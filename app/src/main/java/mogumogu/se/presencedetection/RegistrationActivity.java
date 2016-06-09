@@ -18,21 +18,23 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
 
     private SharedPreferences preferences;
     private DialogFragment dialogFragment;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-//      bara för test
-        preferences.edit().putBoolean(USER_IS_REGISTERED, true).apply();
-
+        intent = new Intent(this, ScanActivity.class);
         preferences = getSharedPreferences(PRESENCE_DETECTION_PREFERENCES, MODE_PRIVATE);
+
+        //      bara för test
+        preferences.edit().putBoolean(USER_IS_REGISTERED, false).apply();
+
         boolean userIsRegistered = preferences.getBoolean(USER_IS_REGISTERED, false);
 
         if (userIsRegistered) {
 
-            Intent intent = new Intent(this, ScanActivity.class);
             startActivity(intent);
 
         } else {
@@ -60,13 +62,13 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
 
         if (firstName.trim().isEmpty() || lastName.trim().isEmpty()) {
 
-            Toast.makeText(this, "First name and last name can not be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "First name and last name can not be empty.", Toast.LENGTH_LONG).show();
+            showRegistrationDialog();
 
         } else {
 
             preferences.edit().putBoolean(USER_IS_REGISTERED, true).apply();
 
-            Intent intent = new Intent(this, ScanActivity.class);
             intent.putExtra(FIRST_NAME, firstName);
             intent.putExtra(LAST_NAME, lastName);
             startActivity(intent);
@@ -77,5 +79,6 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
     public void onDialogNegativeClick(DialogFragment dialog) {
 
         dialogFragment.getDialog().cancel();
+        showRegistrationDialog();
     }
 }
