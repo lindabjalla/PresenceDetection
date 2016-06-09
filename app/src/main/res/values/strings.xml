@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PresenceDetection</string>
+
+    <string name="register">Register</string>
+    <string name="cancel">Cancel</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="registration">REGISTRATION</string>
+</resources>
