@@ -1,6 +1,5 @@
 package mogumogu.se.presencedetection;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -44,7 +43,7 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
 
         String userId = preferences.getString(USER_ID, null);
 
-        if(userId != null) {
+        if (userId != null) {
 
             Log.d("userId", userId);
         }
