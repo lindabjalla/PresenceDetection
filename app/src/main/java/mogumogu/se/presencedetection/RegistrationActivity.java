@@ -15,7 +15,6 @@ import com.google.gson.Gson;
 
 import mogumogu.se.presencedetection.model.User;
 import mogumogu.se.presencedetection.model.UserId;
-import okhttp3.Headers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,7 +28,6 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
     private SharedPreferences preferences;
     private DialogFragment dialogFragment;
     private Intent intent;
-    private Context context = this;
     private Gson gson;
 
     @Override
@@ -43,6 +41,13 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
 
         //      bara för test
 //        preferences.edit().putBoolean(USER_IS_REGISTERED, false).apply();
+
+        String userId = preferences.getString(USER_ID, null);
+
+        if(userId != null) {
+
+            Log.d("userId", userId);
+        }
 
         boolean userIsRegistered = preferences.getBoolean(USER_IS_REGISTERED, false);
 
@@ -80,7 +85,7 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
 
         } else {
 
-            User user = new User(firstName, lastName);
+            final User user = new User(firstName, lastName);
             String userJson = gson.toJson(user);
 
             RetrofitManager retrofitManager = new RetrofitManager();
@@ -99,8 +104,9 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
 
                         UserId userIdObject = gson.fromJson(responseBody, UserId.class);
                         final String userId = userIdObject.getUserId();
+                        Log.d("userId from server", userId);
 
-                        preferences.edit().putString(USER_ID, userId);
+                        preferences.edit().putString(USER_ID, userId).apply();
                         preferences.edit().putBoolean(USER_IS_REGISTERED, true).apply();
                         startActivity(intent);
                     }
