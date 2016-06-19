@@ -1,4 +1,4 @@
-package mogumogu.se.presencedetection;
+package se.mogumogu.presencedetection;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,18 +7,19 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import mogumogu.se.presencedetection.model.User;
-import mogumogu.se.presencedetection.model.UserId;
+import se.mogumogu.presencedetection.model.User;
+import se.mogumogu.presencedetection.model.UserId;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegistrationActivity extends FragmentActivity implements RegistrationDialogFragment.RegistrationDialogListener {
+public class MainActivity extends FragmentActivity implements RegistrationDialogFragment.RegistrationDialogListener {
 
     public static final String PRESENCE_DETECTION_PREFERENCES = "se.mogumogu.presencedetection.PRESENCE_DETECTION_PREFERENCES";
     public static final String USER_IS_REGISTERED = "se.mogumogu.presencedetection.USER_IS_REGISTERED";
@@ -33,6 +34,7 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         intent = new Intent(this, ScanActivity.class);
         preferences = getSharedPreferences(PRESENCE_DETECTION_PREFERENCES, MODE_PRIVATE);
@@ -50,16 +52,19 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
 
         boolean userIsRegistered = preferences.getBoolean(USER_IS_REGISTERED, false);
 
-        if (userIsRegistered) {
-
-            startActivity(intent);
-
-        } else {
+        if (!userIsRegistered) {
 
             showRegistrationDialog();
         }
 
-        setContentView(R.layout.activity_registration);
+        Button scanButton = (Button) findViewById(R.id.scan_button);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(intent);
+            }
+        });
     }
 
     public void showRegistrationDialog() {
@@ -107,7 +112,7 @@ public class RegistrationActivity extends FragmentActivity implements Registrati
 
                         preferences.edit().putString(USER_ID, userId).apply();
                         preferences.edit().putBoolean(USER_IS_REGISTERED, true).apply();
-                        startActivity(intent);
+                        dialogFragment.dismiss();
                     }
                 }
 

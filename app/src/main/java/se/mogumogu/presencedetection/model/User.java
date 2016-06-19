@@ -1,4 +1,4 @@
-package mogumogu.se.presencedetection.model;
+package se.mogumogu.presencedetection.model;
 
 import com.google.gson.annotations.SerializedName;
 

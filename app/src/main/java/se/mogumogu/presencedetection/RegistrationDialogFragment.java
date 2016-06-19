@@ -1,4 +1,4 @@
-package mogumogu.se.presencedetection;
+package se.mogumogu.presencedetection;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -34,9 +34,9 @@ public class RegistrationDialogFragment extends DialogFragment {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View view = inflater.inflate(R.layout.dialog_registration, null);
+        final View view = inflater.inflate(se.mogumogu.presencedetection.R.layout.dialog_registration, null);
         dialogBuilder.setView(view)
-                .setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
+                .setPositiveButton(se.mogumogu.presencedetection.R.string.register, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
 
@@ -44,7 +44,7 @@ public class RegistrationDialogFragment extends DialogFragment {
                     }
                 })
 
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(se.mogumogu.presencedetection.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
 

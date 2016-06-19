@@ -1,4 +1,4 @@
-package mogumogu.se.presencedetection;
+package se.mogumogu.presencedetection;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

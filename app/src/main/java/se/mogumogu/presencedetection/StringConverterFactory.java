@@ -1,4 +1,4 @@
-package mogumogu.se.presencedetection;
+package se.mogumogu.presencedetection;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

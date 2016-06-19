@@ -1,7 +1,6 @@
-package mogumogu.se.presencedetection;
+package se.mogumogu.presencedetection;
 
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitManager {
 
