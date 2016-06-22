@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetection;
+package se.mogumogu.presencedetection.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import se.mogumogu.presencedetection.R;
+import se.mogumogu.presencedetection.RegistrationDialogFragment;
+import se.mogumogu.presencedetection.RetrofitManager;
 import se.mogumogu.presencedetection.model.User;
 import se.mogumogu.presencedetection.model.UserId;
 import retrofit2.Call;

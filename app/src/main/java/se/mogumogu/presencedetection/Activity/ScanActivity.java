@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetection;
+package se.mogumogu.presencedetection.Activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -17,11 +17,12 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
+
+import se.mogumogu.presencedetection.BeaconAdapter;
+import se.mogumogu.presencedetection.R;
 
 @TargetApi(Build.VERSION_CODES.N)
 public class ScanActivity extends Activity implements BeaconConsumer {
@@ -31,8 +32,8 @@ public class ScanActivity extends Activity implements BeaconConsumer {
     private Context context = this;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private ActiveBeaconAdapter adapter;
-    private Set<Beacon> activeBeacons;
+    private BeaconAdapter adapter;
+    private Set<Beacon> closeBeacons;
     private final Region ALL_BEACONS_REGION = new Region("allBeacons", null, null, null);
 
     @Override
@@ -56,7 +57,8 @@ public class ScanActivity extends Activity implements BeaconConsumer {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
 
-                activeBeacons = new LinkedHashSet<>();
+                Log.d("all beacons", beacons.toString());
+                closeBeacons = new HashSet<>();
 
                 recyclerView = (RecyclerView) findViewById(R.id.recycler_view_scan);
                 layoutManager = new LinearLayoutManager(context);
@@ -67,13 +69,13 @@ public class ScanActivity extends Activity implements BeaconConsumer {
 
                         if (beacon.getId1() != null && beacon.getBluetoothName().equals("closebeacon.com")) {
 
-                            activeBeacons.add(beacon);
+                            closeBeacons.add(beacon);
                             Log.d("activeBeacon", beacon.toString() + " is about " + beacon.getDistance() + " meters away." + "serviceUUID " + beacon.getServiceUuid());
                         }
                     }
                 }
 
-                adapter = new ActiveBeaconAdapter(context, activeBeacons);
+                adapter = new BeaconAdapter(context, closeBeacons);
 
                 try {
                     beaconManager.stopRangingBeaconsInRegion(ALL_BEACONS_REGION);
