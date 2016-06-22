@@ -7,4 +7,8 @@
     <string name="last_name">Last name</string>
     <string name="registration">REGISTRATION</string>
     <string name="scan_beacons">SCAN BEACONS</string>
+    <string name="label_uuid">"UUID: "</string>
+    <string name="label_major">"Major: "</string>
+    <string name="label_minor">"Minor: "</string>
+
 </resources>
