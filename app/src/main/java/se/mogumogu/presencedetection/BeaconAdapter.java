@@ -127,10 +127,6 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
             preferences.edit().putString(BEACON_KEY, beaconJson).apply();
 
             showSubscriptionDialog();
-
-//            Intent intent = new Intent(context, SubscriptionActivity.class);
-//            intent.putExtra(BEACON_KEY, beacon);
-//            context.startActivity(intent);
         }
 
         public void showSubscriptionDialog() {

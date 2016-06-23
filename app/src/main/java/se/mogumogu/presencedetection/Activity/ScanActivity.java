@@ -2,6 +2,7 @@ package se.mogumogu.presencedetection.Activity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -93,6 +95,10 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
                             Log.d("activeBeacon", beacon.toString() + " is about " + beacon.getDistance() + " meters away." + "serviceUUID " + beacon.getServiceUuid());
                         }
                     }
+                } else {
+
+                    Intent intent = new Intent(context, MainActivity.class);
+                    startActivity(intent);
                 }
 
                 adapter = new BeaconAdapter(context, closeBeacons, getSupportFragmentManager());
@@ -155,9 +161,17 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
         String beaconJson = preferences.getString(BeaconAdapter.BEACON_KEY, null);
         final Beacon beacon = gson.fromJson(beaconJson, Beacon.class);
 
+        Log.d("beacon uuid", String.valueOf(beacon.getId1()));
+        Log.d("beacon major", String.valueOf(beacon.getId2()));
+        Log.d("beacon minor", String.valueOf(beacon.getId3()));
+
         for (Beacon aBeacon : subscribedBeacons) {
 
-            if (beacon.getId1() != aBeacon.getId1() && beacon.getId2() != aBeacon.getId2() && beacon.getId3() != aBeacon.getId3()) {
+            Log.d("aBeacon uuid", String.valueOf(beacon.getId1()));
+            Log.d("aBeacon major", String.valueOf(beacon.getId2()));
+            Log.d("aBeacon minor", String.valueOf(beacon.getId3()));
+
+            if (!beacon.getId1().equals(aBeacon.getId1()) && !beacon.getId2().equals(aBeacon.getId2()) && !beacon.getId3().equals(aBeacon.getId3())) {
 
                 RetrofitManager retrofitManager = new RetrofitManager();
                 final String userId = preferences.getString(MainActivity.USER_ID, null);
@@ -184,6 +198,10 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
                             preferences.edit().putString(TIMESTAMP, timestamp).apply();
                             preferences.edit().putString(SUBSCRIBED_BEACONS, subscribedBeaconSetJson).apply();
                             dialog.dismiss();
+
+                        } else {
+
+                            Log.d("response", responseBody);
                         }
                     }
 
@@ -193,6 +211,10 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
                         t.printStackTrace();
                     }
                 });
+
+            } else {
+
+                Toast.makeText(context, "This Beacon is previously subscribed", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -201,5 +223,19 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
     public void onDialogNegativeClick(DialogFragment dialog) {
 
         dialog.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+        beaconManager.unbind(this);
+    }
+
+    @Override
+    protected void onPause() {
+
+        super.onPause();
+        beaconManager.unbind(this);
     }
 }
