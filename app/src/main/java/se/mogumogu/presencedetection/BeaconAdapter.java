@@ -2,6 +2,10 @@ package se.mogumogu.presencedetection;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,23 +14,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.altbeacon.beacon.Beacon;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import retrofit2.Call;
+import se.mogumogu.presencedetection.Activity.MainActivity;
 import se.mogumogu.presencedetection.Activity.SubscriptionActivity;
+import se.mogumogu.presencedetection.DialogFragment.RegistrationDialogFragment;
+import se.mogumogu.presencedetection.DialogFragment.SubscriptionDialogFragment;
 
 public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceViewHolder> {
 
     public static final String BEACON_KEY = "se.mogumogu.presencedetection.BEACON_KEY";
     private Context context;
     private List<Beacon> beaconList;
+    private FragmentManager manager;
 
-    public BeaconAdapter(final Context context, final Set<Beacon> beaconSet) {
+    public BeaconAdapter(final Context context, final Set<Beacon> beaconSet, FragmentManager manager) {
 
         this.context = context;
         beaconList = new ArrayList<>();
@@ -38,7 +52,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
             }
         });
         Collections.reverse(beaconList);
-
+        this.manager = manager;
         for (Beacon b : beaconList) {
             Log.d("rssi", "---------" + b.getId1().toString() + ": " + String.valueOf(b.getRssi()));
         }
@@ -48,7 +62,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
     public DeviceViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_active_beacons, parent, false);
-        return new DeviceViewHolder(view, context, beaconList);
+        return new DeviceViewHolder(view, context, beaconList, manager);
     }
 
     @Override
@@ -81,8 +95,12 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
         public final TextView minorView;
         private Context context;
         private List<Beacon> beacons;
+        private DialogFragment dialogFragment;
+        private FragmentManager manager;
+        private Beacon beacon;
+        private Gson gson;
 
-        public DeviceViewHolder(View view, Context context, List<Beacon> beacons) {
+        public DeviceViewHolder(View view, Context context, List<Beacon> beacons, FragmentManager manager) {
 
             super(view);
             this.proximityUuidView = (TextView) view.findViewById(R.id.proximity_uuid);
@@ -92,17 +110,33 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
             view.setOnClickListener(this);
             this.context = context;
             this.beacons = beacons;
+            this.manager = manager;
+
+            dialogFragment = new SubscriptionDialogFragment();
+            gson = new Gson();
         }
 
         @Override
         public void onClick(View view) {
 
             int position = getAdapterPosition();
-            Beacon beacon = beacons.get(position);
+            beacon = beacons.get(position);
+            String beaconJson = gson.toJson(beacon);
+            SharedPreferences preferences =
+                    context.getSharedPreferences(MainActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
+            preferences.edit().putString(BEACON_KEY, beaconJson).apply();
 
-            Intent intent = new Intent(context, SubscriptionActivity.class);
-            intent.putExtra(BEACON_KEY, beacon);
-            context.startActivity(intent);
+            showSubscriptionDialog();
+
+//            Intent intent = new Intent(context, SubscriptionActivity.class);
+//            intent.putExtra(BEACON_KEY, beacon);
+//            context.startActivity(intent);
+        }
+
+        public void showSubscriptionDialog() {
+
+            dialogFragment = new SubscriptionDialogFragment();
+            dialogFragment.show(manager, "SubscriptionDialogFragment");
         }
     }
 }

@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">PresenceDetection</string>
 
+    <!-- DialogFragment-->
     <string name="register">Register</string>
     <string name="cancel">Cancel</string>
+    <string name="subscribe">Subscribe</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
+    <string name="subscription_dialog">Subscribe this Beacon?</string>
     <string name="registration">REGISTRATION</string>
     <string name="scan_beacons">SCAN BEACONS</string>
     <string name="label_uuid">"UUID: "</string>

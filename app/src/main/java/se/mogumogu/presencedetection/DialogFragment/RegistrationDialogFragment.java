@@ -1,30 +1,31 @@
-package se.mogumogu.presencedetection;
+package se.mogumogu.presencedetection.DialogFragment;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
+
+import se.mogumogu.presencedetection.R;
 
 public class RegistrationDialogFragment extends DialogFragment {
 
     private RegistrationDialogListener listener;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
         try {
 
-            listener = (RegistrationDialogListener) activity;
+            listener = (RegistrationDialogListener) context;
 
         } catch (ClassCastException e) {
 
-            throw new ClassCastException(activity.toString() + " must implement NoticeDialogListener");
+            throw new ClassCastException(context.toString() + " must implement RegistrationDialogListener");
         }
     }
 
@@ -33,10 +34,10 @@ public class RegistrationDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-        final View view = inflater.inflate(se.mogumogu.presencedetection.R.layout.dialog_registration, null);
+        final View view = View.inflate(getContext(), R.layout.dialog_fragment_registration, null);
+
         dialogBuilder.setView(view)
-                .setPositiveButton(se.mogumogu.presencedetection.R.string.register, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.register, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
 
@@ -44,7 +45,7 @@ public class RegistrationDialogFragment extends DialogFragment {
                     }
                 })
 
-                .setNegativeButton(se.mogumogu.presencedetection.R.string.cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
 
