@@ -7,11 +7,17 @@
     <string name="subscribe">Subscribe</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
+    <string name="alias_name">Give Beacon a name</string>
     <string name="subscription_dialog">Subscribe this Beacon?</string>
+
+    <!-- RegistrationActivity-->
     <string name="registration">REGISTRATION</string>
     <string name="scan_beacons">SCAN BEACONS</string>
     <string name="label_uuid">"UUID: "</string>
     <string name="label_major">"Major: "</string>
     <string name="label_minor">"Minor: "</string>
+
+    <!-- ScanActivity -->
+    <string name="subscription_message">Tap a Beacon to subscribe</string>
 
 </resources>

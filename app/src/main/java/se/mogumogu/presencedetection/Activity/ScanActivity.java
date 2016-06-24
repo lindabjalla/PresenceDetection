@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetection.Activity;
+package se.mogumogu.presencedetection.activity;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,10 +34,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import se.mogumogu.presencedetection.BeaconAdapter;
-import se.mogumogu.presencedetection.DialogFragment.SubscriptionDialogFragment;
+import se.mogumogu.presencedetection.dialogfragment.SubscriptionDialogFragment;
 import se.mogumogu.presencedetection.R;
 import se.mogumogu.presencedetection.RetrofitManager;
 import se.mogumogu.presencedetection.model.BeaconSubscription;
+import se.mogumogu.presencedetection.model.SubscribedBeacon;
 import se.mogumogu.presencedetection.model.Timestamp;
 
 @TargetApi(Build.VERSION_CODES.N)
@@ -104,6 +105,7 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
                 adapter = new BeaconAdapter(context, closeBeacons, getSupportFragmentManager());
 
                 try {
+
                     beaconManager.stopRangingBeaconsInRegion(ALL_BEACONS_REGION);
 
                 } catch (RemoteException e) {
@@ -144,7 +146,7 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
             Log.d("subscribedBeacons", subscribedBeaconSetJson);
         }
 
-        final Set<Beacon> subscribedBeacons;
+        final Set<SubscribedBeacon> subscribedBeacons;
         gson = new Gson();
 
         if (subscribedBeaconSetJson == null) {
@@ -153,7 +155,7 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
 
         } else {
 
-            Type type = new TypeToken<Set<Beacon>>() {
+            Type type = new TypeToken<Set<SubscribedBeacon>>() {
             }.getType();
             subscribedBeacons = gson.fromJson(subscribedBeaconSetJson, type);
         }
@@ -161,62 +163,59 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
         String beaconJson = preferences.getString(BeaconAdapter.BEACON_KEY, null);
         final Beacon beacon = gson.fromJson(beaconJson, Beacon.class);
 
-        Log.d("beacon uuid", String.valueOf(beacon.getId1()));
-        Log.d("beacon major", String.valueOf(beacon.getId2()));
-        Log.d("beacon minor", String.valueOf(beacon.getId3()));
+//        for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+//
+//            if (beacon.getId1().equals(subscribedBeacon.getBeacon().getId1())
+//                    && beacon.getId2().equals(subscribedBeacon.getBeacon().getId2())
+//                    && beacon.getId3().equals(subscribedBeacon.getBeacon().getId3())) {
+//
+//                Toast.makeText(context, "This Beacon is previously subscribed", Toast.LENGTH_LONG).show();
+//
+//            } else {
 
-        for (Beacon aBeacon : subscribedBeacons) {
+        RetrofitManager retrofitManager = new RetrofitManager();
+        final String userId = preferences.getString(MainActivity.USER_ID, null);
+        BeaconSubscription beaconSubscription = new BeaconSubscription(userId, beacon.getId1().toString());
+        String beaconSubscriptionJson = gson.toJson(beaconSubscription);
 
-            Log.d("aBeacon uuid", String.valueOf(beacon.getId1()));
-            Log.d("aBeacon major", String.valueOf(beacon.getId2()));
-            Log.d("aBeacon minor", String.valueOf(beacon.getId3()));
+        Call<String> result = retrofitManager.getPresenceDetectionService().subscribeBeacon("input=" + beaconSubscriptionJson);
+        result.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
 
-            if (!beacon.getId1().equals(aBeacon.getId1()) && !beacon.getId2().equals(aBeacon.getId2()) && !beacon.getId3().equals(aBeacon.getId3())) {
+                Log.d("response", response.body());
 
-                RetrofitManager retrofitManager = new RetrofitManager();
-                final String userId = preferences.getString(MainActivity.USER_ID, null);
-                BeaconSubscription beaconSubscription = new BeaconSubscription(userId, beacon.getId1().toString());
-                String beaconSubscriptionJson = gson.toJson(beaconSubscription);
+                String responseBody = response.body();
 
-                Call<String> result = retrofitManager.getPresenceDetectionService().subscribeBeacon("input=" + beaconSubscriptionJson);
-                result.enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
+                if (responseBody.contains("\"response_value\":\"200\"")) {
 
-                        Log.d("response", response.body());
+                    Timestamp timestampObject = gson.fromJson(responseBody, Timestamp.class);
+                    final String timestamp = timestampObject.getTimestamp();
+                    Log.d("timestamp from server", timestamp);
 
-                        String responseBody = response.body();
+                    EditText aliasNameEditText = (EditText) findViewById(R.id.alias_name);
+                    String aliasName = aliasNameEditText.getText().toString();
 
-                        if (responseBody.contains("\"response_value\":\"200\"")) {
+                    subscribedBeacons.add(new SubscribedBeacon(aliasName, beacon));
+                    subscribedBeaconSetJson = gson.toJson(subscribedBeacons);
+                    preferences.edit().putString(TIMESTAMP, timestamp).apply();
+                    preferences.edit().putString(SUBSCRIBED_BEACONS, subscribedBeaconSetJson).apply();
+                    dialog.dismiss();
 
-                            Timestamp timestampObject = gson.fromJson(responseBody, Timestamp.class);
-                            final String timestamp = timestampObject.getTimestamp();
-                            Log.d("timestamp from server", timestamp);
+                } else {
 
-                            subscribedBeacons.add(beacon);
-                            subscribedBeaconSetJson = gson.toJson(subscribedBeacons);
-                            preferences.edit().putString(TIMESTAMP, timestamp).apply();
-                            preferences.edit().putString(SUBSCRIBED_BEACONS, subscribedBeaconSetJson).apply();
-                            dialog.dismiss();
-
-                        } else {
-
-                            Log.d("response", responseBody);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-
-                        t.printStackTrace();
-                    }
-                });
-
-            } else {
-
-                Toast.makeText(context, "This Beacon is previously subscribed", Toast.LENGTH_LONG).show();
+                    Log.d("response", responseBody);
+                }
             }
-        }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+                t.printStackTrace();
+            }
+        });
+//            }
+//        }
     }
 
     @Override

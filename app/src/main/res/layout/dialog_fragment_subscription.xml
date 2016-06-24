@@ -2,14 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="se.mogumogu.presencedetection.DialogFragment.SubscriptionDialogFragment">
+    android:orientation="vertical"
+    tools:context="se.mogumogu.presencedetection.dialogfragment.SubscriptionDialogFragment">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="16dp"
         android:text="@string/subscription_dialog"
         android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/alias_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="@string/alias_name"
+        android:padding="16dp" />
 
 </LinearLayout>

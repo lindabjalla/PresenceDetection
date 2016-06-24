@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetection.DialogFragment;
+package se.mogumogu.presencedetection.dialogfragment;
 
 import android.app.Dialog;
 import android.content.Context;

@@ -1,10 +1,8 @@
 package se.mogumogu.presencedetection;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,15 +22,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import retrofit2.Call;
-import se.mogumogu.presencedetection.Activity.MainActivity;
-import se.mogumogu.presencedetection.Activity.SubscriptionActivity;
-import se.mogumogu.presencedetection.DialogFragment.RegistrationDialogFragment;
-import se.mogumogu.presencedetection.DialogFragment.SubscriptionDialogFragment;
+import se.mogumogu.presencedetection.activity.MainActivity;
+import se.mogumogu.presencedetection.activity.ScanActivity;
+import se.mogumogu.presencedetection.dialogfragment.SubscriptionDialogFragment;
+import se.mogumogu.presencedetection.model.SubscribedBeacon;
 
 public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceViewHolder> {
 
@@ -88,7 +85,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
         return beaconList.size();
     }
 
-    public static final class DeviceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static final class DeviceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public final TextView proximityUuidView;
         public final TextView majorView;
@@ -121,12 +118,36 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
 
             int position = getAdapterPosition();
             beacon = beacons.get(position);
-            String beaconJson = gson.toJson(beacon);
+
             SharedPreferences preferences =
                     context.getSharedPreferences(MainActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
-            preferences.edit().putString(BEACON_KEY, beaconJson).apply();
 
-            showSubscriptionDialog();
+            String subscribedBeaconSetJson = preferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
+
+            if (subscribedBeaconSetJson != null) {
+
+                Type type = new TypeToken<Set<SubscribedBeacon>>() {
+                }.getType();
+
+                Set<SubscribedBeacon> subscribedBeacons = gson.fromJson(subscribedBeaconSetJson, type);
+
+                for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+
+                    if (beacon.getId1().equals(subscribedBeacon.getBeacon().getId1())
+                            && beacon.getId2().equals(subscribedBeacon.getBeacon().getId2())
+                            && beacon.getId3().equals(subscribedBeacon.getBeacon().getId3())) {
+
+                        Toast.makeText(context, "This Beacon is previously subscribed", Toast.LENGTH_LONG).show();
+
+                    } else {
+
+                        String beaconJson = gson.toJson(beacon);
+                        preferences.edit().putString(BEACON_KEY, beaconJson).apply();
+
+                        showSubscriptionDialog();
+                    }
+                }
+            }
         }
 
         public void showSubscriptionDialog() {
