@@ -22,6 +22,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +34,7 @@ import se.mogumogu.presencedetection.model.SubscribedBeacon;
 public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceViewHolder> {
 
     public static final String BEACON_KEY = "se.mogumogu.presencedetection.BEACON_KEY";
+
     private Context context;
     private List<Beacon> beaconList;
     private FragmentManager manager;
@@ -124,36 +126,47 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
 
             String subscribedBeaconSetJson = preferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
 
-            if (subscribedBeaconSetJson != null) {
+            Set<SubscribedBeacon> subscribedBeacons;
 
-                Type type = new TypeToken<Set<SubscribedBeacon>>() {
-                }.getType();
+            if (subscribedBeaconSetJson == null) {
 
-                Set<SubscribedBeacon> subscribedBeacons = gson.fromJson(subscribedBeaconSetJson, type);
+                subscribedBeacons = new HashSet<>();
 
-                for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+            } else {
 
-                    if (beacon.getId1().equals(subscribedBeacon.getBeacon().getId1())
-                            && beacon.getId2().equals(subscribedBeacon.getBeacon().getId2())
-                            && beacon.getId3().equals(subscribedBeacon.getBeacon().getId3())) {
+                Type type = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
+                subscribedBeacons = gson.fromJson(subscribedBeaconSetJson, type);
+            }
 
-                        Toast.makeText(context, "This Beacon is previously subscribed", Toast.LENGTH_LONG).show();
+            if(beaconIsSubscribed(beacon, subscribedBeacons)){
 
-                    } else {
+                Toast.makeText(context, "This Beacon is previously subscribed", Toast.LENGTH_LONG).show();
 
-                        String beaconJson = gson.toJson(beacon);
-                        preferences.edit().putString(BEACON_KEY, beaconJson).apply();
+            }else{
 
-                        showSubscriptionDialog();
-                    }
-                }
+                String beaconJson = gson.toJson(beacon);
+                preferences.edit().putString(BEACON_KEY, beaconJson).apply();
+
+                showSubscriptionDialog();
             }
         }
 
-        public void showSubscriptionDialog() {
+        private void showSubscriptionDialog() {
 
             dialogFragment = new SubscriptionDialogFragment();
             dialogFragment.show(manager, "SubscriptionDialogFragment");
+        }
+
+        private boolean beaconIsSubscribed(Beacon beacon, Set<SubscribedBeacon> subscribedBeacons){
+
+            for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+
+                if(subscribedBeacon.getBeacon().getIdentifiers().containsAll(beacon.getIdentifiers())){
+
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

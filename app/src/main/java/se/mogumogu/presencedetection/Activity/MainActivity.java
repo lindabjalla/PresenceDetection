@@ -1,5 +1,6 @@
 package se.mogumogu.presencedetection.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,8 +31,8 @@ public class MainActivity extends FragmentActivity implements RegistrationDialog
 
     private SharedPreferences preferences;
     private DialogFragment dialogFragment;
-    private Intent intent;
     private Gson gson;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,6 @@ public class MainActivity extends FragmentActivity implements RegistrationDialog
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        intent = new Intent(this, ScanActivity.class);
         preferences = getSharedPreferences(PRESENCE_DETECTION_PREFERENCES, MODE_PRIVATE);
         gson = new Gson();
 
@@ -65,6 +65,7 @@ public class MainActivity extends FragmentActivity implements RegistrationDialog
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(context, ScanActivity.class);
                 startActivity(intent);
             }
         });
@@ -115,7 +116,10 @@ public class MainActivity extends FragmentActivity implements RegistrationDialog
 
                         preferences.edit().putString(USER_ID, userId).apply();
                         preferences.edit().putBoolean(USER_IS_REGISTERED, true).apply();
-                        dialogFragment.dismiss();
+
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
                     }
                 }
 

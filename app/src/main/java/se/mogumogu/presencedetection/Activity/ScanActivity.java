@@ -34,9 +34,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import se.mogumogu.presencedetection.BeaconAdapter;
-import se.mogumogu.presencedetection.dialogfragment.SubscriptionDialogFragment;
 import se.mogumogu.presencedetection.R;
 import se.mogumogu.presencedetection.RetrofitManager;
+import se.mogumogu.presencedetection.dialogfragment.SubscriptionDialogFragment;
 import se.mogumogu.presencedetection.model.BeaconSubscription;
 import se.mogumogu.presencedetection.model.SubscribedBeacon;
 import se.mogumogu.presencedetection.model.Timestamp;
@@ -135,7 +135,7 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
     }
 
     @Override
-    public void onDialogPositiveClick(final DialogFragment dialog, View view) {
+    public void onDialogPositiveClick(final DialogFragment dialog, final View view) {
 
         preferences = context.getSharedPreferences(MainActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
 
@@ -163,16 +163,6 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
         String beaconJson = preferences.getString(BeaconAdapter.BEACON_KEY, null);
         final Beacon beacon = gson.fromJson(beaconJson, Beacon.class);
 
-//        for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
-//
-//            if (beacon.getId1().equals(subscribedBeacon.getBeacon().getId1())
-//                    && beacon.getId2().equals(subscribedBeacon.getBeacon().getId2())
-//                    && beacon.getId3().equals(subscribedBeacon.getBeacon().getId3())) {
-//
-//                Toast.makeText(context, "This Beacon is previously subscribed", Toast.LENGTH_LONG).show();
-//
-//            } else {
-
         RetrofitManager retrofitManager = new RetrofitManager();
         final String userId = preferences.getString(MainActivity.USER_ID, null);
         BeaconSubscription beaconSubscription = new BeaconSubscription(userId, beacon.getId1().toString());
@@ -193,7 +183,7 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
                     final String timestamp = timestampObject.getTimestamp();
                     Log.d("timestamp from server", timestamp);
 
-                    EditText aliasNameEditText = (EditText) findViewById(R.id.alias_name);
+                    EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name);
                     String aliasName = aliasNameEditText.getText().toString();
 
                     subscribedBeacons.add(new SubscribedBeacon(aliasName, beacon));
@@ -214,8 +204,6 @@ public class ScanActivity extends FragmentActivity implements BeaconConsumer, Su
                 t.printStackTrace();
             }
         });
-//            }
-//        }
     }
 
     @Override

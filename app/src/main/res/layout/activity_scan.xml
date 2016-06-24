@@ -14,7 +14,7 @@
         android:id="@+id/subscription_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorApricot"
+        android:background="@color/colorVintageBlue"
         android:gravity="center"
         android:padding="16dp"
         android:text="@string/subscription_message"
