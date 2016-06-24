@@ -138,11 +138,11 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
                 subscribedBeacons = gson.fromJson(subscribedBeaconSetJson, type);
             }
 
-            if(beaconIsSubscribed(beacon, subscribedBeacons)){
+            if (beaconIsSubscribed(beacon, subscribedBeacons)) {
 
                 Toast.makeText(context, "This Beacon is previously subscribed", Toast.LENGTH_LONG).show();
 
-            }else{
+            } else {
 
                 String beaconJson = gson.toJson(beacon);
                 preferences.edit().putString(BEACON_KEY, beaconJson).apply();
@@ -157,11 +157,11 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
             dialogFragment.show(manager, "SubscriptionDialogFragment");
         }
 
-        private boolean beaconIsSubscribed(Beacon beacon, Set<SubscribedBeacon> subscribedBeacons){
+        private boolean beaconIsSubscribed(Beacon beacon, Set<SubscribedBeacon> subscribedBeacons) {
 
             for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 
-                if(subscribedBeacon.getBeacon().getIdentifiers().containsAll(beacon.getIdentifiers())){
+                if (subscribedBeacon.getBeacon().getIdentifiers().containsAll(beacon.getIdentifiers())) {
 
                     return true;
                 }
