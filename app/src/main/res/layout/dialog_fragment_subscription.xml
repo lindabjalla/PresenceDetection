@@ -14,7 +14,7 @@
         <!--android:textSize="20sp" />-->
 
     <EditText
-        android:id="@+id/alias_name"
+        android:id="@+id/my_beacons_alias_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

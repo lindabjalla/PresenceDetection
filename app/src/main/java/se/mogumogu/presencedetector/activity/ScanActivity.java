@@ -15,6 +15,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,24 +33,27 @@ import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import se.mogumogu.presencedetector.BeaconAdapter;
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.RangeHandler;
 import se.mogumogu.presencedetector.RetrofitManager;
+import se.mogumogu.presencedetector.adapter.BeaconAdapter;
 import se.mogumogu.presencedetector.dialogfragment.SubscriptionDialogFragment;
 import se.mogumogu.presencedetector.model.BeaconSubscription;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 import se.mogumogu.presencedetector.model.Timestamp;
 
 @TargetApi(Build.VERSION_CODES.N)
-public class ScanActivity extends AppCompatActivity implements BeaconConsumer, SubscriptionDialogFragment.SubscriptionDialogListener, RangeNotifier {
+public class ScanActivity extends AppCompatActivity
+        implements BeaconConsumer, SubscriptionDialogFragment.SubscriptionDialogListener, RangeNotifier {
 
     public static final String SUBSCRIBED_BEACONS = "se.mogumogu.presencedetection.SUBSCRIBED_BEACONS";
     public static final String TIMESTAMP = "se.mogumogu.presencedetection.TIMESTAMP";
@@ -58,7 +64,7 @@ public class ScanActivity extends AppCompatActivity implements BeaconConsumer, S
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private BeaconAdapter adapter;
-    private Set<Beacon> closeBeacons;
+    private List<Beacon> closeBeacons;
     private final Region ALL_BEACONS_REGION = new Region("allBeacons", null, null, null);
     private Gson gson;
     private SharedPreferences preferences;
@@ -93,7 +99,7 @@ public class ScanActivity extends AppCompatActivity implements BeaconConsumer, S
         beaconManager.bind(this);
 
         gson = new Gson();
-        preferences = context.getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
+        preferences = getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
 
         subscribedBeaconsJson = preferences.getString(SUBSCRIBED_BEACONS, null);
 
@@ -103,13 +109,12 @@ public class ScanActivity extends AppCompatActivity implements BeaconConsumer, S
 
         } else {
 
-            Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {
-            }.getType();
+            Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
             subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
         }
 
         intent = new Intent(context, RegistrationActivity.class);
-        closeBeacons = new HashSet<>();
+        closeBeacons = new ArrayList<>();
     }
 
     @Override
@@ -199,7 +204,14 @@ public class ScanActivity extends AppCompatActivity implements BeaconConsumer, S
 
                 if (beacon.getId1() != null && beacon.getBluetoothName().equals("closebeacon.com")) {
 
-                    closeBeacons.add(beacon);
+                    if (isAlreadyDetected(beacon, closeBeacons)) {
+
+                        replaceBeaconToTheOneWithNewStatus(beacon, closeBeacons);
+
+                    } else {
+
+                        closeBeacons.add(beacon);
+                    }
                     Log.d("closeBeacons", closeBeacons.toString());
                 }
 
@@ -252,7 +264,7 @@ public class ScanActivity extends AppCompatActivity implements BeaconConsumer, S
                     final String timestamp = timestampObject.getTimestamp();
                     Log.d("timestamp from server", timestamp);
 
-                    EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name);
+                    EditText aliasNameEditText = (EditText) view.findViewById(R.id.my_beacons_alias_name);
                     String aliasName = aliasNameEditText.getText().toString();
 
                     subscribedBeacons.add(new SubscribedBeacon(aliasName, beacon));
@@ -276,5 +288,62 @@ public class ScanActivity extends AppCompatActivity implements BeaconConsumer, S
                 t.printStackTrace();
             }
         });
+    }
+
+    private void replaceBeaconToTheOneWithNewStatus(Beacon beacon, List<Beacon> beacons) {
+
+        for (Beacon aBeacon : beacons) {
+
+            if (aBeacon.getIdentifiers().containsAll(beacon.getIdentifiers())) {
+
+                beacons.set(beacons.indexOf(aBeacon), beacon);
+            }
+        }
+    }
+
+    private boolean isAlreadyDetected(Beacon beacon, List<Beacon> beacons) {
+
+        for (Beacon aBeacon : beacons) {
+
+            if (aBeacon.getIdentifiers().containsAll(beacon.getIdentifiers())) {
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent intent;
+
+        switch (item.getItemId()) {
+
+            case R.id.menu_item_my_beacons:
+                intent = new Intent(this, SubscribedBeaconsActivity.class);
+                context.startActivity(intent);
+                return true;
+
+            case R.id.menu_item_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                context.startActivity(intent);
+                return true;
+
+            case R.id.menu_item_help:
+                intent = new Intent(this, HelpActivity.class);
+                context.startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

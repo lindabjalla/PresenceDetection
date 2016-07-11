@@ -150,21 +150,9 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         showRegistrationDialog();
     }
 
-//    @Override
-//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-//
-//        super.onSaveInstanceState(outState, outPersistentState);
-//        bottomBar.onSaveInstanceState(outState);
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;

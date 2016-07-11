@@ -1,8 +1,13 @@
 package se.mogumogu.presencedetector.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.altbeacon.beacon.Beacon;
 
-public class SubscribedBeacon {
+import java.io.Serializable;
+
+public class SubscribedBeacon implements Serializable {
 
     private String aliasName;
     private Beacon beacon;
