@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="se.mogumogu.presencedetection.dialogfragment.SubscriptionDialogFragment">
+    tools:context="se.mogumogu.presencedetector.dialogfragment.SubscriptionDialogFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="@string/subscription_dialog"
-        android:textSize="20sp" />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="16dp"-->
+        <!--android:text="@string/subscription_dialog"-->
+        <!--android:textSize="20sp" />-->
 
     <EditText
         android:id="@+id/alias_name"

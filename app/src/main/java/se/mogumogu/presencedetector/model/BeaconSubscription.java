@@ -1,10 +1,10 @@
-package se.mogumogu.presencedetection.model;
+package se.mogumogu.presencedetector.model;
 
 public class BeaconSubscription extends AbstractEntity{
 
     public BeaconSubscription(String userId, String beaconUuid){
 
-        super.userId = userId;
-        super.beaconUuid = beaconUuid;
+        this.userId = userId;
+        this.beaconUuid = beaconUuid;
     }
 }

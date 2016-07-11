@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_item_my_beacons"
+        android:icon="@drawable/icon_my_beacons"
+        android:title="@string/my_beacons"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/menu_item_settings"
+        android:icon="@drawable/icon_settings"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/menu_item_help"
+        android:icon="@drawable/icon_help"
+        android:title="@string/help"
+        app:showAsAction="ifRoom|withText"/>
+
+</menu>

@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetection.dialogfragment;
+package se.mogumogu.presencedetector.dialogfragment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
-import se.mogumogu.presencedetection.R;
+import se.mogumogu.presencedetector.R;
 
 public class SubscriptionDialogFragment extends DialogFragment {
 
@@ -33,8 +33,10 @@ public class SubscriptionDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         final View view = View.inflate(getContext(), R.layout.dialog_fragment_subscription, null);
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        dialogBuilder.setTitle(R.string.dialog_fragment_subscription_title);
 
         dialogBuilder.setView(view)
                 .setPositiveButton(R.string.subscribe, new DialogInterface.OnClickListener() {

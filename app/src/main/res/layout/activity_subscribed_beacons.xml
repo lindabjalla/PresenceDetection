@@ -7,16 +7,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activity.MainActivity">
-
-    <Button
-        android:id="@+id/scan_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@color/colorApricot"
-        android:padding="18dp"
-        android:text="@string/scan_beacons"
-        android:textSize="25sp" />
+    tools:context="se.mogumogu.presencedetector.activity.SubscribedBeaconsActivity">
 
 </RelativeLayout>

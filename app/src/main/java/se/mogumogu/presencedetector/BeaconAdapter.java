@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetection;
+package se.mogumogu.presencedetector;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,10 +26,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import se.mogumogu.presencedetection.activity.MainActivity;
-import se.mogumogu.presencedetection.activity.ScanActivity;
-import se.mogumogu.presencedetection.dialogfragment.SubscriptionDialogFragment;
-import se.mogumogu.presencedetection.model.SubscribedBeacon;
+import se.mogumogu.presencedetector.activity.RegistrationActivity;
+import se.mogumogu.presencedetector.activity.ScanActivity;
+import se.mogumogu.presencedetector.dialogfragment.SubscriptionDialogFragment;
+import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceViewHolder> {
 
@@ -56,7 +56,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
             Log.d("rssi", "---------" + b.getId1().toString() + ": " + String.valueOf(b.getRssi()));
         }
     }
-
+    
     @Override
     public DeviceViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
@@ -73,11 +73,11 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
 
         if (position % 2 == 0) {
 
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorEggshell));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorApricot));
 
         } else {
 
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorVintageBlue));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorEggshell));
         }
     }
 
@@ -122,7 +122,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
             beacon = beacons.get(position);
 
             SharedPreferences preferences =
-                    context.getSharedPreferences(MainActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
+                    context.getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
 
             String subscribedBeaconSetJson = preferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
 

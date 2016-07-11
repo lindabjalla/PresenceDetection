@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorEggshell"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.RegistrationActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/scan_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
         android:id="@+id/subscription_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorVintageBlue"
+        android:layout_below="@id/scan_toolbar"
         android:gravity="center"
         android:padding="16dp"
+        android:background="@color/colorEggshell"
         android:text="@string/subscription_message"
-        android:textSize="24sp" />
+        android:textColor="@color/colorDimGray"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -27,6 +41,6 @@
         android:layout_height="match_parent"
         android:layout_below="@id/subscription_message"
         android:scrollbars="vertical"
-        tools:context="se.mogumogu.presencedetection.activity.MainActivity" />
+        tools:context=".activity.RegistrationActivity" />
 
 </RelativeLayout>

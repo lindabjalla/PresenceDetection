@@ -1,23 +1,36 @@
 <resources>
-    <string name="app_name">PresenceDetection</string>
+    <string name="app_name">PRESENCE DETECTOR</string>
 
     <!-- DialogFragment-->
-    <string name="register">Register</string>
+    <string name="activate">Activate</string>
     <string name="cancel">Cancel</string>
     <string name="subscribe">Subscribe</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
-    <string name="alias_name">Give Beacon a name</string>
+    <string name="alias_name">Give the beacon a name. e.g. SchoolBeacon, JobBeacon</string>
     <string name="subscription_dialog">Subscribe this Beacon?</string>
+    <string name="dialog_fragment_registration_title">Activate Presence Detector</string>
+    <string name="dialog_fragment_subscription_title">Subscribe the beacon</string>
 
     <!-- RegistrationActivity-->
     <string name="registration">REGISTRATION</string>
-    <string name="scan_beacons">SCAN BEACONS</string>
+    <string name="scan_beacons">Scan beacons</string>
     <string name="label_uuid">"UUID: "</string>
     <string name="label_major">"Major: "</string>
     <string name="label_minor">"Minor: "</string>
 
     <!-- ScanActivity -->
-    <string name="subscription_message">Tap a Beacon to subscribe</string>
+    <string name="label_scan_activity">BEACONS NEARBY</string>
+    <string name="subscription_message">Tap a Beacon to subscribe!</string>
+    <string name="new_beacon_not_found_message">New beacon was not found.</string>
+    <string name="title_activity_tabbed_navigation">TabbedNavigationActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- Menu -->
+    <string name="my_beacons">My Beacons</string>
+    <string name="scan">Scan</string>
+    <string name="settings">Settings</string>
+    <string name="help">Help</string>
 
 </resources>

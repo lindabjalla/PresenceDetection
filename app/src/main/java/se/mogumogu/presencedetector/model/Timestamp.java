@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetection.model;
+package se.mogumogu.presencedetector.model;
 
 public class Timestamp {
 

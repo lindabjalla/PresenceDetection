@@ -1,12 +1,17 @@
-package se.mogumogu.presencedetection.activity;
+package se.mogumogu.presencedetector.activity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,16 +19,16 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import se.mogumogu.presencedetection.R;
-import se.mogumogu.presencedetection.dialogfragment.RegistrationDialogFragment;
-import se.mogumogu.presencedetection.RetrofitManager;
-import se.mogumogu.presencedetection.model.User;
-import se.mogumogu.presencedetection.model.UserId;
+import se.mogumogu.presencedetector.R;
+import se.mogumogu.presencedetector.dialogfragment.RegistrationDialogFragment;
+import se.mogumogu.presencedetector.RetrofitManager;
+import se.mogumogu.presencedetector.model.User;
+import se.mogumogu.presencedetector.model.UserId;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends FragmentActivity implements RegistrationDialogFragment.RegistrationDialogListener {
+public class RegistrationActivity extends AppCompatActivity implements RegistrationDialogFragment.RegistrationDialogListener {
 
     public static final String PRESENCE_DETECTION_PREFERENCES = "se.mogumogu.presencedetection.PRESENCE_DETECTION_PREFERENCES";
     public static final String USER_IS_REGISTERED = "se.mogumogu.presencedetection.USER_IS_REGISTERED";
@@ -38,7 +43,12 @@ public class MainActivity extends FragmentActivity implements RegistrationDialog
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_registration);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
+        myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
+        setSupportActionBar(myToolbar);
 
         preferences = getSharedPreferences(PRESENCE_DETECTION_PREFERENCES, MODE_PRIVATE);
         gson = new Gson();
@@ -71,7 +81,7 @@ public class MainActivity extends FragmentActivity implements RegistrationDialog
         });
     }
 
-    public void showRegistrationDialog() {
+    private void showRegistrationDialog() {
 
         dialogFragment = new RegistrationDialogFragment();
         dialogFragment.show(getSupportFragmentManager(), "RegistrationDialogFragment");
@@ -138,5 +148,52 @@ public class MainActivity extends FragmentActivity implements RegistrationDialog
 
         dialogFragment.getDialog().cancel();
         showRegistrationDialog();
+    }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+//
+//        super.onSaveInstanceState(outState, outPersistentState);
+//        bottomBar.onSaveInstanceState(outState);
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Intent intent;
+
+        switch(item.getItemId()){
+
+            case R.id.menu_item_my_beacons:
+                intent = new Intent(this, SubscribedBeaconsActivity.class);
+                context.startActivity(intent);
+                return true;
+
+            case R.id.menu_item_settings:
+                intent = new Intent(this, SettingsActivity.class);
+                context.startActivity(intent);
+                return true;
+
+            case R.id.menu_item_help:
+                intent = new Intent(this, HelpActivity.class);
+                context.startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

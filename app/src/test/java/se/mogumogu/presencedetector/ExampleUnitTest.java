@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetection;
+package se.mogumogu.presencedetector;
 
 import org.junit.Test;
 
