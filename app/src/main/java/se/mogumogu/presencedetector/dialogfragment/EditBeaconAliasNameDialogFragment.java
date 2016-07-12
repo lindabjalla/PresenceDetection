@@ -62,7 +62,7 @@ public class EditBeaconAliasNameDialogFragment extends DialogFragment {
 
         if (subscribedBeacon != null) {
 
-            aliasNameEditText.setHint(subscribedBeacon.getAliasName());
+            aliasNameEditText.setText(subscribedBeacon.getAliasName());
 
         } else {
 
