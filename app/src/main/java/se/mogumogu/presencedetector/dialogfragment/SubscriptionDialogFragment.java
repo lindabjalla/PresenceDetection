@@ -20,11 +20,8 @@ public class SubscriptionDialogFragment extends DialogFragment {
         super.onAttach(context);
 
         try {
-
             listener = (SubscriptionDialogListener) context;
-
         } catch (ClassCastException e) {
-
             throw new ClassCastException(context.toString() + " must implement SubscriptionDialogListener");
         }
     }

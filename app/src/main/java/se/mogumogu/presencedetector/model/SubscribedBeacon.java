@@ -1,8 +1,5 @@
 package se.mogumogu.presencedetector.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import org.altbeacon.beacon.Beacon;
 
 import java.io.Serializable;
@@ -46,6 +43,12 @@ public class SubscribedBeacon implements Serializable {
         return isInRange;
     }
 
+    public SubscribedBeacon setAliasName(String aliasName) {
+
+        this.aliasName = aliasName;
+        return this;
+    }
+
     public void setInRangeNotified(boolean inRangeNotified) {
 
         isInRangeNotified = inRangeNotified;
@@ -59,6 +62,31 @@ public class SubscribedBeacon implements Serializable {
     public void setInRange(boolean inRange){
 
         isInRange = inRange;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+
+        if (this == other) {
+
+            return true;
+        }
+        if (other instanceof SubscribedBeacon) {
+
+           SubscribedBeacon otherSubscribedBeacon = (SubscribedBeacon) other;
+            return aliasName.equals(otherSubscribedBeacon.getAliasName()) && beacon.equals(otherSubscribedBeacon.beacon);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = 1;
+        result = 37 * result + (aliasName != null ? aliasName.hashCode() : 0);
+        result = 37 * result + (beacon != null ? beacon.hashCode() : 0);
+
+        return result;
     }
 
     @Override

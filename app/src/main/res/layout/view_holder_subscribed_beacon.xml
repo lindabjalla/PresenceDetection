@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:stretchColumns="1"
-    android:padding="30dp">
+    android:padding="30dp"
+    android:stretchColumns="1">
 
     <TableRow android:padding="1dp">
 
@@ -19,7 +19,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/my_beacons_alias_name"
+            android:id="@+id/subscribed_beacons_alias_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorLinen"
@@ -44,7 +44,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/my_beacons_status"
+            android:id="@+id/subscribed_beacons_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorLinen"
@@ -53,6 +53,81 @@
             android:textColor="@color/colorDimGray"
             android:textSize="20sp"
             tools:text="in range" />
+
+    </TableRow>
+
+    <TableRow android:padding="1dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="@string/subscribed_beacons_uuid"
+            android:textColor="@color/colorEggshell"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/subscribed_beacons_uuid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorLinen"
+            android:gravity="center"
+            android:padding="6dp"
+            android:textColor="@color/colorDimGray"
+            android:textSize="20sp"
+            tools:text="uuid" />
+
+    </TableRow>
+
+    <TableRow android:padding="1dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="@string/subscribed_beacons_label_major"
+            android:textColor="@color/colorEggshell"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/subscribed_beacons_major"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorLinen"
+            android:gravity="center"
+            android:padding="6dp"
+            android:textColor="@color/colorDimGray"
+            android:textSize="20sp"
+            tools:text="10" />
+
+    </TableRow>
+
+    <TableRow android:padding="1dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="@string/subscribed_beacons_label_minor"
+            android:textColor="@color/colorEggshell"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/subscribed_beacons_minor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorLinen"
+            android:gravity="center"
+            android:padding="6dp"
+            android:textColor="@color/colorDimGray"
+            android:textSize="20sp"
+            tools:text="30" />
 
     </TableRow>
 

@@ -20,11 +20,8 @@ public class RegistrationDialogFragment extends DialogFragment {
         super.onAttach(context);
 
         try {
-
             listener = (RegistrationDialogListener) context;
-
         } catch (ClassCastException e) {
-
             throw new ClassCastException(context.toString() + " must implement RegistrationDialogListener");
         }
     }

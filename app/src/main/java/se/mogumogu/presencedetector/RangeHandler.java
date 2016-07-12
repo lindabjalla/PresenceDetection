@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,6 +57,7 @@ public class RangeHandler implements RangeNotifier {
     private RetrofitManager retrofitManager;
     private Set<Beacon> beaconsToNotifyOutOfRange;
     private Activity activity;
+    private FragmentManager manager;
 
     public RangeHandler(SharedPreferences preferences, Context context) {
 
@@ -78,11 +80,12 @@ public class RangeHandler implements RangeNotifier {
         }
     }
 
-    public RangeHandler(SharedPreferences preferences, Context context, Activity activity){
+    public RangeHandler(SharedPreferences preferences, Context context, Activity activity, FragmentManager manager){
 
         this.preferences = preferences;
         this.context = context;
         this.activity = activity;
+        this.manager = manager;
 
         gson = new Gson();
         responseSuccess = "\"response_value\":\"200\"";
@@ -139,7 +142,7 @@ public class RangeHandler implements RangeNotifier {
             final SubscribedBeaconAdapter subscribedBeaconAdapter;
 
             layoutManager = new LinearLayoutManager(context);
-            subscribedBeaconAdapter = new SubscribedBeaconAdapter(context, subscribedBeacons);
+            subscribedBeaconAdapter = new SubscribedBeaconAdapter(context, subscribedBeacons, manager);
 
             activity.runOnUiThread(new Runnable() {
                 @Override
