@@ -65,7 +65,7 @@ public class ScanActivity extends AppCompatActivity
     private RecyclerView.LayoutManager layoutManager;
     private BeaconAdapter adapter;
     private List<Beacon> closeBeacons;
-    private final Region ALL_BEACONS_REGION = new Region("allBeacons", null, null, null);
+    private Region allBeaconsRegion;
     private Gson gson;
     private SharedPreferences preferences;
     private String subscribedBeaconsJson;
@@ -90,6 +90,7 @@ public class ScanActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        allBeaconsRegion = new Region("allBeacons", null, null, null);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view_scan);
         layoutManager = new LinearLayoutManager(this);
 
@@ -121,7 +122,7 @@ public class ScanActivity extends AppCompatActivity
     public void onBeaconServiceConnect() {
 
         try {
-            beaconManager.startRangingBeaconsInRegion(ALL_BEACONS_REGION);
+            beaconManager.startRangingBeaconsInRegion(allBeaconsRegion);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -133,7 +134,7 @@ public class ScanActivity extends AppCompatActivity
         String beaconJson = preferences.getString(BeaconAdapter.BEACON_KEY, null);
         final Beacon beacon = gson.fromJson(beaconJson, Beacon.class);
 
-        if (beaconIsSubscribed(beacon) != null) {
+        if (beaconIsSubscribed(beacon)) {
 
             Toast.makeText(context, "This beacon is previously subscribed", Toast.LENGTH_LONG).show();
             startActivity(intent);
@@ -159,7 +160,7 @@ public class ScanActivity extends AppCompatActivity
         beaconManager.setRangeNotifier(rangeHandler);
 
         try {
-            beaconManager.startRangingBeaconsInRegion(ALL_BEACONS_REGION);
+            beaconManager.startRangingBeaconsInRegion(allBeaconsRegion);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -174,7 +175,7 @@ public class ScanActivity extends AppCompatActivity
         super.onStop();
     }
 
-    private String beaconIsSubscribed(Beacon beacon) {
+    private boolean beaconIsSubscribed(Beacon beacon) {
 
         if (subscribedBeacons != null) {
 
@@ -182,11 +183,11 @@ public class ScanActivity extends AppCompatActivity
 
                 if (subscribedBeacon.getBeacon().getIdentifiers().containsAll(beacon.getIdentifiers())) {
 
-                    return subscribedBeacon.getAliasName();
+                    return true;
                 }
             }
         }
-        return null;
+        return false;
     }
 
     @Override
@@ -232,7 +233,7 @@ public class ScanActivity extends AppCompatActivity
 
         try {
 
-            beaconManager.startRangingBeaconsInRegion(ALL_BEACONS_REGION);
+            beaconManager.startRangingBeaconsInRegion(allBeaconsRegion);
 
         } catch (RemoteException e) {
 
@@ -264,7 +265,7 @@ public class ScanActivity extends AppCompatActivity
                     final String timestamp = timestampObject.getTimestamp();
                     Log.d("timestamp from server", timestamp);
 
-                    EditText aliasNameEditText = (EditText) view.findViewById(R.id.my_beacons_alias_name);
+                    EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name);
                     String aliasName = aliasNameEditText.getText().toString();
 
                     subscribedBeacons.add(new SubscribedBeacon(aliasName, beacon));

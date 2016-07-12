@@ -1,5 +1,6 @@
 package se.mogumogu.presencedetector;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -30,6 +33,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import se.mogumogu.presencedetector.activity.RegistrationActivity;
 import se.mogumogu.presencedetector.activity.ScanActivity;
+import se.mogumogu.presencedetector.activity.SubscribedBeaconsActivity;
+import se.mogumogu.presencedetector.adapter.SubscribedBeaconAdapter;
 import se.mogumogu.presencedetector.model.BeaconNearby;
 import se.mogumogu.presencedetector.model.BeaconOutOfRange;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
@@ -50,11 +55,34 @@ public class RangeHandler implements RangeNotifier {
     private String timestamp;
     private RetrofitManager retrofitManager;
     private Set<Beacon> beaconsToNotifyOutOfRange;
+    private Activity activity;
 
     public RangeHandler(SharedPreferences preferences, Context context) {
 
         this.preferences = preferences;
         this.context = context;
+
+        gson = new Gson();
+        responseSuccess = "\"response_value\":\"200\"";
+
+        subscribedBeaconsJson = preferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
+
+        if (subscribedBeaconsJson == null) {
+
+            subscribedBeacons = new HashSet<>();
+
+        } else {
+
+            Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
+            subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
+        }
+    }
+
+    public RangeHandler(SharedPreferences preferences, Context context, Activity activity){
+
+        this.preferences = preferences;
+        this.context = context;
+        this.activity = activity;
 
         gson = new Gson();
         responseSuccess = "\"response_value\":\"200\"";
@@ -91,6 +119,37 @@ public class RangeHandler implements RangeNotifier {
         Log.d("beaconsInRange", beaconsInRegionInRange.toString());
         Log.d("lowRssiBeacons", beaconsWithLowRssiLevel.toString());
 
+        if(SubscribedBeaconsActivity.isActive){
+
+            BeaconUtil beaconUtil = new BeaconUtil();
+
+            if (beaconsInRegion.size() > 0) {
+
+                for (Beacon beacon : beaconsInRegion) {
+
+                    if(beaconUtil.isCloseBeacon(beacon) && beaconUtil.beaconIsSubscribed(beacon, subscribedBeacons)){
+
+                        beaconUtil.refreshRangeStatusToSubscribedBeacons(beacon, subscribedBeacons);
+                    }
+                }
+            }
+
+            final RecyclerView recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view_my_beacons);
+            final RecyclerView.LayoutManager layoutManager;
+            final SubscribedBeaconAdapter subscribedBeaconAdapter;
+
+            layoutManager = new LinearLayoutManager(context);
+            subscribedBeaconAdapter = new SubscribedBeaconAdapter(context, subscribedBeacons);
+
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setAdapter(subscribedBeaconAdapter);
+                }
+            });
+        }
         if (!beaconsInRegionInRange.isEmpty() && beaconsInRegion.isEmpty()) {
 
             beaconsToNotifyOutOfRange.addAll(beaconsInRegionInRange);

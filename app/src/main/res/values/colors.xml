@@ -8,4 +8,6 @@
     <color name="colorDimGray">#696969</color>
     <color name="colorAquaGreen">#73bfbf</color>
     <color name="colorVintageBlue">#99C4C0</color>
+    <color name="colorLinen">#faf0e6</color>
+    <color name="colorDarkLinen">#ccc4bc</color>
 </resources>

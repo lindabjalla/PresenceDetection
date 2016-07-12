@@ -4,12 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -27,6 +30,19 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
         this.context = context;
         subscribedBeacons = new ArrayList<>();
         subscribedBeacons.addAll(subscribedBeaconsSet);
+
+        Log.d("unsorted", subscribedBeacons.toString());
+
+        Collections.sort(subscribedBeacons, new Comparator<SubscribedBeacon>() {
+            @Override
+            public int compare(SubscribedBeacon beacon1, SubscribedBeacon beacon2) {
+
+                return Boolean.compare(beacon1.isInRange(), beacon2.isInRange());
+            }
+        });
+        Collections.reverse(subscribedBeacons);
+
+        Log.d("sorted by boolean", subscribedBeacons.toString());
     }
 
     @Override
@@ -40,6 +56,7 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
     public void onBindViewHolder(SubscribedBeaconViewHolder holder, int position) {
 
         holder.aliasNameView.setText(subscribedBeacons.get(position).getAliasName());
+        holder.statusView.setText(getBeaconStatus(position));
 
         if (position % 2 == 0) {
 
@@ -47,7 +64,7 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
 
         } else {
 
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorApricot));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorVintageBlue));
         }
     }
 
@@ -57,11 +74,26 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
         return subscribedBeacons.size();
     }
 
+    private String getBeaconStatus(int position){
+
+        SubscribedBeacon subscribedBeacon = subscribedBeacons.get(position);
+
+        if(subscribedBeacon.isInRange()){
+
+            return "in range";
+
+        }else{
+
+            return "out of range";
+        }
+    }
+
     public static final class SubscribedBeaconViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public static final String SUBSCRIBED_BEACON = "se.mogumogu.presencedetector.SUBSCRIBED_BEACON";
 
         public final TextView aliasNameView;
+        public final TextView statusView;
         private Context context;
         private List<SubscribedBeacon> subscribedBeacons;
         private SubscribedBeacon subscribedBeacon;
@@ -69,7 +101,8 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
         public SubscribedBeaconViewHolder(View view, Context context, List<SubscribedBeacon> subscribedBeacons) {
 
             super(view);
-            this.aliasNameView = (TextView) view.findViewById(R.id.my_beacons_alias_name);
+            aliasNameView = (TextView) view.findViewById(R.id.my_beacons_alias_name);
+            statusView = (TextView) view.findViewById(R.id.my_beacons_status);
             view.setOnClickListener(this);
             this.context = context;
             this.subscribedBeacons = subscribedBeacons;

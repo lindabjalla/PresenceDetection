@@ -19,7 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import org.altbeacon.beacon.Beacon;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -60,7 +59,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
     @Override
     public DeviceViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
-        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_active_beacon, parent, false);
+        final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_active_beacon, parent, false);
         return new DeviceViewHolder(view, context, beacons, manager);
     }
 

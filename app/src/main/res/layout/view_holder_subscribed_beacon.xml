@@ -1,24 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="16dp">
+    android:layout_height="wrap_content"
+    android:stretchColumns="1"
+    android:padding="30dp">
+
+    <TableRow android:padding="1dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:gravity="center"
+            android:padding="6dp"
             android:text="@string/label_alias_name"
-            android:textColor="@color/colorDimGray"
+            android:textColor="@color/colorEggshell"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/my_beacons_alias_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorLinen"
+            android:gravity="center"
+            android:padding="6dp"
             android:textColor="@color/colorDimGray"
             android:textSize="20sp"
             tools:text="my beacon" />
 
-</LinearLayout>
+    </TableRow>
+
+    <TableRow android:padding="1dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="@string/label_status"
+            android:textColor="@color/colorEggshell"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/my_beacons_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorLinen"
+            android:gravity="center"
+            android:padding="6dp"
+            android:textColor="@color/colorDimGray"
+            android:textSize="20sp"
+            tools:text="in range" />
+
+    </TableRow>
+
+</TableLayout>

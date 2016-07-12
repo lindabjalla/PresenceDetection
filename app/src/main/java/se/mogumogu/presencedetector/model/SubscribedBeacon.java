@@ -13,6 +13,7 @@ public class SubscribedBeacon implements Serializable {
     private Beacon beacon;
     private boolean isInRangeNotified;
     private boolean isOutOfRangeNotified;
+    private boolean isInRange;
 
     public SubscribedBeacon(String aliasName, Beacon beacon) {
 
@@ -40,6 +41,11 @@ public class SubscribedBeacon implements Serializable {
         return isOutOfRangeNotified;
     }
 
+    public boolean isInRange(){
+
+        return isInRange;
+    }
+
     public void setInRangeNotified(boolean inRangeNotified) {
 
         isInRangeNotified = inRangeNotified;
@@ -50,6 +56,11 @@ public class SubscribedBeacon implements Serializable {
         isOutOfRangeNotified = outOfRangeNotified;
     }
 
+    public void setInRange(boolean inRange){
+
+        isInRange = inRange;
+    }
+
     @Override
     public String toString() {
         return "SubscribedBeacon{" +
@@ -57,6 +68,7 @@ public class SubscribedBeacon implements Serializable {
                 ", beacon=" + beacon +
                 ", isInRangeNotified=" + isInRangeNotified +
                 ", isOutOfRangeNotified=" + isOutOfRangeNotified +
+                ", isInRange=" + isInRange +
                 '}';
     }
 }
