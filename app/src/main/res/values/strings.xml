@@ -14,14 +14,13 @@
     <string name="dialog_fragment_edit_beacon_alias_name_title">Edit name of the beacon</string>
 
     <!-- RegistrationActivity-->
-    <string name="registration">REGISTRATION</string>
     <string name="scan_beacons">Scan beacons</string>
     <string name="label_uuid">"UUID: "</string>
     <string name="label_major">"Major: "</string>
     <string name="label_minor">"Minor: "</string>
 
     <!-- ScanActivity -->
-    <string name="label_scan_activity">BEACONS NEARBY</string>
+    <string name="label_scan_activity">CLOSE BEACONS NEARBY</string>
     <string name="subscription_message">Tap a Beacon to subscribe!</string>
     <string name="new_beacon_not_found_message">New beacon was not found.</string>
     <string name="title_activity_tabbed_navigation">TabbedNavigationActivity</string>
@@ -35,6 +34,33 @@
     <string name="subscribed_beacons_uuid">UUID</string>
     <string name="subscribed_beacons_label_major">Major</string>
     <string name="subscribed_beacons_label_minor">Minor</string>
+
+    <!-- SettingsActivity -->
+    <string name="label_setting_activity">APP Configuration</string>
+    <string name="reactivation_interval">Reactivation Interval</string>
+    <string name="reactivation_interval_info">You can set up here how long time to wait for the next activation of in rage notification
+        after that your beacon went out of range.</string>
+    <string name="default_reactivation_interval_value">1</string>
+    <string name="default_reactivation_interval_unit">day</string>
+    <string name="rssi_threshold">RSSI Threshold</string>
+    <string name="max_rssi_threshold">Max RSSI Threshold</string>
+    <string name="default_rssi_threshold_value_min">-45</string>
+    <string name="default_rssi_threshold_value_max">-20</string>
+    <string name="rssi_threshold_info">You can set up here RSSI(Received Signal Strength Indicator) threshold.
+        A greater number means the signal is stronger. For example, if you want to monitor your beacons in wider range,
+        set up the minimum value to a smaller number like -60.</string>
+    <string name="min">Min</string>
+    <string name="max">Max</string>
+    <string name="urls">URLs</string>
+    <string name="urls_info">You can set up here URLs to the server.</string>
+    <string name="user_registration">User Registration</string>
+    <string name="default_user_registration_url">http://beacons.zenzor.io/sys/api/register_user</string>
+    <string name="beacon_subscription">Beacon Subscription</string>
+    <string name="default_beacon_subscription_url">http://beacons.zenzor.io/sys/api/subscribe_beacon</string>
+    <string name="in_range_notification">In-range Notification</string>
+    <string name="default_in_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_nearby</string>
+    <string name="out_of_range_notification">Out-of-range Notification</string>
+    <string name="default_out_of_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_outofrange</string>
 
     <!-- Menu -->
     <string name="my_beacons">My Beacons</string>

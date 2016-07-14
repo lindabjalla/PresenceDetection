@@ -1,12 +1,415 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorEggshell"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="se.mogumogu.presencedetector.activity.SettingsActivity">
 
-</RelativeLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/settings_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorEggshell"
+        android:padding="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorDarkLinen"
+                android:gravity="center"
+                android:padding="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorDarkLinen"
+                    android:padding="6dp"
+                    android:text="@string/reactivation_interval"
+                    android:textColor="@color/colorEggshell"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/help_icon_reactivation_interval"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorDarkLinen"
+                    android:contentDescription="@string/reactivation_interval_info"
+                    android:padding="6dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/icon_help_outline_eggshell" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:gravity="center"
+                android:padding="6dp">
+
+                <EditText
+                    android:id="@+id/reactivation_interval_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorEggshell"
+                    android:inputType="number"
+                    android:labelFor="@id/reactivation_interval_value"
+                    android:padding="6dp"
+                    android:text="@string/default_reactivation_interval_value"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/reactivation_interval_unit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorLinen"
+                    android:padding="6dp"
+                    android:text="@string/default_reactivation_interval_unit"
+                    android:textColor="@color/colorDimGray"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorEggshell"
+        android:orientation="vertical"
+        android:padding="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/rssi_threshold"
+                android:textColor="@color/colorEggshell"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/help_icon_min_rssi_threshold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorDarkLinen"
+                android:contentDescription="@string/reactivation_interval_info"
+                android:padding="6dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_help_outline_eggshell" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:baselineAligned="false"
+                android:divider="@drawable/divider"
+                android:orientation="horizontal"
+                android:showDividers="middle">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorLinen"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/min"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/min_rssi_threshold_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorEggshell"
+                        android:inputType="number"
+                        android:labelFor="@id/min_rssi_threshold_value"
+                        android:padding="6dp"
+                        android:text="@string/default_rssi_threshold_value_min"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorLinen"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/max"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/max_rssi_threshold_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorEggshell"
+                        android:inputType="number"
+                        android:labelFor="@id/max_rssi_threshold_value"
+                        android:padding="6dp"
+                        android:text="@string/default_rssi_threshold_value_max"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="@color/colorEggshell"
+        android:orientation="vertical"
+        android:padding="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:text="@string/urls"
+                android:textColor="@color/colorEggshell"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/help_icon_urls"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorDarkLinen"
+                android:contentDescription="@string/reactivation_interval_info"
+                android:padding="6dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_help_outline_eggshell" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:padding="6dp"
+                android:orientation="vertical"
+                android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/user_registration"
+                android:textColor="@color/colorDimGray"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/user_registration_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorEggshell"
+                android:gravity="center"
+                android:inputType="textUri"
+                android:labelFor="@id/user_registration_url"
+                android:padding="8dp"
+                android:text="@string/default_user_registration_url"
+                android:textColor="@color/colorDimGray"
+                android:textSize="18sp" />
+
+                </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:padding="6dp"
+                android:orientation="vertical"
+                android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/beacon_subscription"
+                android:textColor="@color/colorDimGray"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/beacon_subscription_url"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorEggshell"
+                android:gravity="center"
+                android:inputType="textUri"
+                android:labelFor="@id/beacon_subscription_url"
+                android:padding="8dp"
+                android:text="@string/default_beacon_subscription_url"
+                android:textColor="@color/colorDimGray"
+                android:textSize="18sp" />
+
+                </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:padding="6dp"
+                android:orientation="vertical"
+                android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/in_range_notification"
+                android:textColor="@color/colorDimGray"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/in_range_notification_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorEggshell"
+                android:gravity="center"
+                android:inputType="textUri"
+                android:labelFor="@id/in_range_notification_url"
+                android:padding="8dp"
+                android:text="@string/default_in_range_notification_url"
+                android:textColor="@color/colorDimGray"
+                android:textSize="18sp" />
+
+                </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkLinen"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:padding="6dp"
+                android:orientation="vertical"
+                android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorLinen"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="@string/out_of_range_notification"
+                android:textColor="@color/colorDimGray"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/out_of_range_notification_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorEggshell"
+                android:gravity="center"
+                android:inputType="textUri"
+                android:labelFor="@id/out_of_range_notification_url"
+                android:padding="8dp"
+                android:text="@string/default_out_of_range_notification_url"
+                android:textColor="@color/colorDimGray"
+                android:textSize="18sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</TableLayout>

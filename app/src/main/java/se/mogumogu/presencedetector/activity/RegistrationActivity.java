@@ -45,7 +45,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.registration_toolbar);
         myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         setSupportActionBar(myToolbar);
