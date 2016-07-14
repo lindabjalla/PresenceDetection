@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetector.dialogfragment;
+package se.mogumogu.presencedetector.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -42,7 +42,7 @@ public class EditBeaconAliasNameDialogFragment extends DialogFragment {
         try {
             listener = (EditBeaconAliasNameDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement SubscriptionDialogListener");
+            throw new ClassCastException(context.toString() + " must implement EditBeaconAliasNameDialogListener");
         }
     }
 

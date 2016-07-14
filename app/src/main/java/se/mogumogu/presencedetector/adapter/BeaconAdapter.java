@@ -28,7 +28,7 @@ import java.util.Set;
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.activity.RegistrationActivity;
 import se.mogumogu.presencedetector.activity.ScanActivity;
-import se.mogumogu.presencedetector.dialogfragment.SubscriptionDialogFragment;
+import se.mogumogu.presencedetector.fragment.SubscriptionDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceViewHolder> {

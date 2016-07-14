@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetector.dialogfragment;
+package se.mogumogu.presencedetector.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,18 +11,18 @@ import android.view.View;
 
 import se.mogumogu.presencedetector.R;
 
-public class SubscriptionDialogFragment extends DialogFragment {
+public class RegistrationDialogFragment extends DialogFragment {
 
-    private SubscriptionDialogListener listener;
+    private RegistrationDialogListener listener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         try {
-            listener = (SubscriptionDialogListener) context;
+            listener = (RegistrationDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement SubscriptionDialogListener");
+            throw new ClassCastException(context.toString() + " must implement RegistrationDialogListener");
         }
     }
 
@@ -30,17 +30,17 @@ public class SubscriptionDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final View view = View.inflate(getContext(), R.layout.dialog_fragment_subscription, null);
+        final View view = View.inflate(getContext(), R.layout.dialog_fragment_registration, null);
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        dialogBuilder.setTitle(R.string.dialog_fragment_subscription_title);
+        dialogBuilder.setTitle(R.string.dialog_fragment_registration_title);
 
         dialogBuilder.setView(view)
-                .setPositiveButton(R.string.subscribe, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
 
-                        listener.onDialogPositiveClick(SubscriptionDialogFragment.this, view);
+                        listener.onDialogPositiveClick(RegistrationDialogFragment.this, view);
                     }
                 })
 
@@ -48,14 +48,14 @@ public class SubscriptionDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
 
-                        listener.onDialogNegativeClick(SubscriptionDialogFragment.this);
+                        listener.onDialogNegativeClick(RegistrationDialogFragment.this);
                     }
                 });
 
         return dialogBuilder.create();
     }
 
-    public interface SubscriptionDialogListener {
+    public interface RegistrationDialogListener {
 
         void onDialogPositiveClick(DialogFragment dialog, View view);
 

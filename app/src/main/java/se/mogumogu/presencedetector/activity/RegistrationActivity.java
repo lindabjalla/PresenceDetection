@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import se.mogumogu.presencedetector.R;
-import se.mogumogu.presencedetector.dialogfragment.RegistrationDialogFragment;
+import se.mogumogu.presencedetector.fragment.RegistrationDialogFragment;
 import se.mogumogu.presencedetector.RetrofitManager;
 import se.mogumogu.presencedetector.model.User;
 import se.mogumogu.presencedetector.model.UserId;

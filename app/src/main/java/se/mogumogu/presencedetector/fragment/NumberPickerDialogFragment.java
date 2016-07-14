@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetector.dialogfragment;
+package se.mogumogu.presencedetector.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,18 +11,18 @@ import android.view.View;
 
 import se.mogumogu.presencedetector.R;
 
-public class RegistrationDialogFragment extends DialogFragment {
+public class NumberPickerDialogFragment extends DialogFragment {
 
-    private RegistrationDialogListener listener;
+    private NumberPickerDialogListener listener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         try {
-            listener = (RegistrationDialogListener) context;
+            listener = (NumberPickerDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement RegistrationDialogListener");
+            throw new ClassCastException(context.toString() + " must implement NumberPickerDialogListener");
         }
     }
 
@@ -30,17 +30,17 @@ public class RegistrationDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        final View view = View.inflate(getContext(), R.layout.dialog_fragment_registration, null);
+        final View view = View.inflate(getContext(), R.layout.dialog_fragment_number_picker, null);
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        dialogBuilder.setTitle(R.string.dialog_fragment_registration_title);
+        dialogBuilder.setTitle(R.string.dialog_fragment_number_picker_title);
 
         dialogBuilder.setView(view)
-                .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.set, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
 
-                        listener.onDialogPositiveClick(RegistrationDialogFragment.this, view);
+                        listener.onDialogPositiveClick(NumberPickerDialogFragment.this, view);
                     }
                 })
 
@@ -48,17 +48,18 @@ public class RegistrationDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
 
-                        listener.onDialogNegativeClick(RegistrationDialogFragment.this);
+                        listener.onDialogNegativeClick(NumberPickerDialogFragment.this);
                     }
                 });
 
         return dialogBuilder.create();
     }
 
-    public interface RegistrationDialogListener {
+    public interface NumberPickerDialogListener {
 
         void onDialogPositiveClick(DialogFragment dialog, View view);
 
         void onDialogNegativeClick(DialogFragment dialog);
     }
+
 }

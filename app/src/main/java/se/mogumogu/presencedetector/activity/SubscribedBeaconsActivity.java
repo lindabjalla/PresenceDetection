@@ -32,7 +32,7 @@ import java.util.Set;
 
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.RangeHandler;
-import se.mogumogu.presencedetector.dialogfragment.EditBeaconAliasNameDialogFragment;
+import se.mogumogu.presencedetector.fragment.EditBeaconAliasNameDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public class SubscribedBeaconsActivity extends AppCompatActivity implements BeaconConsumer, EditBeaconAliasNameDialogFragment.EditBeaconAliasNameDialogListener {

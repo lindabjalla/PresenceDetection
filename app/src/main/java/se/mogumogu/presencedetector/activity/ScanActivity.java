@@ -46,7 +46,7 @@ import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.RangeHandler;
 import se.mogumogu.presencedetector.RetrofitManager;
 import se.mogumogu.presencedetector.adapter.BeaconAdapter;
-import se.mogumogu.presencedetector.dialogfragment.SubscriptionDialogFragment;
+import se.mogumogu.presencedetector.fragment.SubscriptionDialogFragment;
 import se.mogumogu.presencedetector.model.BeaconSubscription;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 import se.mogumogu.presencedetector.model.Timestamp;

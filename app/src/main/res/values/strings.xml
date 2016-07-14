@@ -6,12 +6,14 @@
     <string name="cancel">Cancel</string>
     <string name="subscribe">Subscribe</string>
     <string name="save">Save</string>
+    <string name="set">Set</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
     <string name="alias_name">Give the beacon a name. e.g. SchoolBeacon, JobBeacon</string>
     <string name="dialog_fragment_registration_title">Activate Presence Detector</string>
     <string name="dialog_fragment_subscription_title">Subscribe the beacon</string>
     <string name="dialog_fragment_edit_beacon_alias_name_title">Edit name of the beacon</string>
+    <string name="dialog_fragment_number_picker_title">Set reactivation interval</string>
 
     <!-- RegistrationActivity-->
     <string name="scan_beacons">Scan beacons</string>

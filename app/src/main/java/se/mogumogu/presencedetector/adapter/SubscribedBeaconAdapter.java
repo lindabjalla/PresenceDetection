@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import se.mogumogu.presencedetector.R;
-import se.mogumogu.presencedetector.dialogfragment.EditBeaconAliasNameDialogFragment;
+import se.mogumogu.presencedetector.fragment.EditBeaconAliasNameDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeaconAdapter.SubscribedBeaconViewHolder> {
