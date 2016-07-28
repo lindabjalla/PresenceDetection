@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,7 +46,8 @@ public class RangeHandler implements RangeNotifier {
     public static final int NOTIFICATION_ID = 1;
 
     private Context context;
-    private SharedPreferences preferences;
+    private SharedPreferences appDataPreferences;
+    private SharedPreferences settingsPreferences;
     private Gson gson;
     private String responseSuccess;
     private String beaconAliasName;
@@ -58,16 +60,17 @@ public class RangeHandler implements RangeNotifier {
     private Set<Beacon> beaconsToNotifyOutOfRange;
     private Activity activity;
     private FragmentManager manager;
+    private int rssiThreshold;
 
-    public RangeHandler(SharedPreferences preferences, Context context) {
+    public RangeHandler(Context context) {
 
-        this.preferences = preferences;
         this.context = context;
-
+        appDataPreferences = context.getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
+        settingsPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         gson = new Gson();
         responseSuccess = "\"response_value\":\"200\"";
 
-        subscribedBeaconsJson = preferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
+        subscribedBeaconsJson = appDataPreferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
 
         if (subscribedBeaconsJson == null) {
 
@@ -78,29 +81,41 @@ public class RangeHandler implements RangeNotifier {
             Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
             subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
         }
+
+        String defaultRssiThreshold = context.getString(R.string.rssi_threshold_default);
+        String rssiThresholdString = settingsPreferences.getString(NumberPickerPreference.PREFERENCE_RSSI_THRESHOLD_KEY, defaultRssiThreshold);
+        rssiThreshold = Integer.parseInt(rssiThresholdString);
     }
 
-    public RangeHandler(SharedPreferences preferences, Context context, Activity activity, FragmentManager manager){
+    public RangeHandler(Context context, Activity activity, FragmentManager manager) {
 
-        this.preferences = preferences;
-        this.context = context;
+        this(context);
+//        this.context = context;
+//        appDataPreferences = context.getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
+//        settingsPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.activity = activity;
         this.manager = manager;
 
-        gson = new Gson();
-        responseSuccess = "\"response_value\":\"200\"";
+//        gson = new Gson();
+//        responseSuccess = "\"response_value\":\"200\"";
+//
+//        subscribedBeaconsJson = appDataPreferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
+//
+//        if (subscribedBeaconsJson == null) {
+//
+//            subscribedBeacons = new HashSet<>();
+//
+//        } else {
+//
+//            Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {
+//            }.getType();
+//            subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
+//        }
 
-        subscribedBeaconsJson = preferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
 
-        if (subscribedBeaconsJson == null) {
-
-            subscribedBeacons = new HashSet<>();
-
-        } else {
-
-            Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
-            subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
-        }
+//        String defaultRssiThreshold = context.getString(R.string.rssi_threshold_default);
+//        String rssiThresholdString = settingsPreferences.getString(NumberPickerPreference.PREFERENCE_RSSI_THRESHOLD_KEY, defaultRssiThreshold);
+//        rssiThreshold = Integer.parseInt(rssiThresholdString);
     }
 
     @Override
@@ -108,10 +123,10 @@ public class RangeHandler implements RangeNotifier {
 
         Log.d("RangeHandler", "didRange");
         Log.d("beaconsInRegion", beaconsInRegion.toString());
-        userId = preferences.getString(RegistrationActivity.USER_ID, null);
-        timestamp = preferences.getString(ScanActivity.TIMESTAMP, null);
+        userId = appDataPreferences.getString(RegistrationActivity.USER_ID, null);
+        timestamp = appDataPreferences.getString(ScanActivity.TIMESTAMP, null);
 
-        String serverUrl = preferences.getString(RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
+        String serverUrl = settingsPreferences.getString(RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
         retrofitManager = new RetrofitManager(serverUrl);
 
         List<Beacon> allBeaconsInRange = findAllBeaconsInRange();
@@ -123,17 +138,15 @@ public class RangeHandler implements RangeNotifier {
         Log.d("beaconsInRange", beaconsInRegionInRange.toString());
         Log.d("lowRssiBeacons", beaconsWithLowRssiLevel.toString());
 
-        if(SubscribedBeaconsActivity.isActive){
-
-            BeaconUtil beaconUtil = new BeaconUtil();
+        if (SubscribedBeaconsActivity.isActive) {
 
             if (beaconsInRegion.size() > 0) {
 
                 for (Beacon beacon : beaconsInRegion) {
 
-                    if(beaconUtil.isCloseBeacon(beacon) && beaconUtil.beaconIsSubscribed(beacon, subscribedBeacons)){
+                    if (isCloseBeacon(beacon) && beaconIsSubscribed(beacon, subscribedBeacons)) {
 
-                        beaconUtil.refreshRangeStatusToSubscribedBeacons(beacon, subscribedBeacons);
+                        refreshRangeStatusToSubscribedBeacons(beacon, subscribedBeacons);
                     }
                 }
             }
@@ -236,7 +249,7 @@ public class RangeHandler implements RangeNotifier {
                 Log.d("beaconRssi", String.valueOf(beaconInRegion.getRssi()));
                 if (subscribedBeacon.getBeacon().getIdentifiers().containsAll(beaconInRegion.getIdentifiers())
                         && !subscribedBeacon.isInRangeNotified()
-                        && (beaconInRegion.getRssi() >= -45 && beaconInRegion.getRssi() <= -20)) {
+                        && (beaconInRegion.getRssi() >= rssiThreshold && beaconInRegion.getRssi() <= -20)) {
 
                     inRangeUnNotifiedBeacons.add(beaconInRegion);
                 }
@@ -326,7 +339,7 @@ public class RangeHandler implements RangeNotifier {
                         }
 
                         subscribedBeaconsJson = gson.toJson(subscribedBeacons);
-                        preferences.edit().putString(ScanActivity.SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
+                        appDataPreferences.edit().putString(ScanActivity.SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
 
                         sendNotification("Beacon in range", "Beacon " + beaconAliasName + " is in range.", R.drawable.icon_bluetooth_in_range);
 
@@ -377,7 +390,7 @@ public class RangeHandler implements RangeNotifier {
                         }
 
                         subscribedBeaconsJson = gson.toJson(subscribedBeacons);
-                        preferences.edit().putString(ScanActivity.SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
+                        appDataPreferences.edit().putString(ScanActivity.SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
 
                         sendNotification("Beacon out of range", "Beacon " + beaconAliasName + " is out of range.", R.drawable.icon_bluetooth_out_of_range);
 
@@ -393,6 +406,42 @@ public class RangeHandler implements RangeNotifier {
                     t.printStackTrace();
                 }
             });
+        }
+    }
+
+    public boolean isCloseBeacon(Beacon beacon) {
+
+        return beacon.getId1() != null && beacon.getBluetoothName().equals("closebeacon.com");
+    }
+
+    public boolean beaconIsSubscribed(Beacon beacon, Set<SubscribedBeacon> subscribedBeacons) {
+
+        if (subscribedBeacons != null) {
+
+            for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+
+                if (subscribedBeacon.getBeacon().getIdentifiers().containsAll(beacon.getIdentifiers())) {
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void refreshRangeStatusToSubscribedBeacons(Beacon beacon, Set<SubscribedBeacon> subscribedBeacons) {
+
+        Log.d("rssi", String.valueOf(beacon.getRssi()));
+        for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+
+            if (beacon.getIdentifiers().containsAll(subscribedBeacon.getBeacon().getIdentifiers()) && (beacon.getRssi() >= rssiThreshold && beacon.getRssi() <= -20)) {
+
+                subscribedBeacon.setInRange(true);
+
+            } else {
+
+                subscribedBeacon.setInRange(false);
+            }
         }
     }
 }

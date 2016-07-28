@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -68,7 +69,8 @@ public class ScanActivity extends AppCompatActivity
     private List<Beacon> closeBeacons;
     private Region allBeaconsRegion;
     private Gson gson;
-    private SharedPreferences preferences;
+    private SharedPreferences appDataPreferences;
+    private SharedPreferences settingsPreferences;
     private String subscribedBeaconsJson;
     private Set<SubscribedBeacon> subscribedBeacons;
     private Intent intent;
@@ -101,9 +103,10 @@ public class ScanActivity extends AppCompatActivity
         beaconManager.bind(this);
 
         gson = new Gson();
-        preferences = getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
+        appDataPreferences = getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
+        settingsPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        subscribedBeaconsJson = preferences.getString(SUBSCRIBED_BEACONS, null);
+        subscribedBeaconsJson = appDataPreferences.getString(SUBSCRIBED_BEACONS, null);
 
         if (subscribedBeaconsJson == null) {
 
@@ -132,7 +135,7 @@ public class ScanActivity extends AppCompatActivity
     @Override
     public void onDialogPositiveClick(final DialogFragment dialog, final View view) {
 
-        String beaconJson = preferences.getString(BeaconAdapter.BEACON_KEY, null);
+        String beaconJson = appDataPreferences.getString(BeaconAdapter.BEACON_KEY, null);
         final Beacon beacon = gson.fromJson(beaconJson, Beacon.class);
 
         if (beaconIsSubscribed(beacon)) {
@@ -156,7 +159,7 @@ public class ScanActivity extends AppCompatActivity
 
         Log.d("onPause", "onPause");
         super.onPause();
-        RangeHandler rangeHandler = new RangeHandler(preferences, context);
+        RangeHandler rangeHandler = new RangeHandler(context);
         beaconManager.unbind(this);
         beaconManager.setRangeNotifier(rangeHandler);
 
@@ -246,10 +249,10 @@ public class ScanActivity extends AppCompatActivity
 
         Log.d("subscribeBeacon", "came in");
 
-        String serverUrl = preferences.getString(RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
+        String serverUrl = settingsPreferences.getString(RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
         RetrofitManager retrofitManager = new RetrofitManager(serverUrl);
 
-        final String userId = preferences.getString(RegistrationActivity.USER_ID, null);
+        final String userId = appDataPreferences.getString(RegistrationActivity.USER_ID, null);
         BeaconSubscription beaconSubscription = new BeaconSubscription(userId, beacon.getId1().toString());
         String beaconSubscriptionJson = gson.toJson(beaconSubscription);
 
@@ -273,8 +276,8 @@ public class ScanActivity extends AppCompatActivity
 
                     subscribedBeacons.add(new SubscribedBeacon(aliasName, beacon));
                     subscribedBeaconsJson = gson.toJson(subscribedBeacons);
-                    preferences.edit().putString(TIMESTAMP, timestamp).apply();
-                    preferences.edit().putString(SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
+                    appDataPreferences.edit().putString(TIMESTAMP, timestamp).apply();
+                    appDataPreferences.edit().putString(SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
                     dialog.dismiss();
 
                     Toast.makeText(context, aliasName + " is successfully subscribed.", Toast.LENGTH_LONG).show();

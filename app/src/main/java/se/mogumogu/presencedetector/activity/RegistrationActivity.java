@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,14 +20,14 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import se.mogumogu.presencedetector.R;
-import se.mogumogu.presencedetector.fragment.RegistrationDialogFragment;
-import se.mogumogu.presencedetector.RetrofitManager;
-import se.mogumogu.presencedetector.model.User;
-import se.mogumogu.presencedetector.model.UserId;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import se.mogumogu.presencedetector.R;
+import se.mogumogu.presencedetector.RetrofitManager;
+import se.mogumogu.presencedetector.fragment.RegistrationDialogFragment;
+import se.mogumogu.presencedetector.model.User;
+import se.mogumogu.presencedetector.model.UserId;
 
 public class RegistrationActivity extends AppCompatActivity implements RegistrationDialogFragment.RegistrationDialogListener {
 
@@ -36,7 +37,8 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     public static final String PREFERENCE_SERVER_URL_KEY = "preference_server_url_key";
     public static final String DEFAULT_SERVER_URL = "http://beacons.zenzor.io";
 
-    private SharedPreferences preferences;
+    private SharedPreferences appDataPreferences;
+    private SharedPreferences settingsPreferences;
     private DialogFragment dialogFragment;
     private Gson gson;
     private Context context = this;
@@ -52,20 +54,21 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         setSupportActionBar(myToolbar);
 
-        preferences = getSharedPreferences(PRESENCE_DETECTION_PREFERENCES, MODE_PRIVATE);
+        appDataPreferences = getSharedPreferences(PRESENCE_DETECTION_PREFERENCES, MODE_PRIVATE);
+        settingsPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         gson = new Gson();
 
         //      bara för test
 //        activity_settings.edit().putBoolean(USER_IS_REGISTERED, false).apply();
 
-        String userId = preferences.getString(USER_ID, null);
+        String userId = appDataPreferences.getString(USER_ID, null);
 
         if (userId != null) {
 
             Log.d("userId", userId);
         }
 
-        boolean userIsRegistered = preferences.getBoolean(USER_IS_REGISTERED, false);
+        boolean userIsRegistered = appDataPreferences.getBoolean(USER_IS_REGISTERED, false);
 
         if (!userIsRegistered) {
 
@@ -108,7 +111,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
             final User user = new User(firstName, lastName);
             String userJson = gson.toJson(user);
 
-            String serverUrl = preferences.getString(PREFERENCE_SERVER_URL_KEY, DEFAULT_SERVER_URL);
+            String serverUrl = settingsPreferences.getString(PREFERENCE_SERVER_URL_KEY, DEFAULT_SERVER_URL);
             RetrofitManager retrofitManager = new RetrofitManager(serverUrl);
 
             Log.d("serverUrl", serverUrl);
@@ -130,8 +133,8 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
                         final String userId = userIdObject.getUserId();
                         Log.d("userId from server", userId);
 
-                        preferences.edit().putString(USER_ID, userId).apply();
-                        preferences.edit().putBoolean(USER_IS_REGISTERED, true).apply();
+                        appDataPreferences.edit().putString(USER_ID, userId).apply();
+                        appDataPreferences.edit().putBoolean(USER_IS_REGISTERED, true).apply();
 
                         Intent intent = getIntent();
                         finish();
@@ -169,7 +172,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
 
         Intent intent;
 
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
 
             case R.id.menu_item_my_beacons:
                 intent = new Intent(this, SubscribedBeaconsActivity.class);

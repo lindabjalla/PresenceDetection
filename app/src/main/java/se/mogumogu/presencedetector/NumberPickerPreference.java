@@ -18,8 +18,10 @@ import java.util.List;
 
 public class NumberPickerPreference extends DialogPreference {
 
+    public static final String PREFERENCE_RSSI_THRESHOLD_KEY = "preference_rssi_threshold_key";
+
     private NumberPicker numberPicker;
-    private String maxValue;
+    private String defaultValue;
     private List<String> rssiThresholdValues;
 
     public NumberPickerPreference(Context context, AttributeSet attrs) {
@@ -49,12 +51,12 @@ public class NumberPickerPreference extends DialogPreference {
         super.onBindDialogView(view);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        maxValue = getContext().getResources().getString(R.string.rssi_threshold_max);
-        String currentValue = preferences.getString("preference_rssi_threshold_key", maxValue);
+        defaultValue = getContext().getResources().getString(R.string.rssi_threshold_default);
+        String currentValue = preferences.getString(PREFERENCE_RSSI_THRESHOLD_KEY, defaultValue);
 
         rssiThresholdValues = new ArrayList<>();
 
-        for (int i = -80; i <= -45; i++) {
+        for (int i = -69; i <= -45; i++) {
 
             rssiThresholdValues.add(String.valueOf(i));
         }
@@ -81,7 +83,7 @@ public class NumberPickerPreference extends DialogPreference {
             numberPicker.clearFocus();
 
             Log.d("minValue", String.valueOf(numberPicker.getMinValue()));
-            Log.d("maxValue", String.valueOf(numberPicker.getMaxValue()));
+            Log.d("defaultValue", String.valueOf(numberPicker.getMaxValue()));
             Log.d("rssiThresholdValues", rssiThresholdValues.toString());
 
             int index = numberPicker.getValue();
@@ -104,7 +106,7 @@ public class NumberPickerPreference extends DialogPreference {
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
 
-        setValue(restorePersistedValue ? getPersistedString(maxValue) : (String) defaultValue);
+        setValue(restorePersistedValue ? getPersistedString(this.defaultValue) : (String) defaultValue);
     }
 
     public void setValue(String value) {

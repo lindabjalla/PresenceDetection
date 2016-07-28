@@ -69,7 +69,7 @@ public class SubscribedBeaconsActivity extends AppCompatActivity implements Beac
         context = this;
         allBeaconsRegion = new Region("allBeacons", null, null, null);
         preferences = getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
-        RangeHandler rangeHandler = new RangeHandler(preferences, this, this, getSupportFragmentManager());
+        RangeHandler rangeHandler = new RangeHandler(this, this, getSupportFragmentManager());
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.setRangeNotifier(rangeHandler);

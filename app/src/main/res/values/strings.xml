@@ -72,7 +72,6 @@
     <string name="help">Help</string>
 
     <!-- activity_settings -->
-    <string name="rssi_threshold_min">-80</string>
-    <string name="rssi_threshold_max">-45</string>
+    <string name="rssi_threshold_default">-45</string>
 
 </resources>

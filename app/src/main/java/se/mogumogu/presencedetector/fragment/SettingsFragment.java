@@ -70,7 +70,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
             } else if (preference instanceof NumberPickerPreference) {
 
-                final String currentRssiThreshold = sharedPreferences.getString(key, getResources().getString(R.string.rssi_threshold_max));
+                final String currentRssiThreshold = sharedPreferences.getString(key, getResources().getString(R.string.rssi_threshold_default));
                 preference.setSummary(currentRssiThreshold);
                 sharedPreferences.edit().putString(key, currentRssiThreshold).apply();
 

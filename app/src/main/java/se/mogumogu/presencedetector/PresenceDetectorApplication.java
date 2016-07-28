@@ -2,7 +2,6 @@ package se.mogumogu.presencedetector;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -13,13 +12,10 @@ import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
-import se.mogumogu.presencedetector.activity.RegistrationActivity;
-
-public class PresenceDetectorApplication extends Application implements BootstrapNotifier{
+public class PresenceDetectorApplication extends Application implements BootstrapNotifier {
 
     private static final String TAG = PresenceDetectorApplication.class.getSimpleName();
 
-    private SharedPreferences preferences;
     private BeaconManager beaconManager;
     private Context context = this;
 
@@ -35,7 +31,6 @@ public class PresenceDetectorApplication extends Application implements Bootstra
         beaconManager.setBackgroundScanPeriod(1100L);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
         RegionBootstrap regionBootstrap = new RegionBootstrap(this, new Region("allBeacons", null, null, null));
-        preferences = this.getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, MODE_PRIVATE);
     }
 
     @Override
@@ -43,7 +38,7 @@ public class PresenceDetectorApplication extends Application implements Bootstra
 
         Log.d(TAG, "Got a didEnterRegion call");
 
-        RangeHandler rangeHandler = new RangeHandler(preferences, context);
+        RangeHandler rangeHandler = new RangeHandler(context);
         beaconManager.setRangeNotifier(rangeHandler);
 
         try {
@@ -66,5 +61,6 @@ public class PresenceDetectorApplication extends Application implements Bootstra
     }
 
     @Override
-    public void didDetermineStateForRegion(int i, Region region) {}
+    public void didDetermineStateForRegion(int i, Region region) {
+    }
 }
