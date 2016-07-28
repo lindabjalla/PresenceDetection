@@ -53,17 +53,17 @@
     <string name="urls">URLs</string>
     <string name="urls_info">You can set up here URLs to the server.</string>
 
-    <string name="preference_title_user_registration_url">User registration url</string>
-    <string name="default_user_registration_url">http://beacons.zenzor.io/sys/api/register_user</string>
+    <string name="preference_title_server_url">Server URL</string>
+    <string name="default_server_url">http://beacons.zenzor.io</string>
 
-    <string name="preference_title_beacon_subscription_url">Beacon subscription url</string>
-    <string name="default_beacon_subscription_url">http://beacons.zenzor.io/sys/api/subscribe_beacon</string>
+    <!--<string name="preference_title_beacon_subscription_url">Beacon subscription url</string>-->
+    <!--<string name="default_beacon_subscription_url">http://beacons.zenzor.io/sys/api/subscribe_beacon</string>-->
 
-    <string name="preference_title_in_range_notification_url">In-range notification url</string>
-    <string name="default_in_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_nearby</string>
+    <!--<string name="preference_title_in_range_notification_url">In-range notification url</string>-->
+    <!--<string name="default_in_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_nearby</string>-->
 
-    <string name="preference_title_out_of_range_notification_url">Out-of-range notification url</string>
-    <string name="default_out_of_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_outofrange</string>
+    <!--<string name="preference_title_out_of_range_notification_url">Out-of-range notification url</string>-->
+    <!--<string name="default_out_of_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_outofrange</string>-->
 
     <!-- Menu -->
     <string name="my_beacons">My Beacons</string>
