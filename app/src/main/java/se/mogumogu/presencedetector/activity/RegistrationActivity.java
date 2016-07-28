@@ -33,6 +33,8 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     public static final String PRESENCE_DETECTION_PREFERENCES = "se.mogumogu.presencedetection.PRESENCE_DETECTION_PREFERENCES";
     public static final String USER_IS_REGISTERED = "se.mogumogu.presencedetection.USER_IS_REGISTERED";
     public static final String USER_ID = "se.mogumogu.presencedetection.USER_ID";
+    public static final String PREFERENCE_SERVER_URL_KEY = "preference_server_url_key";
+    public static final String DEFAULT_SERVER_URL = "http://beacons.zenzor.io";
 
     private SharedPreferences preferences;
     private DialogFragment dialogFragment;
@@ -106,8 +108,12 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
             final User user = new User(firstName, lastName);
             String userJson = gson.toJson(user);
 
-            RetrofitManager retrofitManager = new RetrofitManager();
+            String serverUrl = preferences.getString(PREFERENCE_SERVER_URL_KEY, DEFAULT_SERVER_URL);
+            RetrofitManager retrofitManager = new RetrofitManager(serverUrl);
+
+            Log.d("serverUrl", serverUrl);
             Log.d("inputString", "input=" + userJson);
+
             Call<String> result = retrofitManager.getPresenceDetectionService().registerUser("input=" + userJson);
 
             result.enqueue(new Callback<String>() {

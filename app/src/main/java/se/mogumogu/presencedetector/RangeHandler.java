@@ -111,7 +111,8 @@ public class RangeHandler implements RangeNotifier {
         userId = preferences.getString(RegistrationActivity.USER_ID, null);
         timestamp = preferences.getString(ScanActivity.TIMESTAMP, null);
 
-        retrofitManager = new RetrofitManager();
+        String serverUrl = preferences.getString(RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
+        retrofitManager = new RetrofitManager(serverUrl);
 
         List<Beacon> allBeaconsInRange = findAllBeaconsInRange();
         List<Beacon> beaconsInRegionInRange = findBeaconsInRegionInRange(beaconsInRegion, allBeaconsInRange);

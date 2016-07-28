@@ -55,9 +55,10 @@ import se.mogumogu.presencedetector.model.Timestamp;
 public class ScanActivity extends AppCompatActivity
         implements BeaconConsumer, SubscriptionDialogFragment.SubscriptionDialogListener, RangeNotifier {
 
+    private static final String TAG = ScanActivity.class.getSimpleName();
+
     public static final String SUBSCRIBED_BEACONS = "se.mogumogu.presencedetection.SUBSCRIBED_BEACONS";
     public static final String TIMESTAMP = "se.mogumogu.presencedetection.TIMESTAMP";
-    private static final String TAG = ScanActivity.class.getSimpleName();
 
     private BeaconManager beaconManager;
     private Context context = this;
@@ -245,7 +246,9 @@ public class ScanActivity extends AppCompatActivity
 
         Log.d("subscribeBeacon", "came in");
 
-        RetrofitManager retrofitManager = new RetrofitManager();
+        String serverUrl = preferences.getString(RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
+        RetrofitManager retrofitManager = new RetrofitManager(serverUrl);
+
         final String userId = preferences.getString(RegistrationActivity.USER_ID, null);
         BeaconSubscription beaconSubscription = new BeaconSubscription(userId, beacon.getId1().toString());
         String beaconSubscriptionJson = gson.toJson(beaconSubscription);
