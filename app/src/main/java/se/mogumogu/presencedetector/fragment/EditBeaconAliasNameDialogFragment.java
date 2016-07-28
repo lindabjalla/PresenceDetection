@@ -73,7 +73,7 @@ public class EditBeaconAliasNameDialogFragment extends DialogFragment {
         dialogBuilder.setTitle(R.string.dialog_fragment_edit_beacon_alias_name_title);
 
         dialogBuilder.setView(view)
-                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
 

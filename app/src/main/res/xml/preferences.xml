@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="@string/default_interval_value"
+        android:dialogTitle="@string/reactivation_interval"
+        android:entries="@array/reactivation_interval_array"
+        android:entryValues="@array/reactivation_interval_value_array"
+        android:key="preference_reactivation_interval_key"
+        android:summary="@string/one_day"
+        android:title="@string/reactivation_interval" />
+
+    <se.mogumogu.presencedetector.NumberPickerPreference
+        android:defaultValue="@string/rssi_threshold_max"
+        android:dialogTitle="@string/dialog_title_rssi_threshold"
+        android:key="preference_rssi_threshold_key"
+        android:summary="@string/rssi_threshold_max"
+        android:title="@string/dialog_title_rssi_threshold" />
+
+    <EditTextPreference
+        android:defaultValue="@string/default_user_registration_url"
+        android:dialogTitle="@string/preference_title_user_registration_url"
+        android:inputType="textUri"
+        android:key="preference_user_registration_url_key"
+        android:persistent="true"
+        android:summary="@string/default_user_registration_url"
+        android:title="@string/preference_title_user_registration_url" />
+
+    <EditTextPreference
+        android:defaultValue="@string/default_beacon_subscription_url"
+        android:dialogTitle="@string/preference_title_beacon_subscription_url"
+        android:inputType="textUri"
+        android:key="preference_beacon_subscription_url_key"
+        android:persistent="true"
+        android:summary="@string/default_beacon_subscription_url"
+        android:title="@string/preference_title_beacon_subscription_url" />
+
+    <EditTextPreference
+        android:defaultValue="@string/default_in_range_notification_url"
+        android:dialogTitle="@string/preference_title_beacon_subscription_url"
+        android:inputType="textUri"
+        android:key="preference_in_range_notification_key"
+        android:persistent="true"
+        android:summary="@string/default_in_range_notification_url"
+        android:title="@string/preference_title_in_range_notification_url" />
+
+    <EditTextPreference
+        android:defaultValue="@string/default_out_of_range_notification_url"
+        android:dialogTitle="@string/preference_title_out_of_range_notification_url"
+        android:inputType="textUri"
+        android:key="preference_out_of_range_notification_key"
+        android:persistent="true"
+        android:summary="@string/default_out_of_range_notification_url"
+        android:title="@string/preference_title_out_of_range_notification_url" />
+
+</PreferenceScreen>

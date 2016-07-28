@@ -3,9 +3,8 @@
 
     <!-- DialogFragment-->
     <string name="activate">Activate</string>
-    <string name="cancel">Cancel</string>
     <string name="subscribe">Subscribe</string>
-    <string name="save">Save</string>
+    <string name="ok">OK</string>
     <string name="set">Set</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
@@ -13,7 +12,7 @@
     <string name="dialog_fragment_registration_title">Activate Presence Detector</string>
     <string name="dialog_fragment_subscription_title">Subscribe the beacon</string>
     <string name="dialog_fragment_edit_beacon_alias_name_title">Edit name of the beacon</string>
-    <string name="dialog_fragment_number_picker_title">Set reactivation interval</string>
+    <string name="dialog_fragment_number_picker_title">Set value of reactivation interval</string>
 
     <!-- RegistrationActivity-->
     <string name="scan_beacons">Scan beacons</string>
@@ -38,16 +37,14 @@
     <string name="subscribed_beacons_label_minor">Minor</string>
 
     <!-- SettingsActivity -->
-    <string name="label_setting_activity">APP Configuration</string>
-    <string name="reactivation_interval">Reactivation Interval</string>
+    <string name="title_setting_activity">App Configuration</string>
+    <string name="reactivation_interval">Reactivation interval</string>
     <string name="reactivation_interval_info">You can set up here how long time to wait for the next activation of in rage notification
         after that your beacon went out of range.</string>
-    <string name="default_reactivation_interval_value">1</string>
-    <string name="default_reactivation_interval_unit">day</string>
-    <string name="rssi_threshold">RSSI Threshold</string>
+    <string name="default_interval_value">1440</string>
+    <string name="one_day">1 day</string>
+    <string name="dialog_title_rssi_threshold">RSSI threshold</string>
     <string name="max_rssi_threshold">Max RSSI Threshold</string>
-    <string name="default_rssi_threshold_value_min">-45</string>
-    <string name="default_rssi_threshold_value_max">-20</string>
     <string name="rssi_threshold_info">You can set up here RSSI(Received Signal Strength Indicator) threshold.
         A greater number means the signal is stronger. For example, if you want to monitor your beacons in wider range,
         set up the minimum value to a smaller number like -60.</string>
@@ -55,13 +52,17 @@
     <string name="max">Max</string>
     <string name="urls">URLs</string>
     <string name="urls_info">You can set up here URLs to the server.</string>
-    <string name="user_registration">User Registration</string>
+
+    <string name="preference_title_user_registration_url">User registration url</string>
     <string name="default_user_registration_url">http://beacons.zenzor.io/sys/api/register_user</string>
-    <string name="beacon_subscription">Beacon Subscription</string>
+
+    <string name="preference_title_beacon_subscription_url">Beacon subscription url</string>
     <string name="default_beacon_subscription_url">http://beacons.zenzor.io/sys/api/subscribe_beacon</string>
-    <string name="in_range_notification">In-range Notification</string>
+
+    <string name="preference_title_in_range_notification_url">In-range notification url</string>
     <string name="default_in_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_nearby</string>
-    <string name="out_of_range_notification">Out-of-range Notification</string>
+
+    <string name="preference_title_out_of_range_notification_url">Out-of-range notification url</string>
     <string name="default_out_of_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_outofrange</string>
 
     <!-- Menu -->
@@ -69,5 +70,9 @@
     <string name="scan">Scan</string>
     <string name="settings">Settings</string>
     <string name="help">Help</string>
+
+    <!-- activity_settings -->
+    <string name="rssi_threshold_min">-80</string>
+    <string name="rssi_threshold_max">-45</string>
 
 </resources>

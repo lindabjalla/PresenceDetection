@@ -54,7 +54,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         gson = new Gson();
 
         //      bara för test
-//        preferences.edit().putBoolean(USER_IS_REGISTERED, false).apply();
+//        activity_settings.edit().putBoolean(USER_IS_REGISTERED, false).apply();
 
         String userId = preferences.getString(USER_ID, null);
 

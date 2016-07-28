@@ -54,7 +54,7 @@
         </activity>
 
         <activity android:name=".activity.SettingsActivity"
-            android:label="@string/label_setting_activity"
+            android:label="@string/title_setting_activity"
             android:parentActivityName=".activity.RegistrationActivity">
 
             <meta-data

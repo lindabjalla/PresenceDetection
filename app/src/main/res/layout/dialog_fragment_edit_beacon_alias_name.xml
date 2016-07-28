@@ -6,10 +6,10 @@
 
     <EditText
         android:id="@+id/alias_name_edit"
-        android:labelFor="@id/alias_name_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:labelFor="@id/alias_name_edit"
         android:padding="16dp" />
 
 </LinearLayout>
