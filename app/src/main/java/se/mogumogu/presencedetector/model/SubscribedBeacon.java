@@ -11,6 +11,7 @@ public class SubscribedBeacon implements Serializable {
     private boolean isInRangeNotified;
     private boolean isOutOfRangeNotified;
     private boolean isInRange;
+    private String timeStamp;
 
     public SubscribedBeacon(String aliasName, Beacon beacon) {
 
@@ -43,6 +44,11 @@ public class SubscribedBeacon implements Serializable {
         return isInRange;
     }
 
+    public String getTimeStamp() {
+
+        return timeStamp;
+    }
+
     public SubscribedBeacon setAliasName(String aliasName) {
 
         this.aliasName = aliasName;
@@ -62,6 +68,11 @@ public class SubscribedBeacon implements Serializable {
     public void setInRange(boolean inRange){
 
         isInRange = inRange;
+    }
+
+    public void setTimeStamp(String timeStamp) {
+
+        this.timeStamp = timeStamp;
     }
 
     @Override

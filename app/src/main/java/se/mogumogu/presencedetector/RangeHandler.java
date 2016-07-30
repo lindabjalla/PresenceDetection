@@ -37,13 +37,14 @@ import se.mogumogu.presencedetector.activity.RegistrationActivity;
 import se.mogumogu.presencedetector.activity.ScanActivity;
 import se.mogumogu.presencedetector.activity.SubscribedBeaconsActivity;
 import se.mogumogu.presencedetector.adapter.SubscribedBeaconAdapter;
-import se.mogumogu.presencedetector.model.BeaconNearby;
+import se.mogumogu.presencedetector.model.BeaconInRange;
 import se.mogumogu.presencedetector.model.BeaconOutOfRange;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public class RangeHandler implements RangeNotifier {
 
     public static final int NOTIFICATION_ID = 1;
+    public static final String PREFERENCE_REACTIVATION_INTERVAL_KEY = "preference_reactivation_interval_key";
 
     private Context context;
     private SharedPreferences appDataPreferences;
@@ -90,32 +91,8 @@ public class RangeHandler implements RangeNotifier {
     public RangeHandler(Context context, Activity activity, FragmentManager manager) {
 
         this(context);
-//        this.context = context;
-//        appDataPreferences = context.getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
-//        settingsPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.activity = activity;
         this.manager = manager;
-
-//        gson = new Gson();
-//        responseSuccess = "\"response_value\":\"200\"";
-//
-//        subscribedBeaconsJson = appDataPreferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
-//
-//        if (subscribedBeaconsJson == null) {
-//
-//            subscribedBeacons = new HashSet<>();
-//
-//        } else {
-//
-//            Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {
-//            }.getType();
-//            subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
-//        }
-
-
-//        String defaultRssiThreshold = context.getString(R.string.rssi_threshold_default);
-//        String rssiThresholdString = settingsPreferences.getString(NumberPickerPreference.PREFERENCE_RSSI_THRESHOLD_KEY, defaultRssiThreshold);
-//        rssiThreshold = Integer.parseInt(rssiThresholdString);
     }
 
     @Override
@@ -245,11 +222,38 @@ public class RangeHandler implements RangeNotifier {
 
         for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 
+            if (subscribedBeacon.isOutOfRangeNotified()) {
+
+                String defaultIntervalValue = context.getString(R.string.default_interval_value);
+                String reactivationIntervalString =
+                        settingsPreferences.getString(PREFERENCE_REACTIVATION_INTERVAL_KEY, defaultIntervalValue);
+                long reactivationInterval = Long.parseLong(reactivationIntervalString);
+
+                Log.d("interval", reactivationIntervalString);
+
+                //TODO: Ask how much the minimum interval must be
+
+                long currentTime = System.currentTimeMillis();
+                long outOfRangeTime = Long.parseLong(subscribedBeacon.getTimeStamp());
+
+                Log.d("currentTime", String.valueOf(currentTime));
+                Log.d("outOfRangeTime", String.valueOf(outOfRangeTime));
+                Log.d("difference", String.valueOf(currentTime - outOfRangeTime));
+
+                if ((currentTime - outOfRangeTime) >= reactivationInterval) {
+
+                    subscribedBeacon.setInRangeNotified(false);
+                    subscribedBeacon.setOutOfRangeNotified(false);
+                }
+            }
+
             for (Beacon beaconInRegion : beaconsInRegion) {
                 Log.d("beaconRssi", String.valueOf(beaconInRegion.getRssi()));
                 if (subscribedBeacon.getBeacon().getIdentifiers().containsAll(beaconInRegion.getIdentifiers())
                         && !subscribedBeacon.isInRangeNotified()
                         && (beaconInRegion.getRssi() >= rssiThreshold && beaconInRegion.getRssi() <= -20)) {
+
+                    Log.d("rssiThreshold", String.valueOf(rssiThreshold));
 
                     inRangeUnNotifiedBeacons.add(beaconInRegion);
                 }
@@ -307,17 +311,17 @@ public class RangeHandler implements RangeNotifier {
 
             Log.d("beaconRssi", String.valueOf(beaconToNotifyInRange.getRssi()));
 
-            BeaconNearby beaconNearby = new BeaconNearby(userId,
+            BeaconInRange beaconInRange = new BeaconInRange(userId,
                     beaconToNotifyInRange.getId1().toString(),
                     beaconToNotifyInRange.getId2().toString(),
                     beaconToNotifyInRange.getId3().toString(),
                     String.valueOf(beaconToNotifyInRange.getRssi()),
                     timestamp);
 
-            String beaconNearbyJson = gson.toJson(beaconNearby);
+            String beaconInRangeJson = gson.toJson(beaconInRange);
 
             final Call<String> result = retrofitManager.getPresenceDetectionService()
-                    .setInRangeNotification("input=" + beaconNearbyJson);
+                    .setInRangeNotification("input=" + beaconInRangeJson);
 
             result.enqueue(new Callback<String>() {
                 @Override
@@ -362,9 +366,11 @@ public class RangeHandler implements RangeNotifier {
 
         for (final Beacon beaconToNotifyOutOfRange : beaconsToNotifyOutOfRange) {
 
+            final String timeStamp = String.valueOf(System.currentTimeMillis());
+
             BeaconOutOfRange beaconOutOfRange = new BeaconOutOfRange(userId,
                     beaconToNotifyOutOfRange.getId1().toString(),
-                    String.valueOf(System.currentTimeMillis()));
+                    timeStamp);
 
             String beaconOutOfRangeJson = gson.toJson(beaconOutOfRange);
 
@@ -385,6 +391,7 @@ public class RangeHandler implements RangeNotifier {
                         if (subscribedBeacon != null) {
 
                             subscribedBeacon.setOutOfRangeNotified(true);
+                            subscribedBeacon.setTimeStamp(timeStamp);
                             Log.d("outOfRangeNotified", String.valueOf(subscribedBeacon.isOutOfRangeNotified()));
                             beaconAliasName = subscribedBeacon.getAliasName();
                         }

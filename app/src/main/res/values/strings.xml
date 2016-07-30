@@ -41,7 +41,7 @@
     <string name="reactivation_interval">Reactivation interval</string>
     <string name="reactivation_interval_info">You can set up here how long time to wait for the next activation of in rage notification
         after that your beacon went out of range.</string>
-    <string name="default_interval_value">1440</string>
+    <string name="default_interval_value">86400000</string>
     <string name="one_day">1 day</string>
     <string name="dialog_title_rssi_threshold">RSSI threshold</string>
     <string name="max_rssi_threshold">Max RSSI Threshold</string>
