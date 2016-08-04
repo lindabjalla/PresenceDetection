@@ -1,13 +1,18 @@
 package se.mogumogu.presencedetector.model;
 
-public class BeaconInRange extends AbstractEntity {
+public final class BeaconInRange extends AbstractEntity {
 
     private String major;
     private String minor;
     private String rssi;
     private String timestamp;
 
-    public BeaconInRange(String userId, String beaconUuid, String major, String minor, String rssi, String timestamp) {
+    public BeaconInRange(final String userId,
+                         final String beaconUuid,
+                         final String major,
+                         final String minor,
+                         final String rssi,
+                         final String timestamp) {
 
         this.userId = userId;
         this.beaconUuid = beaconUuid;

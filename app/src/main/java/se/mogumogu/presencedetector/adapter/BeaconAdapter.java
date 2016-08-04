@@ -31,7 +31,7 @@ import se.mogumogu.presencedetector.activity.ScanActivity;
 import se.mogumogu.presencedetector.fragment.SubscriptionDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
-public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceViewHolder> {
+public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceViewHolder> {
 
     public static final String BEACON_KEY = "se.mogumogu.presencedetection.BEACON_KEY";
 
@@ -39,10 +39,11 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
     private List<Beacon> beacons;
     private FragmentManager manager;
 
-    public BeaconAdapter(final Context context, final List<Beacon> beacons, FragmentManager manager) {
+    public BeaconAdapter(final Context context, final List<Beacon> beacons, final FragmentManager manager) {
 
         this.context = context;
         this.beacons = beacons;
+
         Collections.sort(beacons, new Comparator<Beacon>() {
             @Override
             public int compare(Beacon beacon1, Beacon beacon2) {
@@ -50,12 +51,13 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
             }
         });
         Collections.reverse(beacons);
+
         this.manager = manager;
         for (Beacon b : beacons) {
             Log.d("rssi", "---------" + b.getId1().toString() + ": " + String.valueOf(b.getRssi()));
         }
     }
-    
+
     @Override
     public DeviceViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
@@ -97,8 +99,9 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
         private FragmentManager manager;
         private Beacon beacon;
         private Gson gson;
+        private Set<SubscribedBeacon> subscribedBeacons;
 
-        public DeviceViewHolder(View view, Context context, List<Beacon> beacons, FragmentManager manager) {
+        public DeviceViewHolder(final View view, final Context context, final List<Beacon> beacons, final FragmentManager manager) {
 
             super(view);
             this.proximityUuidView = (TextView) view.findViewById(R.id.proximity_uuid);
@@ -115,17 +118,15 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(final View view) {
 
             int position = getAdapterPosition();
             beacon = beacons.get(position);
 
-            SharedPreferences preferences =
+            final SharedPreferences preferences =
                     context.getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
 
-            String subscribedBeaconSetJson = preferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
-
-            Set<SubscribedBeacon> subscribedBeacons;
+            final String subscribedBeaconSetJson = preferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
 
             if (subscribedBeaconSetJson == null) {
 
@@ -133,7 +134,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
 
             } else {
 
-                Type type = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
+                final Type type = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
                 subscribedBeacons = gson.fromJson(subscribedBeaconSetJson, type);
             }
 
@@ -143,7 +144,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
 
             } else {
 
-                String beaconJson = gson.toJson(beacon);
+                final String beaconJson = gson.toJson(beacon);
                 preferences.edit().putString(BEACON_KEY, beaconJson).apply();
 
                 showSubscriptionDialog();
@@ -156,7 +157,7 @@ public class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceView
             dialogFragment.show(manager, "SubscriptionDialogFragment");
         }
 
-        private boolean beaconIsSubscribed(Beacon beacon, Set<SubscribedBeacon> subscribedBeacons) {
+        private boolean beaconIsSubscribed(final Beacon beacon, final Set<SubscribedBeacon> subscribedBeacons) {
 
             for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 

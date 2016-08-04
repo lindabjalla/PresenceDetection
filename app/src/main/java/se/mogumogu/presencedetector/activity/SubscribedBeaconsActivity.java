@@ -1,19 +1,14 @@
 package se.mogumogu.presencedetector.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,7 +30,7 @@ import se.mogumogu.presencedetector.RangeHandler;
 import se.mogumogu.presencedetector.fragment.EditBeaconAliasNameDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
-public class SubscribedBeaconsActivity extends AppCompatActivity implements BeaconConsumer, EditBeaconAliasNameDialogFragment.EditBeaconAliasNameDialogListener {
+public final class SubscribedBeaconsActivity extends ToolbarProvider implements BeaconConsumer, EditBeaconAliasNameDialogFragment.EditBeaconAliasNameDialogListener {
 
     private static final String TAG = SubscribedBeaconsActivity.class.getSimpleName();
     public static boolean isActive;
@@ -49,16 +44,18 @@ public class SubscribedBeaconsActivity extends AppCompatActivity implements Beac
     private SharedPreferences preferences;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d("onCreate", "onCreate");
         setContentView(R.layout.activity_subscribed_beacons);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_beacons_toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_beacons_toolbar);
         myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         setSupportActionBar(myToolbar);
 
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
 
@@ -69,7 +66,7 @@ public class SubscribedBeaconsActivity extends AppCompatActivity implements Beac
         context = this;
         allBeaconsRegion = new Region("allBeacons", null, null, null);
         preferences = getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
-        RangeHandler rangeHandler = new RangeHandler(this, this, getSupportFragmentManager());
+        final RangeHandler rangeHandler = new RangeHandler(this, getSupportFragmentManager());
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.setRangeNotifier(rangeHandler);
@@ -85,43 +82,8 @@ public class SubscribedBeaconsActivity extends AppCompatActivity implements Beac
 
         } else {
 
-            Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
+            final Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
             subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        Intent intent;
-
-        switch (item.getItemId()) {
-
-            case R.id.menu_item_my_beacons:
-                intent = new Intent(this, SubscribedBeaconsActivity.class);
-                context.startActivity(intent);
-                return true;
-
-            case R.id.menu_item_settings:
-                intent = new Intent(this, SettingsActivity.class);
-                context.startActivity(intent);
-                return true;
-
-            case R.id.menu_item_help:
-                intent = new Intent(this, HelpActivity.class);
-                context.startActivity(intent);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -154,17 +116,18 @@ public class SubscribedBeaconsActivity extends AppCompatActivity implements Beac
     @Override
     protected void onStop() {
 
+        Log.d("onStop", "onStop");
         super.onStop();
         isActive = false;
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, View view) {
+    public void onDialogPositiveClick(final DialogFragment dialog, final View view) {
 
-        EditText editText = (EditText) view.findViewById(R.id.alias_name_edit);
-        String aliasName = editText.getText().toString();
-        final Bundle arguments = dialog.getArguments();
-        final SubscribedBeacon subscribedBeacon = (SubscribedBeacon) arguments.getSerializable(EditBeaconAliasNameDialogFragment.SUBSCRIBED_BEACON);
+        final EditText editText = (EditText) view.findViewById(R.id.alias_name_edit);
+        final String aliasName = editText.getText().toString();
+        final Bundle bundle = dialog.getArguments();
+        final SubscribedBeacon subscribedBeacon = bundle.getParcelable(EditBeaconAliasNameDialogFragment.SUBSCRIBED_BEACON);
 
         if (subscribedBeacon != null) {
 
@@ -183,7 +146,7 @@ public class SubscribedBeaconsActivity extends AppCompatActivity implements Beac
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogNegativeClick(final DialogFragment dialog) {
 
         dialog.dismiss();
     }

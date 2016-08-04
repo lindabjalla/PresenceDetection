@@ -1,14 +1,14 @@
 package se.mogumogu.presencedetector.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import se.mogumogu.presencedetector.R;
 
-public class HelpActivity extends AppCompatActivity {
+public final class HelpActivity extends ToolbarProvider {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
     }

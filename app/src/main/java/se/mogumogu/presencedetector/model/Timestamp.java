@@ -1,6 +1,6 @@
 package se.mogumogu.presencedetector.model;
 
-public class Timestamp {
+public final class Timestamp {
 
     private String timestamp;
 

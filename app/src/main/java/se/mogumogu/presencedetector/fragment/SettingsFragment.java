@@ -12,12 +12,12 @@ import android.util.Log;
 import se.mogumogu.presencedetector.NumberPickerPreference;
 import se.mogumogu.presencedetector.R;
 
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public final class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = SettingsFragment.class.getSimpleName();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
@@ -32,15 +32,15 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
         for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); ++i) {
 
-            Preference preference = getPreferenceScreen().getPreference(i);
+            final Preference preference = getPreferenceScreen().getPreference(i);
 
             if (preference instanceof PreferenceGroup) {
 
-                PreferenceGroup preferenceGroup = (PreferenceGroup) preference;
+                final PreferenceGroup preferenceGroup = (PreferenceGroup) preference;
 
                 for (int j = 0; j < preferenceGroup.getPreferenceCount(); ++j) {
 
-                    Preference singlePref = preferenceGroup.getPreference(j);
+                    final Preference singlePref = preferenceGroup.getPreference(j);
                     updatePreference(singlePref, singlePref.getKey());
                 }
 
@@ -52,21 +52,21 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, String key) {
 
         updatePreference(findPreference(key), key);
     }
 
-    private void updatePreference(Preference preference, String key) {
+    private void updatePreference(final Preference preference, final String key) {
 
-        SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
+        final SharedPreferences sharedPreferences = getPreferenceManager().getSharedPreferences();
 
         if (preference != null) {
 
             if (preference instanceof ListPreference) {
 
-                ListPreference listPreference = (ListPreference) preference;
-                listPreference.setSummary(listPreference.getEntry());
+                final ListPreference listPreference = (ListPreference) preference;
+                listPreference.setSummary(listPreference.getEntry() + getResources().getString(R.string.after_out_of_range));
 
             } else if (preference instanceof NumberPickerPreference) {
 

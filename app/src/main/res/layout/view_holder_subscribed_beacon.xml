@@ -19,7 +19,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/subscribed_beacons_alias_name"
+            android:id="@+id/subscribed_beacon_alias_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorLinen"
@@ -64,7 +64,7 @@
             android:background="@color/colorDarkLinen"
             android:gravity="center"
             android:padding="6dp"
-            android:text="@string/subscribed_beacons_uuid"
+            android:text="@string/label_uuid"
             android:textColor="@color/colorEggshell"
             android:textSize="20sp" />
 
@@ -89,7 +89,7 @@
             android:background="@color/colorDarkLinen"
             android:gravity="center"
             android:padding="6dp"
-            android:text="@string/subscribed_beacons_label_major"
+            android:text="@string/label_major"
             android:textColor="@color/colorEggshell"
             android:textSize="20sp" />
 
@@ -114,7 +114,7 @@
             android:background="@color/colorDarkLinen"
             android:gravity="center"
             android:padding="6dp"
-            android:text="@string/subscribed_beacons_label_minor"
+            android:text="@string/label_minor"
             android:textColor="@color/colorEggshell"
             android:textSize="20sp" />
 

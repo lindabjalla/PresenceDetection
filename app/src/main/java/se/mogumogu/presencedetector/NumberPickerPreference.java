@@ -16,7 +16,7 @@ import android.widget.NumberPicker;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NumberPickerPreference extends DialogPreference {
+public final class NumberPickerPreference extends DialogPreference {
 
     public static final String PREFERENCE_RSSI_THRESHOLD_KEY = "preference_rssi_threshold_key";
 
@@ -24,35 +24,35 @@ public class NumberPickerPreference extends DialogPreference {
     private String defaultValue;
     private List<String> rssiThresholdValues;
 
-    public NumberPickerPreference(Context context, AttributeSet attrs) {
+    public NumberPickerPreference(final Context context, final AttributeSet attributeSet) {
 
-        super(context, attrs);
+        super(context, attributeSet);
     }
 
     @Override
     protected View onCreateDialogView() {
 
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
 
         numberPicker = new NumberPicker(getContext());
         numberPicker.setLayoutParams(layoutParams);
 
-        FrameLayout dialogView = new FrameLayout(getContext());
+        final FrameLayout dialogView = new FrameLayout(getContext());
         dialogView.addView(numberPicker);
 
         return dialogView;
     }
 
     @Override
-    protected void onBindDialogView(View view) {
+    protected void onBindDialogView(final View view) {
 
         super.onBindDialogView(view);
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         defaultValue = getContext().getResources().getString(R.string.rssi_threshold_default);
-        String currentValue = preferences.getString(PREFERENCE_RSSI_THRESHOLD_KEY, defaultValue);
+        final String currentValue = preferences.getString(PREFERENCE_RSSI_THRESHOLD_KEY, defaultValue);
 
         rssiThresholdValues = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class NumberPickerPreference extends DialogPreference {
             rssiThresholdValues.add(String.valueOf(i));
         }
 
-        int listSize = rssiThresholdValues.size();
+        final int listSize = rssiThresholdValues.size();
         Log.d("currentValue", String.valueOf(currentValue));
 
         final int indexOfCurrentValue = rssiThresholdValues.indexOf(currentValue);
@@ -74,7 +74,7 @@ public class NumberPickerPreference extends DialogPreference {
     }
 
     @Override
-    protected void onDialogClosed(boolean positiveResult) {
+    protected void onDialogClosed(final boolean positiveResult) {
 
         super.onDialogClosed(positiveResult);
 
@@ -87,7 +87,7 @@ public class NumberPickerPreference extends DialogPreference {
             Log.d("rssiThresholdValues", rssiThresholdValues.toString());
 
             int index = numberPicker.getValue();
-            String newValue = rssiThresholdValues.get(index);
+            final String newValue = rssiThresholdValues.get(index);
 
             if (callChangeListener(newValue)) {
 
@@ -98,18 +98,18 @@ public class NumberPickerPreference extends DialogPreference {
     }
 
     @Override
-    protected Object onGetDefaultValue(TypedArray a, int index) {
+    protected Object onGetDefaultValue(final TypedArray a, int index) {
 
         return a.getString(index);
     }
 
     @Override
-    protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
+    protected void onSetInitialValue(final boolean restorePersistedValue, final Object defaultValue) {
 
         setValue(restorePersistedValue ? getPersistedString(this.defaultValue) : (String) defaultValue);
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
 
         persistString(value);
     }

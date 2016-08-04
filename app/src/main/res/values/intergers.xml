@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <integer name="reactivation_interval_default">1440</integer>
-
-    <integer name="rssi_threshold_min">-80</integer>
-    <integer name="rssi_threshold_max">-45</integer>
-</resources>

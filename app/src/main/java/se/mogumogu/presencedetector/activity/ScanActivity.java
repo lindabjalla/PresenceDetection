@@ -11,14 +11,10 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -45,7 +41,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.RangeHandler;
-import se.mogumogu.presencedetector.RetrofitManager;
+import se.mogumogu.presencedetector.rest.RetrofitManager;
 import se.mogumogu.presencedetector.adapter.BeaconAdapter;
 import se.mogumogu.presencedetector.fragment.SubscriptionDialogFragment;
 import se.mogumogu.presencedetector.model.BeaconSubscription;
@@ -53,7 +49,7 @@ import se.mogumogu.presencedetector.model.SubscribedBeacon;
 import se.mogumogu.presencedetector.model.Timestamp;
 
 @TargetApi(Build.VERSION_CODES.N)
-public class ScanActivity extends AppCompatActivity
+public final class ScanActivity extends ToolbarProvider
         implements BeaconConsumer, SubscriptionDialogFragment.SubscriptionDialogListener, RangeNotifier {
 
     private static final String TAG = ScanActivity.class.getSimpleName();
@@ -63,8 +59,6 @@ public class ScanActivity extends AppCompatActivity
 
     private BeaconManager beaconManager;
     private Context context = this;
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
     private BeaconAdapter adapter;
     private List<Beacon> closeBeacons;
     private Region allBeaconsRegion;
@@ -76,16 +70,16 @@ public class ScanActivity extends AppCompatActivity
     private Intent intent;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.scan_toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.beacon_details_toolbar);
         myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         setSupportActionBar(myToolbar);
 
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
 
@@ -93,9 +87,15 @@ public class ScanActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        closeBeacons = new ArrayList<>();
+
         allBeaconsRegion = new Region("allBeacons", null, null, null);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view_scan);
-        layoutManager = new LinearLayoutManager(this);
+
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_scan);
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        adapter = new BeaconAdapter(context, closeBeacons, getSupportFragmentManager());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.setRangeNotifier(this);
@@ -119,7 +119,6 @@ public class ScanActivity extends AppCompatActivity
         }
 
         intent = new Intent(context, RegistrationActivity.class);
-        closeBeacons = new ArrayList<>();
     }
 
     @Override
@@ -135,7 +134,7 @@ public class ScanActivity extends AppCompatActivity
     @Override
     public void onDialogPositiveClick(final DialogFragment dialog, final View view) {
 
-        String beaconJson = appDataPreferences.getString(BeaconAdapter.BEACON_KEY, null);
+        final String beaconJson = appDataPreferences.getString(BeaconAdapter.BEACON_KEY, null);
         final Beacon beacon = gson.fromJson(beaconJson, Beacon.class);
 
         if (beaconIsSubscribed(beacon)) {
@@ -148,7 +147,7 @@ public class ScanActivity extends AppCompatActivity
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogNegativeClick(final DialogFragment dialog) {
 
         dialog.dismiss();
         startActivity(intent);
@@ -159,7 +158,7 @@ public class ScanActivity extends AppCompatActivity
 
         Log.d("onPause", "onPause");
         super.onPause();
-        RangeHandler rangeHandler = new RangeHandler(context);
+        final RangeHandler rangeHandler = new RangeHandler(context);
         beaconManager.unbind(this);
         beaconManager.setRangeNotifier(rangeHandler);
 
@@ -179,7 +178,7 @@ public class ScanActivity extends AppCompatActivity
         super.onStop();
     }
 
-    private boolean beaconIsSubscribed(Beacon beacon) {
+    private boolean beaconIsSubscribed(final Beacon beacon) {
 
         if (subscribedBeacons != null) {
 
@@ -195,7 +194,7 @@ public class ScanActivity extends AppCompatActivity
     }
 
     @Override
-    public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
+    public void didRangeBeaconsInRegion(final Collection<Beacon> beacons, final Region region) {
 
         Log.d("ScanActivity", "rangeNotifier");
         Log.d("all beacons", beacons.toString());
@@ -220,16 +219,11 @@ public class ScanActivity extends AppCompatActivity
                     Log.d("closeBeacons", closeBeacons.toString());
                 }
 
-                recyclerView = (RecyclerView) findViewById(R.id.recycler_view_scan);
-                layoutManager = new LinearLayoutManager(context);
-                adapter = new BeaconAdapter(context, closeBeacons, getSupportFragmentManager());
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        recyclerView.setLayoutManager(layoutManager);
-                        recyclerView.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -249,30 +243,32 @@ public class ScanActivity extends AppCompatActivity
 
         Log.d("subscribeBeacon", "came in");
 
-        String serverUrl = settingsPreferences.getString(RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
-        RetrofitManager retrofitManager = new RetrofitManager(serverUrl);
+        final String serverUrl = settingsPreferences.getString(
+                RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
+        final RetrofitManager retrofitManager = new RetrofitManager(serverUrl);
 
         final String userId = appDataPreferences.getString(RegistrationActivity.USER_ID, null);
-        BeaconSubscription beaconSubscription = new BeaconSubscription(userId, beacon.getId1().toString());
-        String beaconSubscriptionJson = gson.toJson(beaconSubscription);
+        final BeaconSubscription beaconSubscription = new BeaconSubscription(userId, beacon.getId1().toString());
+        final String beaconSubscriptionJson = gson.toJson(beaconSubscription);
 
-        Call<String> result = retrofitManager.getPresenceDetectionService().subscribeBeacon("input=" + beaconSubscriptionJson);
+        final Call<String> result
+                = retrofitManager.getPresenceDetectionService().subscribeBeacon("input=" + beaconSubscriptionJson);
         result.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(final Call<String> call, final Response<String> response) {
 
                 Log.d("response", response.body());
 
-                String responseBody = response.body();
+                final String responseBody = response.body();
 
                 if (responseBody.contains("\"response_value\":\"200\"")) {
 
-                    Timestamp timestampObject = gson.fromJson(responseBody, Timestamp.class);
+                    final Timestamp timestampObject = gson.fromJson(responseBody, Timestamp.class);
                     final String timestamp = timestampObject.getTimestamp();
                     Log.d("timestamp from server", timestamp);
 
-                    EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name);
-                    String aliasName = aliasNameEditText.getText().toString();
+                    final EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name);
+                    final String aliasName = aliasNameEditText.getText().toString();
 
                     subscribedBeacons.add(new SubscribedBeacon(aliasName, beacon));
                     subscribedBeaconsJson = gson.toJson(subscribedBeacons);
@@ -290,14 +286,14 @@ public class ScanActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(final Call<String> call, final Throwable t) {
 
                 t.printStackTrace();
             }
         });
     }
 
-    private void replaceBeaconToTheOneWithNewStatus(Beacon beacon, List<Beacon> beacons) {
+    private void replaceBeaconToTheOneWithNewStatus(final Beacon beacon, final List<Beacon> beacons) {
 
         for (Beacon aBeacon : beacons) {
 
@@ -308,7 +304,7 @@ public class ScanActivity extends AppCompatActivity
         }
     }
 
-    private boolean isAlreadyDetected(Beacon beacon, List<Beacon> beacons) {
+    private boolean isAlreadyDetected(final Beacon beacon, final List<Beacon> beacons) {
 
         for (Beacon aBeacon : beacons) {
 
@@ -318,39 +314,5 @@ public class ScanActivity extends AppCompatActivity
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        Intent intent;
-
-        switch (item.getItemId()) {
-
-            case R.id.menu_item_my_beacons:
-                intent = new Intent(this, SubscribedBeaconsActivity.class);
-                context.startActivity(intent);
-                return true;
-
-            case R.id.menu_item_settings:
-                intent = new Intent(this, SettingsActivity.class);
-                context.startActivity(intent);
-                return true;
-
-            case R.id.menu_item_help:
-                intent = new Intent(this, HelpActivity.class);
-                context.startActivity(intent);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }

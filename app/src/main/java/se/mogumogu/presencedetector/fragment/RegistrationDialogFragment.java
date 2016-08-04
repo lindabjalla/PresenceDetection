@@ -11,12 +11,12 @@ import android.view.View;
 
 import se.mogumogu.presencedetector.R;
 
-public class RegistrationDialogFragment extends DialogFragment {
+public final class RegistrationDialogFragment extends DialogFragment {
 
     private RegistrationDialogListener listener;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(final Context context) {
         super.onAttach(context);
 
         try {
@@ -28,17 +28,17 @@ public class RegistrationDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
 
         final View view = View.inflate(getContext(), R.layout.dialog_fragment_registration, null);
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         dialogBuilder.setTitle(R.string.dialog_fragment_registration_title);
 
         dialogBuilder.setView(view)
                 .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int id) {
+                    public void onClick(final DialogInterface dialogInterface, final int id) {
 
                         listener.onDialogPositiveClick(RegistrationDialogFragment.this, view);
                     }
@@ -46,7 +46,7 @@ public class RegistrationDialogFragment extends DialogFragment {
 
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int id) {
+                    public void onClick(final DialogInterface dialogInterface, final int id) {
 
                         listener.onDialogNegativeClick(RegistrationDialogFragment.this);
                     }
@@ -57,8 +57,8 @@ public class RegistrationDialogFragment extends DialogFragment {
 
     public interface RegistrationDialogListener {
 
-        void onDialogPositiveClick(DialogFragment dialog, View view);
+        void onDialogPositiveClick(final DialogFragment dialog, final View view);
 
-        void onDialogNegativeClick(DialogFragment dialog);
+        void onDialogNegativeClick(final DialogFragment dialog);
     }
 }

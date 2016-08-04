@@ -1,77 +1,57 @@
 <resources>
-    <string name="app_name">PRESENCE DETECTOR</string>
+    <string name="app_name">Presence Detector</string>
 
     <!-- DialogFragment-->
     <string name="activate">Activate</string>
     <string name="subscribe">Subscribe</string>
-    <string name="ok">OK</string>
-    <string name="set">Set</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last name</string>
-    <string name="alias_name">Give the beacon a name. e.g. SchoolBeacon, JobBeacon</string>
-    <string name="dialog_fragment_registration_title">Activate Presence Detector</string>
-    <string name="dialog_fragment_subscription_title">Subscribe the beacon</string>
-    <string name="dialog_fragment_edit_beacon_alias_name_title">Edit name of the beacon</string>
-    <string name="dialog_fragment_number_picker_title">Set value of reactivation interval</string>
+    <string name="alias_name">Name the beacon!</string>
+    <string name="dialog_fragment_registration_title">Activate the app!</string>
+    <string name="dialog_fragment_subscription_title">Subscribe the beacon!</string>
+    <string name="dialog_fragment_edit_beacon_alias_name_title">Edit the beacon name!</string>
 
     <!-- RegistrationActivity-->
     <string name="scan_beacons">Scan beacons</string>
-    <string name="label_uuid">"UUID: "</string>
-    <string name="label_major">"Major: "</string>
-    <string name="label_minor">"Minor: "</string>
+    <string name="label_uuid">UUID</string>
+    <string name="label_major">Major</string>
+    <string name="label_minor">Minor</string>
 
     <!-- ScanActivity -->
-    <string name="label_scan_activity">CLOSE BEACONS NEARBY</string>
+    <string name="label_scan_activity">Beacons Nearby</string>
     <string name="subscription_message">Tap a Beacon to subscribe!</string>
-    <string name="new_beacon_not_found_message">New beacon was not found.</string>
-    <string name="title_activity_tabbed_navigation">TabbedNavigationActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- SubscribedBeaconsActivity -->
-    <string name="label_my_beacons_activity">MY BEACONS</string>
+    <string name="label_subscribed_beacons_activity">My Beacons</string>
     <string name="label_alias_name">Name</string>
     <string name="label_status">Status</string>
-    <string name="subscribed_beacons_uuid">UUID</string>
-    <string name="subscribed_beacons_label_major">Major</string>
-    <string name="subscribed_beacons_label_minor">Minor</string>
 
     <!-- SettingsActivity -->
     <string name="title_setting_activity">App Configuration</string>
-    <string name="reactivation_interval">Reactivation interval</string>
-    <string name="reactivation_interval_info">You can set up here how long time to wait for the next activation of in rage notification
-        after that your beacon went out of range.</string>
+    <string name="re_monitoring_interval">Re-monitor if beacon is in range</string>
+    <string name="dialog_title_re_monitoring_interval">Re-monitoring interval</string>
     <string name="default_interval_value">86400000</string>
     <string name="one_day">1 day</string>
+    <string name="after_out_of_range">" after out-of-range notification is sent."</string>
+    <string name="title_rssi_threshold">In range when RSSI is greater than or equal to</string>
     <string name="dialog_title_rssi_threshold">RSSI threshold</string>
-    <string name="max_rssi_threshold">Max RSSI Threshold</string>
-    <string name="rssi_threshold_info">You can set up here RSSI(Received Signal Strength Indicator) threshold.
-        A greater number means the signal is stronger. For example, if you want to monitor your beacons in wider range,
-        set up the minimum value to a smaller number like -60.</string>
-    <string name="min">Min</string>
-    <string name="max">Max</string>
-    <string name="urls">URLs</string>
-    <string name="urls_info">You can set up here URLs to the server.</string>
 
     <string name="preference_title_server_url">Server URL</string>
     <string name="default_server_url">http://beacons.zenzor.io</string>
 
-    <!--<string name="preference_title_beacon_subscription_url">Beacon subscription url</string>-->
-    <!--<string name="default_beacon_subscription_url">http://beacons.zenzor.io/sys/api/subscribe_beacon</string>-->
-
-    <!--<string name="preference_title_in_range_notification_url">In-range notification url</string>-->
-    <!--<string name="default_in_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_nearby</string>-->
-
-    <!--<string name="preference_title_out_of_range_notification_url">Out-of-range notification url</string>-->
-    <!--<string name="default_out_of_range_notification_url">http://beacons.zenzor.io/sys/api/beacon_outofrange</string>-->
-
     <!-- Menu -->
-    <string name="my_beacons">My Beacons</string>
-    <string name="scan">Scan</string>
+    <string name="my_beacons">My beacons</string>
     <string name="settings">Settings</string>
     <string name="help">Help</string>
 
-    <!-- activity_settings -->
+    <!-- SettingsActivity -->
     <string name="rssi_threshold_default">-45</string>
+    
+    <!-- BeaconDetailsActivity -->
+    <string name="label_beacon_details_activity">Beacon details</string>
+    <string name="last_time_in_range">In range</string>
+    <string name="last_time_out_of_range">Out of range</string>
+    <string name="rssi">RSSI</string>
+    <string name="no_data">No data</string>
 
 </resources>

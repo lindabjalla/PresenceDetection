@@ -15,28 +15,27 @@ import android.widget.EditText;
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
-public class EditBeaconAliasNameDialogFragment extends DialogFragment {
+public final class EditBeaconAliasNameDialogFragment extends DialogFragment {
 
     private static final String TAG = EditBeaconAliasNameDialogFragment.class.getSimpleName();
     public static final String SUBSCRIBED_BEACON = "se.mogumogu.presencedetector.SUBSCRIBED_BEACON";
 
-
     private EditBeaconAliasNameDialogListener listener;
     private SubscribedBeacon subscribedBeacon;
 
-    public static DialogFragment newInstance(SubscribedBeacon subscribedBeacon) {
+    public static DialogFragment newInstance(final SubscribedBeacon subscribedBeacon) {
 
-        DialogFragment dialogFragment = new EditBeaconAliasNameDialogFragment();
+        final DialogFragment dialogFragment = new EditBeaconAliasNameDialogFragment();
 
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(SUBSCRIBED_BEACON, subscribedBeacon);
+        final Bundle arguments = new Bundle();
+        arguments.putParcelable(SUBSCRIBED_BEACON, subscribedBeacon);
         dialogFragment.setArguments(arguments);
 
         return dialogFragment;
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(final Context context) {
         super.onAttach(context);
 
         try {
@@ -47,15 +46,15 @@ public class EditBeaconAliasNameDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        subscribedBeacon = (SubscribedBeacon) getArguments().getSerializable(SUBSCRIBED_BEACON);
+        subscribedBeacon = getArguments().getParcelable(SUBSCRIBED_BEACON);
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle bundle) {
+    public Dialog onCreateDialog(final Bundle bundle) {
 
         final View view = View.inflate(getContext(), R.layout.dialog_fragment_edit_beacon_alias_name, null);
         final EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name_edit);
@@ -69,13 +68,13 @@ public class EditBeaconAliasNameDialogFragment extends DialogFragment {
             Log.d(TAG, "subscribed beacon is null");
         }
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         dialogBuilder.setTitle(R.string.dialog_fragment_edit_beacon_alias_name_title);
 
         dialogBuilder.setView(view)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int id) {
+                    public void onClick(final DialogInterface dialogInterface, final int id) {
 
                         listener.onDialogPositiveClick(EditBeaconAliasNameDialogFragment.this, view);
                     }
@@ -83,7 +82,7 @@ public class EditBeaconAliasNameDialogFragment extends DialogFragment {
 
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int id) {
+                    public void onClick(final DialogInterface dialogInterface, final int id) {
 
                         listener.onDialogNegativeClick(EditBeaconAliasNameDialogFragment.this);
                     }
@@ -94,8 +93,8 @@ public class EditBeaconAliasNameDialogFragment extends DialogFragment {
 
     public interface EditBeaconAliasNameDialogListener {
 
-        void onDialogPositiveClick(DialogFragment dialog, View view);
+        void onDialogPositiveClick(final DialogFragment dialog, final View view);
 
-        void onDialogNegativeClick(DialogFragment dialog);
+        void onDialogNegativeClick(final DialogFragment dialog);
     }
 }

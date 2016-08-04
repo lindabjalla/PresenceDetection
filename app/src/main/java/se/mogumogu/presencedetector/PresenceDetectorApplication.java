@@ -1,7 +1,6 @@
 package se.mogumogu.presencedetector;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -12,12 +11,11 @@ import org.altbeacon.beacon.powersave.BackgroundPowerSaver;
 import org.altbeacon.beacon.startup.BootstrapNotifier;
 import org.altbeacon.beacon.startup.RegionBootstrap;
 
-public class PresenceDetectorApplication extends Application implements BootstrapNotifier {
+public final class PresenceDetectorApplication extends Application implements BootstrapNotifier {
 
     private static final String TAG = PresenceDetectorApplication.class.getSimpleName();
 
     private BeaconManager beaconManager;
-    private Context context = this;
 
     @Override
     public void onCreate() {
@@ -25,20 +23,20 @@ public class PresenceDetectorApplication extends Application implements Bootstra
         super.onCreate();
         Log.d(TAG, "App started up");
 
-        BackgroundPowerSaver backgroundPowerSaver = new BackgroundPowerSaver(this);
+        final BackgroundPowerSaver backgroundPowerSaver = new BackgroundPowerSaver(this);
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.setBackgroundBetweenScanPeriod(15000L);
         beaconManager.setBackgroundScanPeriod(1100L);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
-        RegionBootstrap regionBootstrap = new RegionBootstrap(this, new Region("allBeacons", null, null, null));
+        final RegionBootstrap regionBootstrap = new RegionBootstrap(this, new Region("allBeacons", null, null, null));
     }
 
     @Override
-    public void didEnterRegion(Region region) {
+    public void didEnterRegion(final Region region) {
 
         Log.d(TAG, "Got a didEnterRegion call");
 
-        RangeHandler rangeHandler = new RangeHandler(context);
+        final RangeHandler rangeHandler = new RangeHandler(this);
         beaconManager.setRangeNotifier(rangeHandler);
 
         try {
@@ -49,7 +47,7 @@ public class PresenceDetectorApplication extends Application implements Bootstra
     }
 
     @Override
-    public void didExitRegion(Region region) {
+    public void didExitRegion(final Region region) {
 
         Log.d(TAG, "Got a didExitRegion call");
 
@@ -61,6 +59,5 @@ public class PresenceDetectorApplication extends Application implements Bootstra
     }
 
     @Override
-    public void didDetermineStateForRegion(int i, Region region) {
-    }
+    public void didDetermineStateForRegion(final int i, final Region region) {}
 }

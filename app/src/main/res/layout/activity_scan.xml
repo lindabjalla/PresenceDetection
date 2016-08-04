@@ -9,7 +9,7 @@
     tools:context=".activity.ScanActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/scan_toolbar"
+        android:id="@+id/beacon_details_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -19,11 +19,11 @@
 
     <TextView
         android:id="@+id/subscription_message"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/scan_toolbar"
-        android:background="@color/colorEggshell"
-        android:gravity="center"
+        android:layout_below="@id/beacon_details_toolbar"
+        android:background="@color/colorLinen"
+        android:layout_centerHorizontal="true"
         android:padding="16dp"
         android:text="@string/subscription_message"
         android:textColor="@color/colorDimGray"

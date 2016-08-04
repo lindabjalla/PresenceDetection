@@ -3,19 +3,19 @@
 
     <ListPreference
         android:defaultValue="@string/default_interval_value"
-        android:dialogTitle="@string/reactivation_interval"
+        android:dialogTitle="@string/dialog_title_re_monitoring_interval"
         android:entries="@array/reactivation_interval_array"
         android:entryValues="@array/reactivation_interval_value_array"
         android:key="preference_reactivation_interval_key"
         android:summary="@string/one_day"
-        android:title="@string/reactivation_interval" />
+        android:title="@string/re_monitoring_interval" />
 
     <se.mogumogu.presencedetector.NumberPickerPreference
         android:defaultValue="@string/rssi_threshold_default"
         android:dialogTitle="@string/dialog_title_rssi_threshold"
         android:key="preference_rssi_threshold_key"
         android:summary="@string/rssi_threshold_default"
-        android:title="@string/dialog_title_rssi_threshold" />
+        android:title="@string/title_rssi_threshold" />
 
     <EditTextPreference
         android:defaultValue="@string/default_server_url"

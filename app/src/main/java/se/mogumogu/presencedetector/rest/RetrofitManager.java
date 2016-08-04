@@ -1,14 +1,14 @@
-package se.mogumogu.presencedetector;
+package se.mogumogu.presencedetector.rest;
 
 import retrofit2.Retrofit;
 
-public class RetrofitManager {
+public final class RetrofitManager {
 
     private PresenceDetectionService service;
 
-    public RetrofitManager(String serverUrl){
+    public RetrofitManager(final String serverUrl){
 
-        Retrofit retrofit = new Retrofit.Builder()
+        final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(serverUrl + "/sys/api/")
                 .addConverterFactory(new StringConverterFactory())
                 .build();

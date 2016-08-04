@@ -23,13 +23,13 @@ import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.fragment.EditBeaconAliasNameDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
-public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeaconAdapter.SubscribedBeaconViewHolder> {
+public final class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeaconAdapter.SubscribedBeaconViewHolder> {
 
     private Context context;
     private List<SubscribedBeacon> subscribedBeacons;
     private FragmentManager manager;
 
-    public SubscribedBeaconAdapter(Context context, Set<SubscribedBeacon> subscribedBeaconsSet, FragmentManager manager) {
+    public SubscribedBeaconAdapter(final Context context, final Set<SubscribedBeacon> subscribedBeaconsSet, final FragmentManager manager) {
 
         this.context = context;
         subscribedBeacons = new ArrayList<>();
@@ -52,17 +52,17 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
     }
 
     @Override
-    public SubscribedBeaconViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SubscribedBeaconViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
 
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_subscribed_beacon, parent, false);
         return new SubscribedBeaconViewHolder(view, subscribedBeacons, manager);
     }
 
     @Override
-    public void onBindViewHolder(SubscribedBeaconViewHolder holder, int position) {
+    public void onBindViewHolder(final SubscribedBeaconViewHolder holder, int position) {
 
-        SubscribedBeacon subscribedBeacon = subscribedBeacons.get(position);
-        Beacon beacon = subscribedBeacon.getBeacon();
+        final SubscribedBeacon subscribedBeacon = subscribedBeacons.get(position);
+        final Beacon beacon = subscribedBeacon.getBeacon();
 
         holder.aliasNameView.setText(subscribedBeacon.getAliasName());
         holder.statusView.setText(getBeaconStatus(subscribedBeacon));
@@ -86,7 +86,7 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
         return subscribedBeacons.size();
     }
 
-    private String getBeaconStatus(SubscribedBeacon subscribedBeacon) {
+    private String getBeaconStatus(final SubscribedBeacon subscribedBeacon) {
 
         if (subscribedBeacon.isInRange()) {
 
@@ -109,11 +109,12 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
         private SubscribedBeacon subscribedBeacon;
         private FragmentManager manager;
 
-        public SubscribedBeaconViewHolder(View view, List<SubscribedBeacon> subscribedBeacons, FragmentManager manager) {
+        public SubscribedBeaconViewHolder(
+                final View view, final List<SubscribedBeacon> subscribedBeacons, final FragmentManager manager) {
 
             super(view);
 
-            aliasNameView = (TextView) view.findViewById(R.id.subscribed_beacons_alias_name);
+            aliasNameView = (TextView) view.findViewById(R.id.subscribed_beacon_alias_name);
             statusView = (TextView) view.findViewById(R.id.subscribed_beacons_status);
             uuidView = (TextView) view.findViewById(R.id.subscribed_beacons_uuid);
             majorView = (TextView) view.findViewById(R.id.subscribed_beacons_major);
@@ -125,7 +126,7 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
         }
 
         @Override
-        public void onClick(View view) {
+        public void onClick(final View view) {
 
             int position = getAdapterPosition();
             subscribedBeacon = subscribedBeacons.get(position);
@@ -134,9 +135,9 @@ public class SubscribedBeaconAdapter extends RecyclerView.Adapter<SubscribedBeac
 
         }
 
-        private void showEditBeaconAliasNameDialog(SubscribedBeacon subscribedBeacon) {
+        private void showEditBeaconAliasNameDialog(final SubscribedBeacon subscribedBeacon) {
 
-            DialogFragment dialogFragment = EditBeaconAliasNameDialogFragment.newInstance(subscribedBeacon);
+            final DialogFragment dialogFragment = EditBeaconAliasNameDialogFragment.newInstance(subscribedBeacon);
             dialogFragment.show(manager, "EditBeaconAliasNameDialogFragment");
         }
     }

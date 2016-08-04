@@ -1,4 +1,4 @@
-package se.mogumogu.presencedetector;
+package se.mogumogu.presencedetector.rest;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

@@ -7,12 +7,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,12 +20,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import se.mogumogu.presencedetector.R;
-import se.mogumogu.presencedetector.RetrofitManager;
+import se.mogumogu.presencedetector.rest.RetrofitManager;
 import se.mogumogu.presencedetector.fragment.RegistrationDialogFragment;
 import se.mogumogu.presencedetector.model.User;
 import se.mogumogu.presencedetector.model.UserId;
 
-public class RegistrationActivity extends AppCompatActivity implements RegistrationDialogFragment.RegistrationDialogListener {
+public final class RegistrationActivity extends ToolbarProvider implements RegistrationDialogFragment.RegistrationDialogListener {
 
     public static final String PRESENCE_DETECTION_PREFERENCES = "se.mogumogu.presencedetection.PRESENCE_DETECTION_PREFERENCES";
     public static final String USER_IS_REGISTERED = "se.mogumogu.presencedetection.USER_IS_REGISTERED";
@@ -42,14 +38,15 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     private DialogFragment dialogFragment;
     private Gson gson;
     private Context context = this;
+    private Intent intent;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.registration_toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.registration_toolbar);
         myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         setSupportActionBar(myToolbar);
@@ -58,29 +55,23 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         settingsPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         gson = new Gson();
 
-        //      bara för test
-//        activity_settings.edit().putBoolean(USER_IS_REGISTERED, false).apply();
+        final String userId = appDataPreferences.getString(USER_ID, null);
 
-        String userId = appDataPreferences.getString(USER_ID, null);
+        Log.d("userId", userId);
 
-        if (userId != null) {
-
-            Log.d("userId", userId);
-        }
-
-        boolean userIsRegistered = appDataPreferences.getBoolean(USER_IS_REGISTERED, false);
+        final boolean userIsRegistered = appDataPreferences.getBoolean(USER_IS_REGISTERED, false);
 
         if (!userIsRegistered) {
 
             showRegistrationDialog();
         }
 
-        Button scanButton = (Button) findViewById(R.id.scan_button);
+        final Button scanButton = (Button) findViewById(R.id.scan_button);
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View view) {
 
-                Intent intent = new Intent(context, ScanActivity.class);
+                intent = new Intent(context, ScanActivity.class);
                 startActivity(intent);
             }
         });
@@ -93,13 +84,13 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     }
 
     @Override
-    public void onDialogPositiveClick(DialogFragment dialog, View view) {
+    public void onDialogPositiveClick(final DialogFragment dialog, final View view) {
 
-        EditText firstNameEditText = (EditText) view.findViewById(R.id.first_name);
-        EditText lastNameEditText = (EditText) view.findViewById(R.id.last_name);
+        final EditText firstNameEditText = (EditText) view.findViewById(R.id.first_name);
+        final EditText lastNameEditText = (EditText) view.findViewById(R.id.last_name);
 
-        String firstName = firstNameEditText.getText().toString();
-        String lastName = lastNameEditText.getText().toString();
+        final String firstName = firstNameEditText.getText().toString();
+        final String lastName = lastNameEditText.getText().toString();
 
         if (firstName.trim().isEmpty() || lastName.trim().isEmpty()) {
 
@@ -109,41 +100,43 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
         } else {
 
             final User user = new User(firstName, lastName);
-            String userJson = gson.toJson(user);
+            final String userJson = gson.toJson(user);
 
-            String serverUrl = settingsPreferences.getString(PREFERENCE_SERVER_URL_KEY, DEFAULT_SERVER_URL);
-            RetrofitManager retrofitManager = new RetrofitManager(serverUrl);
+            final String serverUrl = settingsPreferences.getString(PREFERENCE_SERVER_URL_KEY, DEFAULT_SERVER_URL);
+            final RetrofitManager retrofitManager = new RetrofitManager(serverUrl);
 
             Log.d("serverUrl", serverUrl);
             Log.d("inputString", "input=" + userJson);
 
-            Call<String> result = retrofitManager.getPresenceDetectionService().registerUser("input=" + userJson);
+            final Call<String> result = retrofitManager.getPresenceDetectionService().registerUser("input=" + userJson);
 
             result.enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
+                public void onResponse(final Call<String> call, final Response<String> response) {
 
                     Log.d("response", response.body());
 
-                    String responseBody = response.body();
+                    final String responseBody = response.body();
 
                     if (responseBody.contains("\"response_value\":\"200\"")) {
 
-                        UserId userIdObject = gson.fromJson(responseBody, UserId.class);
+                        final UserId userIdObject = gson.fromJson(responseBody, UserId.class);
                         final String userId = userIdObject.getUserId();
                         Log.d("userId from server", userId);
 
                         appDataPreferences.edit().putString(USER_ID, userId).apply();
                         appDataPreferences.edit().putBoolean(USER_IS_REGISTERED, true).apply();
 
-                        Intent intent = getIntent();
+                        Toast.makeText(context, "You are successfully registered.", Toast.LENGTH_LONG).show();
+
+                        intent = getIntent();
                         finish();
                         startActivity(intent);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                public void onFailure(final Call<String> call, final Throwable t) {
 
                     Log.d("onFailure", "failed");
                     t.printStackTrace();
@@ -153,44 +146,9 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     }
 
     @Override
-    public void onDialogNegativeClick(DialogFragment dialog) {
+    public void onDialogNegativeClick(final DialogFragment dialog) {
 
         dialogFragment.getDialog().cancel();
         showRegistrationDialog();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        Intent intent;
-
-        switch (item.getItemId()) {
-
-            case R.id.menu_item_my_beacons:
-                intent = new Intent(this, SubscribedBeaconsActivity.class);
-                context.startActivity(intent);
-                return true;
-
-            case R.id.menu_item_settings:
-                intent = new Intent(this, SettingsActivity.class);
-                context.startActivity(intent);
-                return true;
-
-            case R.id.menu_item_help:
-                intent = new Intent(this, HelpActivity.class);
-                context.startActivity(intent);
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 }

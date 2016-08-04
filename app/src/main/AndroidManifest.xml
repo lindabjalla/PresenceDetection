@@ -33,7 +33,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.ScanActivity"
+        <activity
+            android:name=".activity.ScanActivity"
             android:label="@string/label_scan_activity"
             android:parentActivityName=".activity.RegistrationActivity">
 
@@ -42,18 +43,28 @@
                 android:value=".activity.RegistrationActivity" />
         </activity>
 
-        <activity android:name=".BeaconDetailsActivity" />
-
-        <activity android:name=".activity.SubscribedBeaconsActivity"
-            android:label="@string/label_my_beacons_activity"
+        <activity
+            android:name=".activity.BeaconDetailsActivity"
+            android:label="@string/label_beacon_details_activity"
             android:parentActivityName=".activity.RegistrationActivity">
 
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".activity.RegistrationActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.RegistrationActivity" />
         </activity>
 
-        <activity android:name=".activity.SettingsActivity"
+        <activity
+            android:name=".activity.SubscribedBeaconsActivity"
+            android:label="@string/label_subscribed_beacons_activity"
+            android:parentActivityName=".activity.RegistrationActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.RegistrationActivity" />
+        </activity>
+
+        <activity
+            android:name=".activity.SettingsActivity"
             android:label="@string/title_setting_activity"
             android:parentActivityName=".activity.RegistrationActivity">
 
@@ -61,7 +72,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.RegistrationActivity" />
         </activity>
-        <activity android:name=".activity.HelpActivity"/>
+        <activity android:name=".activity.HelpActivity" />
     </application>
 
 </manifest>
