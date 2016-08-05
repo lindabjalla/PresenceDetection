@@ -20,12 +20,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import se.mogumogu.presencedetector.R;
-import se.mogumogu.presencedetector.rest.RetrofitManager;
-import se.mogumogu.presencedetector.fragment.RegistrationDialogFragment;
+import se.mogumogu.presencedetector.fragment.BasicDialogFragment;
 import se.mogumogu.presencedetector.model.User;
 import se.mogumogu.presencedetector.model.UserId;
+import se.mogumogu.presencedetector.rest.RetrofitManager;
 
-public final class RegistrationActivity extends ToolbarProvider implements RegistrationDialogFragment.RegistrationDialogListener {
+public final class RegistrationActivity extends ToolbarProvider implements BasicDialogFragment.BasicDialogListener {
 
     public static final String PRESENCE_DETECTION_PREFERENCES = "se.mogumogu.presencedetection.PRESENCE_DETECTION_PREFERENCES";
     public static final String USER_IS_REGISTERED = "se.mogumogu.presencedetection.USER_IS_REGISTERED";
@@ -57,7 +57,10 @@ public final class RegistrationActivity extends ToolbarProvider implements Regis
 
         final String userId = appDataPreferences.getString(USER_ID, null);
 
-        Log.d("userId", userId);
+        if(userId != null) {
+
+            Log.d("userId", userId);
+        }
 
         final boolean userIsRegistered = appDataPreferences.getBoolean(USER_IS_REGISTERED, false);
 
@@ -79,12 +82,14 @@ public final class RegistrationActivity extends ToolbarProvider implements Regis
 
     private void showRegistrationDialog() {
 
-        dialogFragment = new RegistrationDialogFragment();
-        dialogFragment.show(getSupportFragmentManager(), "RegistrationDialogFragment");
+        dialogFragment = BasicDialogFragment.newInstance(
+                R.layout.dialog_fragment_registration, R.string.dialog_fragment_registration_title, R.string.activate);
+        dialogFragment.show(getSupportFragmentManager(), "BasicDialogFragment");
     }
 
     @Override
     public void onDialogPositiveClick(final DialogFragment dialog, final View view) {
+
 
         final EditText firstNameEditText = (EditText) view.findViewById(R.id.first_name);
         final EditText lastNameEditText = (EditText) view.findViewById(R.id.last_name);
@@ -127,7 +132,7 @@ public final class RegistrationActivity extends ToolbarProvider implements Regis
                         appDataPreferences.edit().putString(USER_ID, userId).apply();
                         appDataPreferences.edit().putBoolean(USER_IS_REGISTERED, true).apply();
 
-                        Toast.makeText(context, "You are successfully registered.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "The app is successfully activated.", Toast.LENGTH_LONG).show();
 
                         intent = getIntent();
                         finish();

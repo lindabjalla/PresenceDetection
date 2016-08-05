@@ -41,16 +41,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.RangeHandler;
-import se.mogumogu.presencedetector.rest.RetrofitManager;
 import se.mogumogu.presencedetector.adapter.BeaconAdapter;
-import se.mogumogu.presencedetector.fragment.SubscriptionDialogFragment;
+import se.mogumogu.presencedetector.fragment.BasicDialogFragment;
 import se.mogumogu.presencedetector.model.BeaconSubscription;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 import se.mogumogu.presencedetector.model.Timestamp;
+import se.mogumogu.presencedetector.rest.RetrofitManager;
 
 @TargetApi(Build.VERSION_CODES.N)
 public final class ScanActivity extends ToolbarProvider
-        implements BeaconConsumer, SubscriptionDialogFragment.SubscriptionDialogListener, RangeNotifier {
+        implements BeaconConsumer, BasicDialogFragment.BasicDialogListener, RangeNotifier {
 
     private static final String TAG = ScanActivity.class.getSimpleName();
 

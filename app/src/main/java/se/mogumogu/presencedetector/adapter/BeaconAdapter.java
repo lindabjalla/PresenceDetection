@@ -28,7 +28,7 @@ import java.util.Set;
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.activity.RegistrationActivity;
 import se.mogumogu.presencedetector.activity.ScanActivity;
-import se.mogumogu.presencedetector.fragment.SubscriptionDialogFragment;
+import se.mogumogu.presencedetector.fragment.BasicDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceViewHolder> {
@@ -47,6 +47,7 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
         Collections.sort(beacons, new Comparator<Beacon>() {
             @Override
             public int compare(Beacon beacon1, Beacon beacon2) {
+
                 return Integer.compare(beacon1.getRssi(), beacon2.getRssi());
             }
         });
@@ -68,17 +69,18 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
     @Override
     public void onBindViewHolder(final DeviceViewHolder holder, final int position) {
 
+        holder.beaconNumberView.setText(context.getString(R.string.beacon, (position + 1)));
         holder.proximityUuidView.setText(beacons.get(position).getId1().toString());
         holder.majorView.setText(beacons.get(position).getId2().toString());
         holder.minorView.setText(beacons.get(position).getId3().toString());
 
         if (position % 2 == 0) {
 
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorApricot));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorVintageBlue));
 
         } else {
 
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorEggshell));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLilyWhite));
         }
     }
 
@@ -90,20 +92,22 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
 
     public static final class DeviceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        public final TextView beaconNumberView;
         public final TextView proximityUuidView;
         public final TextView majorView;
         public final TextView minorView;
         private Context context;
         private List<Beacon> beacons;
-        private DialogFragment dialogFragment;
         private FragmentManager manager;
         private Beacon beacon;
         private Gson gson;
         private Set<SubscribedBeacon> subscribedBeacons;
 
+
         public DeviceViewHolder(final View view, final Context context, final List<Beacon> beacons, final FragmentManager manager) {
 
             super(view);
+            this.beaconNumberView = (TextView) view.findViewById(R.id.beacon_number);
             this.proximityUuidView = (TextView) view.findViewById(R.id.proximity_uuid);
             this.majorView = (TextView) view.findViewById(R.id.text_major);
             this.minorView = (TextView) view.findViewById(R.id.text_minor);
@@ -112,8 +116,6 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
             this.context = context;
             this.beacons = beacons;
             this.manager = manager;
-
-            dialogFragment = new SubscriptionDialogFragment();
             gson = new Gson();
         }
 
@@ -153,7 +155,8 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
 
         private void showSubscriptionDialog() {
 
-            dialogFragment = new SubscriptionDialogFragment();
+            DialogFragment dialogFragment = BasicDialogFragment.newInstance(
+                    R.layout.dialog_fragment_subscription, R.string.dialog_fragment_subscription_title, R.string.subscribe);
             dialogFragment.show(manager, "SubscriptionDialogFragment");
         }
 

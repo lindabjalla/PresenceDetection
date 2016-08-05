@@ -46,7 +46,7 @@
 
     <!-- SettingsActivity -->
     <string name="rssi_threshold_default">-45</string>
-    
+
     <!-- BeaconDetailsActivity -->
     <string name="label_beacon_details_activity">Beacon details</string>
     <string name="last_time_in_range">In range</string>
@@ -54,4 +54,6 @@
     <string name="rssi">RSSI</string>
     <string name="no_data">No data</string>
 
+    <!-- Adapter -->
+    <string name="beacon">Beacon %1$d</string>
 </resources>

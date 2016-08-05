@@ -17,25 +17,34 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <TextView
-        android:id="@+id/subscription_message"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/subscription_message_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/beacon_details_toolbar"
-        android:background="@color/colorLinen"
-        android:layout_centerHorizontal="true"
-        android:padding="16dp"
-        android:text="@string/subscription_message"
-        android:textColor="@color/colorDimGray"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:background="@color/colorLilyWhite"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/subscription_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorEggshell"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/subscription_message"
+            android:textColor="@color/colorDimGray"
+            android:textSize="20sp" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/recycler_view_scan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/subscription_message"
+        android:layout_below="@id/subscription_message_layout"
         android:scrollbars="vertical"
         tools:context=".activity.ScanActivity" />
 
