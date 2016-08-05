@@ -16,6 +16,7 @@
     <application
         android:name=".PresenceDetectorApplication"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -28,9 +29,19 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="app.mogumogu.se"
+                    android:pathPrefix="/presence-detector"
+                    android:scheme="http" />
+            </intent-filter>
+
         </activity>
 
         <activity

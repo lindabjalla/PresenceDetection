@@ -384,6 +384,7 @@ public final class RangeHandler implements RangeNotifier {
                     timeStampOutOfRange);
 
             String beaconOutOfRangeJson = gson.toJson(beaconOutOfRange);
+            Log.d("beaconOutOfRangeJson", beaconOutOfRangeJson);
 
             final Call<String> result = retrofitManager.getPresenceDetectionService().setOutOfRangeNotification("input=" + beaconOutOfRangeJson);
 
