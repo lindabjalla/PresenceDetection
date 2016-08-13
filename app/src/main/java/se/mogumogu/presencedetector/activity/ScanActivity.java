@@ -30,8 +30,10 @@ import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,7 +76,7 @@ public final class ScanActivity extends ToolbarProvider
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.beacon_details_toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.scan_toolbar);
         myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         setSupportActionBar(myToolbar);
@@ -114,7 +116,7 @@ public final class ScanActivity extends ToolbarProvider
 
         } else {
 
-            Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
+            final Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
             subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
         }
 
@@ -182,7 +184,7 @@ public final class ScanActivity extends ToolbarProvider
 
         if (subscribedBeacons != null) {
 
-            for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+            for (final SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 
                 if (subscribedBeacon.getBeacon().getIdentifiers().containsAll(beacon.getIdentifiers())) {
 
@@ -190,6 +192,7 @@ public final class ScanActivity extends ToolbarProvider
                 }
             }
         }
+
         return false;
     }
 
@@ -251,8 +254,8 @@ public final class ScanActivity extends ToolbarProvider
         final BeaconSubscription beaconSubscription = new BeaconSubscription(userId, beacon.getId1().toString());
         final String beaconSubscriptionJson = gson.toJson(beaconSubscription);
 
-        final Call<String> result
-                = retrofitManager.getPresenceDetectionService().subscribeBeacon("input=" + beaconSubscriptionJson);
+        final Call<String> result =
+                retrofitManager.getPresenceDetectionService().subscribeBeacon("input=" + beaconSubscriptionJson);
         result.enqueue(new Callback<String>() {
             @Override
             public void onResponse(final Call<String> call, final Response<String> response) {
@@ -270,7 +273,11 @@ public final class ScanActivity extends ToolbarProvider
                     final EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name);
                     final String aliasName = aliasNameEditText.getText().toString();
 
-                    subscribedBeacons.add(new SubscribedBeacon(aliasName, beacon));
+                    final DateFormat dateFormat = DateFormat.getDateTimeInstance();
+                    final String dateOfSubscription = dateFormat.format(new Date(Long.parseLong(timestamp) * 1000L));
+                    Log.d("dateOfSubscription", dateOfSubscription);
+
+                    subscribedBeacons.add(new SubscribedBeacon(aliasName, beacon, dateOfSubscription));
                     subscribedBeaconsJson = gson.toJson(subscribedBeacons);
                     appDataPreferences.edit().putString(TIMESTAMP, timestamp).apply();
                     appDataPreferences.edit().putString(SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
@@ -295,7 +302,7 @@ public final class ScanActivity extends ToolbarProvider
 
     private void replaceBeaconToTheOneWithNewStatus(final Beacon beacon, final List<Beacon> beacons) {
 
-        for (Beacon aBeacon : beacons) {
+        for (final Beacon aBeacon : beacons) {
 
             if (aBeacon.getIdentifiers().containsAll(beacon.getIdentifiers())) {
 
@@ -306,13 +313,14 @@ public final class ScanActivity extends ToolbarProvider
 
     private boolean isAlreadyDetected(final Beacon beacon, final List<Beacon> beacons) {
 
-        for (Beacon aBeacon : beacons) {
+        for (final Beacon aBeacon : beacons) {
 
             if (aBeacon.getIdentifiers().containsAll(beacon.getIdentifiers())) {
 
                 return true;
             }
         }
+
         return false;
     }
 }

@@ -29,8 +29,6 @@ public final class SettingsActivity extends ToolbarProvider {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        getFragmentManager().beginTransaction()
-                .replace(R.id.pref_content, new SettingsFragment())
-                .commit();
+        getFragmentManager().beginTransaction().replace(R.id.pref_content, new SettingsFragment()).commit();
     }
 }

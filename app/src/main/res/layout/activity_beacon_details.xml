@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorEggshell"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -20,49 +19,51 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@color/colorEggshell"
+        android:background="@color/colorLilyWhite"
         android:padding="16dp"
         android:shrinkColumns="0"
         android:stretchColumns="0">
 
-        <TableRow android:padding="1dp"
+        <TableRow
+            android:padding="1dp"
             android:weightSum="3">
 
             <TextView
                 android:id="@+id/beacon_details_alias_name"
                 android:layout_width="0dp"
-                android:layout_weight="3"
                 android:layout_height="wrap_content"
-                android:background="@color/colorDarkLinen"
+                android:layout_weight="3"
+                android:background="@color/colorMystic"
                 android:gravity="center"
                 android:padding="16dp"
-                android:textColor="@color/colorEggshell"
+                android:textColor="@color/colorDimGray"
                 android:textSize="24sp"
-                tools:text="my beacon"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                tools:text="my beacon" />
 
         </TableRow>
 
-        <TableRow android:padding="1dp"
+        <TableRow
+            android:padding="1dp"
             android:weightSum="3">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorDarkLinen"
+                android:background="@color/colorMystic"
                 android:gravity="center"
                 android:padding="16dp"
                 android:text="@string/last_time_in_range"
-                android:textColor="@color/colorEggshell"
+                android:textColor="@color/colorDimGray"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/beacon_details_last_time_in_range"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="match_parent"
-                android:background="@color/colorLinen"
+                android:layout_weight="2"
+                android:background="@color/colorEggshell"
                 android:gravity="center"
                 android:padding="16dp"
                 android:textColor="@color/colorDimGray"
@@ -71,26 +72,27 @@
 
         </TableRow>
 
-        <TableRow android:padding="1dp"
+        <TableRow
+            android:padding="1dp"
             android:weightSum="3">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorDarkLinen"
+                android:background="@color/colorMystic"
                 android:gravity="center"
                 android:padding="16dp"
                 android:text="@string/last_time_out_of_range"
-                android:textColor="@color/colorEggshell"
+                android:textColor="@color/colorDimGray"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/beacon_details_last_time_out_of_range"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="match_parent"
-                android:background="@color/colorLinen"
+                android:layout_weight="2"
+                android:background="@color/colorEggshell"
                 android:gravity="center"
                 android:padding="16dp"
                 android:textColor="@color/colorDimGray"
@@ -99,26 +101,27 @@
 
         </TableRow>
 
-        <TableRow android:padding="1dp"
+        <TableRow
+            android:padding="1dp"
             android:weightSum="3">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorDarkLinen"
+                android:background="@color/colorMystic"
                 android:gravity="center"
                 android:padding="16dp"
                 android:text="@string/label_uuid"
-                android:textColor="@color/colorEggshell"
+                android:textColor="@color/colorDimGray"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/beacon_details_uuid"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="wrap_content"
-                android:background="@color/colorLinen"
+                android:layout_weight="2"
+                android:background="@color/colorEggshell"
                 android:gravity="center"
                 android:padding="16dp"
                 android:textColor="@color/colorDimGray"
@@ -127,26 +130,27 @@
 
         </TableRow>
 
-        <TableRow android:padding="1dp"
+        <TableRow
+            android:padding="1dp"
             android:weightSum="3">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorDarkLinen"
+                android:background="@color/colorMystic"
                 android:gravity="center"
                 android:padding="16dp"
                 android:text="@string/label_major"
-                android:textColor="@color/colorEggshell"
+                android:textColor="@color/colorDimGray"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/beacon_details_major"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="wrap_content"
-                android:background="@color/colorLinen"
+                android:layout_weight="2"
+                android:background="@color/colorEggshell"
                 android:gravity="center"
                 android:padding="16dp"
                 android:textColor="@color/colorDimGray"
@@ -155,26 +159,27 @@
 
         </TableRow>
 
-        <TableRow android:padding="1dp"
+        <TableRow
+            android:padding="1dp"
             android:weightSum="3">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorDarkLinen"
+                android:background="@color/colorMystic"
                 android:gravity="center"
                 android:padding="16dp"
                 android:text="@string/label_minor"
-                android:textColor="@color/colorEggshell"
+                android:textColor="@color/colorDimGray"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/beacon_details_minor"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="wrap_content"
-                android:background="@color/colorLinen"
+                android:layout_weight="2"
+                android:background="@color/colorEggshell"
                 android:gravity="center"
                 android:padding="16dp"
                 android:textColor="@color/colorDimGray"
@@ -183,26 +188,27 @@
 
         </TableRow>
 
-        <TableRow android:padding="1dp"
+        <TableRow
+            android:padding="1dp"
             android:weightSum="3">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/colorDarkLinen"
+                android:background="@color/colorMystic"
                 android:gravity="center"
                 android:padding="16dp"
                 android:text="@string/rssi"
-                android:textColor="@color/colorEggshell"
+                android:textColor="@color/colorDimGray"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/beacon_details_rssi"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="wrap_content"
-                android:background="@color/colorLinen"
+                android:layout_weight="2"
+                android:background="@color/colorEggshell"
                 android:gravity="center"
                 android:padding="16dp"
                 android:textColor="@color/colorDimGray"

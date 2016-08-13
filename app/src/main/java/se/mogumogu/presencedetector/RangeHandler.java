@@ -39,7 +39,7 @@ import se.mogumogu.presencedetector.activity.RegistrationActivity;
 import se.mogumogu.presencedetector.activity.ScanActivity;
 import se.mogumogu.presencedetector.activity.SubscribedBeaconsActivity;
 import se.mogumogu.presencedetector.adapter.SubscribedBeaconAdapter;
-import se.mogumogu.presencedetector.fragment.EditBeaconAliasNameDialogFragment;
+import se.mogumogu.presencedetector.fragment.BeaconAliasNameDialogFragment;
 import se.mogumogu.presencedetector.model.BeaconInRange;
 import se.mogumogu.presencedetector.model.BeaconOutOfRange;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
@@ -60,13 +60,13 @@ public final class RangeHandler implements RangeNotifier {
     private Set<SubscribedBeacon> subscribedBeacons;
     private List<Beacon> beaconsToNotifyInRange;
     private String userId;
-    private String timestamp;
     private RetrofitManager retrofitManager;
     private Set<Beacon> beaconsToNotifyOutOfRange;
     private int rssiThreshold;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private SubscribedBeaconAdapter subscribedBeaconAdapter;
+    private Activity activity;
 
     public RangeHandler(final Context context) {
 
@@ -87,16 +87,12 @@ public final class RangeHandler implements RangeNotifier {
             final Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
             subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
         }
-
-        final String defaultRssiThreshold = context.getString(R.string.rssi_threshold_default);
-        final String rssiThresholdString
-                = settingsPreferences.getString(NumberPickerPreference.PREFERENCE_RSSI_THRESHOLD_KEY, defaultRssiThreshold);
-        rssiThreshold = Integer.parseInt(rssiThresholdString);
     }
 
     public RangeHandler(final Activity activity, final FragmentManager manager) {
 
         this(activity);
+        this.activity = activity;
         recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view_my_beacons);
         layoutManager = new LinearLayoutManager(activity);
         subscribedBeaconAdapter = new SubscribedBeaconAdapter(activity, subscribedBeacons, manager);
@@ -109,10 +105,17 @@ public final class RangeHandler implements RangeNotifier {
 
         Log.d("RangeHandler", "didRange");
         Log.d("beaconsInRegion", beaconsInRegion.toString());
-        userId = appDataPreferences.getString(RegistrationActivity.USER_ID, null);
-        timestamp = appDataPreferences.getString(ScanActivity.TIMESTAMP, null);
 
-        final String serverUrl = settingsPreferences.getString(RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
+        final String defaultRssiThreshold = context.getString(R.string.rssi_threshold_default);
+        final String rssiThresholdString =
+                settingsPreferences.getString(NumberPickerPreference.PREFERENCE_RSSI_THRESHOLD_KEY, defaultRssiThreshold);
+        rssiThreshold = Integer.parseInt(rssiThresholdString);
+
+        userId = appDataPreferences.getString(RegistrationActivity.USER_ID, null);
+
+        final String serverUrl = settingsPreferences.getString(
+                RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
+
         retrofitManager = new RetrofitManager(serverUrl);
 
         final List<Beacon> allBeaconsInRange = findAllBeaconsInRange();
@@ -126,7 +129,7 @@ public final class RangeHandler implements RangeNotifier {
 
         if (beaconsInRegion.size() > 0) {
 
-            for (Beacon beacon : beaconsInRegion) {
+            for (final Beacon beacon : beaconsInRegion) {
 
                 if (isCloseBeacon(beacon) && beaconIsSubscribed(beacon, subscribedBeacons)) {
 
@@ -136,7 +139,13 @@ public final class RangeHandler implements RangeNotifier {
 
             if (SubscribedBeaconsActivity.isActive) {
 
-                subscribedBeaconAdapter.notifyDataSetChanged();
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        subscribedBeaconAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         }
         if (!beaconsInRegionInRange.isEmpty() && beaconsInRegion.isEmpty()) {
@@ -154,9 +163,8 @@ public final class RangeHandler implements RangeNotifier {
         Log.d("beaconsOutOfRange", beaconsToNotifyOutOfRange.toString());
         Log.d("beaconsInRange", beaconsToNotifyInRange.toString());
         Log.d("subscribed beacons", subscribedBeacons.toString());
+        Log.d("rssiThreshold", String.valueOf(rssiThreshold));
         if (!beaconsToNotifyOutOfRange.isEmpty()) {
-
-            System.out.println("Kom in 1");
 
             notifyOutOfRange();
 
@@ -170,13 +178,14 @@ public final class RangeHandler implements RangeNotifier {
 
         final List<Beacon> allBeaconsInRange = new ArrayList<>();
 
-        for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+        for (final SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 
             if (subscribedBeacon.isInRangeNotified() && !subscribedBeacon.isOutOfRangeNotified()) {
 
                 allBeaconsInRange.add(subscribedBeacon.getBeacon());
             }
         }
+
         return allBeaconsInRange;
     }
 
@@ -184,9 +193,9 @@ public final class RangeHandler implements RangeNotifier {
 
         final List<Beacon> beaconsInRegionInRange = new ArrayList<>();
 
-        for (Beacon beaconInRange : allBeaconsInRange) {
+        for (final Beacon beaconInRange : allBeaconsInRange) {
 
-            for (Beacon beaconInRegion : beaconsInRegion) {
+            for (final Beacon beaconInRegion : beaconsInRegion) {
 
                 if (beaconInRange.getIdentifiers().containsAll(beaconInRegion.getIdentifiers())) {
 
@@ -194,6 +203,7 @@ public final class RangeHandler implements RangeNotifier {
                 }
             }
         }
+
         return beaconsInRegionInRange;
     }
 
@@ -201,13 +211,14 @@ public final class RangeHandler implements RangeNotifier {
 
         final List<Beacon> beaconsWithLowRssi = new ArrayList<>();
 
-        for (Beacon beacon : beacons) {
+        for (final Beacon beacon : beacons) {
 
             if (beacon.getRssi() <= -70) {
 
                 beaconsWithLowRssi.add(beacon);
             }
         }
+
         return beaconsWithLowRssi;
     }
 
@@ -215,7 +226,7 @@ public final class RangeHandler implements RangeNotifier {
 
         final List<Beacon> inRangeUnNotifiedBeacons = new ArrayList<>();
 
-        for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+        for (final SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 
             if (subscribedBeacon.isOutOfRangeNotified()) {
 
@@ -225,8 +236,6 @@ public final class RangeHandler implements RangeNotifier {
                 long reactivationInterval = Long.parseLong(reactivationIntervalString);
 
                 Log.d("interval", reactivationIntervalString);
-
-                //TODO: Ask how much the minimum interval should be
 
                 long currentTime = System.currentTimeMillis();
                 long outOfRangeTime = subscribedBeacon.getOutOfRangeTime();
@@ -242,7 +251,7 @@ public final class RangeHandler implements RangeNotifier {
                 }
             }
 
-            for (Beacon beaconInRegion : beaconsInRegion) {
+            for (final Beacon beaconInRegion : beaconsInRegion) {
 
                 Log.d("beaconRssi", String.valueOf(beaconInRegion.getRssi()));
 
@@ -256,18 +265,20 @@ public final class RangeHandler implements RangeNotifier {
                 }
             }
         }
+
         return inRangeUnNotifiedBeacons;
     }
 
     private SubscribedBeacon findSubscribedBeacon(final Beacon beacon) {
 
-        for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+        for (final SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 
             if (subscribedBeacon.getBeacon().getIdentifiers().containsAll(beacon.getIdentifiers())) {
 
                 return subscribedBeacon;
             }
         }
+
         return null;
     }
 
@@ -278,7 +289,7 @@ public final class RangeHandler implements RangeNotifier {
 
         Log.d("sendNotification", "came in");
 
-        NotificationCompat.Builder notificationBuilder =
+        final NotificationCompat.Builder notificationBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(context)
                         .setSmallIcon(resourceId)
                         .setContentTitle(title)
@@ -288,22 +299,20 @@ public final class RangeHandler implements RangeNotifier {
                         .setLights(0xFF0000FF, 100, 3000)
                         .setPriority(Notification.PRIORITY_DEFAULT);
 
-        Intent intent = new Intent(context, BeaconDetailsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(EditBeaconAliasNameDialogFragment.SUBSCRIBED_BEACON, subscribedBeacon);
+        final Intent intent = new Intent(context, BeaconDetailsActivity.class);
+        final Bundle bundle = new Bundle();
+        bundle.putParcelable(BeaconAliasNameDialogFragment.SUBSCRIBED_BEACON, subscribedBeacon);
         intent.putExtras(bundle);
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        final TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(BeaconDetailsActivity.class);
         stackBuilder.addNextIntent(intent);
 
-        PendingIntent pendingIntent
-                = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         notificationBuilder.setContentIntent(pendingIntent);
 
-        NotificationManager notificationManager
-                = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
         Log.d("sendNotification", "notification sent");
@@ -315,35 +324,37 @@ public final class RangeHandler implements RangeNotifier {
 
             Log.d("beaconRssi", String.valueOf(beaconToNotifyInRange.getRssi()));
 
-            BeaconInRange beaconInRange = new BeaconInRange(userId,
+            final long inRangeTime = System.currentTimeMillis();
+            final String inRangeTimeStamp = String.valueOf(inRangeTime / 1000L);
+
+            final BeaconInRange beaconInRange =
+                    new BeaconInRange(userId,
                     beaconToNotifyInRange.getId1().toString(),
                     beaconToNotifyInRange.getId2().toString(),
                     beaconToNotifyInRange.getId3().toString(),
                     String.valueOf(beaconToNotifyInRange.getRssi()),
-                    timestamp);
+                    inRangeTimeStamp);
 
-            String beaconInRangeJson = gson.toJson(beaconInRange);
+            final String beaconInRangeJson = gson.toJson(beaconInRange);
 
-            final Call<String> result = retrofitManager.getPresenceDetectionService()
-                    .setInRangeNotification("input=" + beaconInRangeJson);
+            final Call<String> result =
+                    retrofitManager.getPresenceDetectionService().setInRangeNotification("input=" + beaconInRangeJson);
 
             result.enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
+                public void onResponse(final Call<String> call, final Response<String> response) {
 
                     Log.d("responseInRange", response.body());
 
-                    String responseBody = response.body();
+                    final String responseBody = response.body();
 
                     if (responseBody.contains(responseSuccess)) {
 
-                        SubscribedBeacon subscribedBeacon = findSubscribedBeacon(beaconToNotifyInRange);
+                        final SubscribedBeacon subscribedBeacon = findSubscribedBeacon(beaconToNotifyInRange);
 
                         if (subscribedBeacon != null) {
 
-                            long inRangeTime = System.currentTimeMillis();
                             subscribedBeacon.setInRangeTime(inRangeTime);
-
                             subscribedBeacon.setInRangeNotified(true);
 
                             Log.d("inRangeNotified", String.valueOf(subscribedBeacon.isInRangeNotified()));
@@ -354,7 +365,8 @@ public final class RangeHandler implements RangeNotifier {
                         subscribedBeaconsJson = gson.toJson(subscribedBeacons);
                         appDataPreferences.edit().putString(ScanActivity.SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
 
-                        sendNotification("Beacon in range", "Beacon " + beaconAliasName + " is in range.", R.drawable.icon_bluetooth_in_range, subscribedBeacon);
+                        sendNotification("Beacon in range", "Beacon " + beaconAliasName + " is in range.",
+                                R.drawable.icon_bluetooth_in_range, subscribedBeacon);
 
                     } else {
 
@@ -363,7 +375,7 @@ public final class RangeHandler implements RangeNotifier {
                 }
 
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
+                public void onFailure(final Call<String> call, final Throwable t) {
 
                     t.printStackTrace();
                 }
@@ -371,19 +383,21 @@ public final class RangeHandler implements RangeNotifier {
         }
     }
 
-    public void notifyOutOfRange() {
+    private void notifyOutOfRange() {
 
         for (final Beacon beaconToNotifyOutOfRange : beaconsToNotifyOutOfRange) {
             Log.d("beaconOutRssi", String.valueOf(beaconToNotifyOutOfRange.getRssi()));
 
             final long outOfRangeTime = System.currentTimeMillis();
-            final String timeStampOutOfRange = String.valueOf(outOfRangeTime);
+            Log.d("outOfRangeTime", String.valueOf(outOfRangeTime));
 
-            final BeaconOutOfRange beaconOutOfRange = new BeaconOutOfRange(userId,
-                    beaconToNotifyOutOfRange.getId1().toString(),
-                    timeStampOutOfRange);
+            final String outOfRangeTimestamp = String.valueOf(outOfRangeTime / 1000L);
+            Log.d("outOfRangeTimestamp", outOfRangeTimestamp);
 
-            String beaconOutOfRangeJson = gson.toJson(beaconOutOfRange);
+            final BeaconOutOfRange beaconOutOfRange =
+                    new BeaconOutOfRange(userId, beaconToNotifyOutOfRange.getId1().toString(), outOfRangeTimestamp);
+
+            final String beaconOutOfRangeJson = gson.toJson(beaconOutOfRange);
             Log.d("beaconOutOfRangeJson", beaconOutOfRangeJson);
 
             final Call<String> result = retrofitManager.getPresenceDetectionService().setOutOfRangeNotification("input=" + beaconOutOfRangeJson);
@@ -392,7 +406,7 @@ public final class RangeHandler implements RangeNotifier {
                 @Override
                 public void onResponse(final Call<String> call, final Response<String> response) {
 
-                    String responseBody = response.body();
+                    final String responseBody = response.body();
 
                     if (responseBody.contains(responseSuccess)) {
 
@@ -403,16 +417,20 @@ public final class RangeHandler implements RangeNotifier {
                         if (subscribedBeacon != null) {
 
                             Log.d("sBeaconOutRssi", String.valueOf(subscribedBeacon.getBeacon().getRssi()));
+
                             subscribedBeacon.setOutOfRangeNotified(true);
                             subscribedBeacon.setOutOfRangeTime(outOfRangeTime);
+
                             Log.d("outOfRangeNotified", String.valueOf(subscribedBeacon.isOutOfRangeNotified()));
+
                             beaconAliasName = subscribedBeacon.getAliasName();
                         }
 
                         subscribedBeaconsJson = gson.toJson(subscribedBeacons);
                         appDataPreferences.edit().putString(ScanActivity.SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
 
-                        sendNotification("Beacon out of range", "Beacon " + beaconAliasName + " is out of range.", R.drawable.icon_bluetooth_out_of_range, subscribedBeacon);
+                        sendNotification("Beacon out of range", "Beacon " + beaconAliasName + " is out of range.",
+                                R.drawable.icon_bluetooth_out_of_range, subscribedBeacon);
 
                     } else {
 
@@ -429,16 +447,16 @@ public final class RangeHandler implements RangeNotifier {
         }
     }
 
-    public boolean isCloseBeacon(final Beacon beacon) {
+    private boolean isCloseBeacon(final Beacon beacon) {
 
         return beacon.getId1() != null && beacon.getBluetoothName().equals("closebeacon.com");
     }
 
-    public boolean beaconIsSubscribed(final Beacon beacon, final Set<SubscribedBeacon> subscribedBeacons) {
+    private boolean beaconIsSubscribed(final Beacon beacon, final Set<SubscribedBeacon> subscribedBeacons) {
 
         if (subscribedBeacons != null) {
 
-            for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+            for (final SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 
                 if (subscribedBeacon.getBeacon().getIdentifiers().containsAll(beacon.getIdentifiers())) {
 
@@ -446,14 +464,15 @@ public final class RangeHandler implements RangeNotifier {
                 }
             }
         }
+
         return false;
     }
 
-    public void refreshSubscribedBeaconStatus(final Beacon beacon, final Set<SubscribedBeacon> subscribedBeacons) {
+    private void refreshSubscribedBeaconStatus(final Beacon beacon, final Set<SubscribedBeacon> subscribedBeacons) {
 
         Log.d("rssi", String.valueOf(beacon.getRssi()));
 
-        for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+        for (final SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 
             if (isSameBeacon(beacon, subscribedBeacon)) {
 

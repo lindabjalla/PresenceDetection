@@ -54,7 +54,8 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
         Collections.reverse(beacons);
 
         this.manager = manager;
-        for (Beacon b : beacons) {
+
+        for (final Beacon b : beacons) {
             Log.d("rssi", "---------" + b.getId1().toString() + ": " + String.valueOf(b.getRssi()));
         }
     }
@@ -63,6 +64,7 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
     public DeviceViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
 
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_active_beacon, parent, false);
+
         return new DeviceViewHolder(view, context, beacons, manager);
     }
 
@@ -122,7 +124,7 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
         @Override
         public void onClick(final View view) {
 
-            int position = getAdapterPosition();
+            final int position = getAdapterPosition();
             beacon = beacons.get(position);
 
             final SharedPreferences preferences =
@@ -140,7 +142,7 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
                 subscribedBeacons = gson.fromJson(subscribedBeaconSetJson, type);
             }
 
-            if (beaconIsSubscribed(beacon, subscribedBeacons)) {
+            if (isSubscribed(beacon, subscribedBeacons)) {
 
                 Toast.makeText(context, "This Beacon is previously subscribed", Toast.LENGTH_LONG).show();
 
@@ -155,20 +157,22 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
 
         private void showSubscriptionDialog() {
 
-            DialogFragment dialogFragment = BasicDialogFragment.newInstance(
+            final DialogFragment dialogFragment = BasicDialogFragment.newInstance(
                     R.layout.dialog_fragment_subscription, R.string.dialog_fragment_subscription_title, R.string.subscribe);
+
             dialogFragment.show(manager, "SubscriptionDialogFragment");
         }
 
-        private boolean beaconIsSubscribed(final Beacon beacon, final Set<SubscribedBeacon> subscribedBeacons) {
+        private boolean isSubscribed(final Beacon beacon, final Set<SubscribedBeacon> subscribedBeacons) {
 
-            for (SubscribedBeacon subscribedBeacon : subscribedBeacons) {
+            for (final SubscribedBeacon subscribedBeacon : subscribedBeacons) {
 
                 if (subscribedBeacon.getBeacon().getIdentifiers().containsAll(beacon.getIdentifiers())) {
 
                     return true;
                 }
             }
+
             return false;
         }
     }

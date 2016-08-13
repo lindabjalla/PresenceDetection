@@ -32,8 +32,9 @@ public final class NumberPickerPreference extends DialogPreference {
     @Override
     protected View onCreateDialogView() {
 
-        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final FrameLayout.LayoutParams layoutParams =
+                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
         layoutParams.gravity = Gravity.CENTER;
 
         numberPicker = new NumberPicker(getContext());
@@ -86,7 +87,7 @@ public final class NumberPickerPreference extends DialogPreference {
             Log.d("defaultValue", String.valueOf(numberPicker.getMaxValue()));
             Log.d("rssiThresholdValues", rssiThresholdValues.toString());
 
-            int index = numberPicker.getValue();
+            final int index = numberPicker.getValue();
             final String newValue = rssiThresholdValues.get(index);
 
             if (callChangeListener(newValue)) {
@@ -98,7 +99,7 @@ public final class NumberPickerPreference extends DialogPreference {
     }
 
     @Override
-    protected Object onGetDefaultValue(final TypedArray a, int index) {
+    protected Object onGetDefaultValue(final TypedArray a, final int index) {
 
         return a.getString(index);
     }

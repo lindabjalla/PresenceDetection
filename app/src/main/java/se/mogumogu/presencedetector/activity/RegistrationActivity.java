@@ -57,7 +57,7 @@ public final class RegistrationActivity extends ToolbarProvider implements Basic
 
         final String userId = appDataPreferences.getString(USER_ID, null);
 
-        if(userId != null) {
+        if (userId != null) {
 
             Log.d("userId", userId);
         }
@@ -89,7 +89,6 @@ public final class RegistrationActivity extends ToolbarProvider implements Basic
 
     @Override
     public void onDialogPositiveClick(final DialogFragment dialog, final View view) {
-
 
         final EditText firstNameEditText = (EditText) view.findViewById(R.id.first_name);
         final EditText lastNameEditText = (EditText) view.findViewById(R.id.last_name);

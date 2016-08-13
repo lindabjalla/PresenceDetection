@@ -52,7 +52,7 @@ public final class SettingsFragment extends PreferenceFragment implements Shared
     }
 
     @Override
-    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, String key) {
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
 
         updatePreference(findPreference(key), key);
     }
@@ -71,6 +71,7 @@ public final class SettingsFragment extends PreferenceFragment implements Shared
             } else if (preference instanceof NumberPickerPreference) {
 
                 final String currentRssiThreshold = sharedPreferences.getString(key, getResources().getString(R.string.rssi_threshold_default));
+                Log.d("currentRssiThreshold", currentRssiThreshold);
                 preference.setSummary(currentRssiThreshold);
                 sharedPreferences.edit().putString(key, currentRssiThreshold).apply();
 

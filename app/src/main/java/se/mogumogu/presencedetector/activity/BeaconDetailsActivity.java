@@ -13,7 +13,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import se.mogumogu.presencedetector.R;
-import se.mogumogu.presencedetector.fragment.EditBeaconAliasNameDialogFragment;
+import se.mogumogu.presencedetector.fragment.BeaconAliasNameDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public final class BeaconDetailsActivity extends ToolbarProvider {
@@ -28,6 +28,7 @@ public final class BeaconDetailsActivity extends ToolbarProvider {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beacon_details);
 
@@ -46,8 +47,7 @@ public final class BeaconDetailsActivity extends ToolbarProvider {
 
         final Intent intent = getIntent();
         final Bundle bundle = intent.getExtras();
-        final SubscribedBeacon subscribedBeacon
-                = bundle.getParcelable(EditBeaconAliasNameDialogFragment.SUBSCRIBED_BEACON);
+        final SubscribedBeacon subscribedBeacon = bundle.getParcelable(BeaconAliasNameDialogFragment.SUBSCRIBED_BEACON);
 
         if (subscribedBeacon != null) {
 
@@ -62,7 +62,6 @@ public final class BeaconDetailsActivity extends ToolbarProvider {
         }
 
         final DateFormat dateFormat = DateFormat.getDateTimeInstance();
-
         final String inRangeDateTime = dateFormat.format(new Date(inRangeTimeInMilliSeconds));
 
         String outOfRangeDateTime;
@@ -75,25 +74,25 @@ public final class BeaconDetailsActivity extends ToolbarProvider {
             outOfRangeDateTime = dateFormat.format(new Date(outOfRangeTimeInMilliSeconds));
         }
 
-        TextView aliasNameTextView = (TextView) findViewById(R.id.beacon_details_alias_name);
+        final TextView aliasNameTextView = (TextView) findViewById(R.id.beacon_details_alias_name);
         aliasNameTextView.setText(aliasName);
 
-        TextView lastTimeInRangeTextView = (TextView) findViewById(R.id.beacon_details_last_time_in_range);
+        final TextView lastTimeInRangeTextView = (TextView) findViewById(R.id.beacon_details_last_time_in_range);
         lastTimeInRangeTextView.setText(inRangeDateTime);
 
-        TextView lastTimeOutOfRangeTextView = (TextView) findViewById(R.id.beacon_details_last_time_out_of_range);
+        final TextView lastTimeOutOfRangeTextView = (TextView) findViewById(R.id.beacon_details_last_time_out_of_range);
         lastTimeOutOfRangeTextView.setText(outOfRangeDateTime);
 
-        TextView proximityUuidTextView = (TextView) findViewById(R.id.beacon_details_uuid);
+        final TextView proximityUuidTextView = (TextView) findViewById(R.id.beacon_details_uuid);
         proximityUuidTextView.setText(proximityUuid);
 
-        TextView majorTextView = (TextView) findViewById(R.id.beacon_details_major);
+        final TextView majorTextView = (TextView) findViewById(R.id.beacon_details_major);
         majorTextView.setText(major);
 
-        TextView minorTextView = (TextView) findViewById(R.id.beacon_details_minor);
+        final TextView minorTextView = (TextView) findViewById(R.id.beacon_details_minor);
         minorTextView.setText(minor);
 
-        TextView rssiTextView = (TextView) findViewById(R.id.beacon_details_rssi);
+        final TextView rssiTextView = (TextView) findViewById(R.id.beacon_details_rssi);
         rssiTextView.setText(rssi);
     }
 }

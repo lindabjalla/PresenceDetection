@@ -27,10 +27,10 @@ import java.util.Set;
 
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.RangeHandler;
-import se.mogumogu.presencedetector.fragment.EditBeaconAliasNameDialogFragment;
+import se.mogumogu.presencedetector.fragment.BeaconAliasNameDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
-public final class SubscribedBeaconsActivity extends ToolbarProvider implements BeaconConsumer, EditBeaconAliasNameDialogFragment.EditBeaconAliasNameDialogListener {
+public final class SubscribedBeaconsActivity extends ToolbarProvider implements BeaconConsumer, BeaconAliasNameDialogFragment.BeaconAliasNameDialogListener {
 
     private static final String TAG = SubscribedBeaconsActivity.class.getSimpleName();
     public static boolean isActive;
@@ -50,7 +50,7 @@ public final class SubscribedBeaconsActivity extends ToolbarProvider implements 
         Log.d("onCreate", "onCreate");
         setContentView(R.layout.activity_subscribed_beacons);
 
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.my_beacons_toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.subscribed_beacons_toolbar);
         myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         setSupportActionBar(myToolbar);
@@ -127,7 +127,7 @@ public final class SubscribedBeaconsActivity extends ToolbarProvider implements 
         final EditText editText = (EditText) view.findViewById(R.id.alias_name_edit);
         final String aliasName = editText.getText().toString();
         final Bundle bundle = dialog.getArguments();
-        final SubscribedBeacon subscribedBeacon = bundle.getParcelable(EditBeaconAliasNameDialogFragment.SUBSCRIBED_BEACON);
+        final SubscribedBeacon subscribedBeacon = bundle.getParcelable(BeaconAliasNameDialogFragment.SUBSCRIBED_BEACON);
 
         if (subscribedBeacon != null) {
 

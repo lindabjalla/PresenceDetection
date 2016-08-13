@@ -33,9 +33,11 @@
             </intent-filter>
 
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="app.mogumogu.se"
                     android:pathPrefix="/presence-detector"
@@ -76,14 +78,24 @@
 
         <activity
             android:name=".activity.SettingsActivity"
-            android:label="@string/title_setting_activity"
+            android:label="@string/label_setting_activity"
             android:parentActivityName=".activity.RegistrationActivity">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.RegistrationActivity" />
         </activity>
-        <activity android:name=".activity.HelpActivity" />
+
+        <activity
+            android:name=".activity.HelpActivity"
+            android:label="@string/help"
+            android:parentActivityName=".activity.RegistrationActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.RegistrationActivity" />
+        </activity>
+
     </application>
 
 </manifest>

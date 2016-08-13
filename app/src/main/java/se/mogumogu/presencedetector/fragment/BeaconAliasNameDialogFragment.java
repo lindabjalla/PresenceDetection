@@ -15,17 +15,17 @@ import android.widget.EditText;
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
-public final class EditBeaconAliasNameDialogFragment extends DialogFragment {
+public final class BeaconAliasNameDialogFragment extends DialogFragment {
 
-    private static final String TAG = EditBeaconAliasNameDialogFragment.class.getSimpleName();
+    private static final String TAG = BeaconAliasNameDialogFragment.class.getSimpleName();
     public static final String SUBSCRIBED_BEACON = "se.mogumogu.presencedetector.SUBSCRIBED_BEACON";
 
-    private EditBeaconAliasNameDialogListener listener;
+    private BeaconAliasNameDialogListener listener;
     private SubscribedBeacon subscribedBeacon;
 
     public static DialogFragment newInstance(final SubscribedBeacon subscribedBeacon) {
 
-        final DialogFragment dialogFragment = new EditBeaconAliasNameDialogFragment();
+        final DialogFragment dialogFragment = new BeaconAliasNameDialogFragment();
 
         final Bundle arguments = new Bundle();
         arguments.putParcelable(SUBSCRIBED_BEACON, subscribedBeacon);
@@ -39,9 +39,9 @@ public final class EditBeaconAliasNameDialogFragment extends DialogFragment {
         super.onAttach(context);
 
         try {
-            listener = (EditBeaconAliasNameDialogListener) context;
+            listener = (BeaconAliasNameDialogListener) context;
         } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement EditBeaconAliasNameDialogListener");
+            throw new ClassCastException(context.toString() + " must implement BeaconAliasNameDialogListener");
         }
     }
 
@@ -76,7 +76,7 @@ public final class EditBeaconAliasNameDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(final DialogInterface dialogInterface, final int id) {
 
-                        listener.onDialogPositiveClick(EditBeaconAliasNameDialogFragment.this, view);
+                        listener.onDialogPositiveClick(BeaconAliasNameDialogFragment.this, view);
                     }
                 })
 
@@ -84,14 +84,14 @@ public final class EditBeaconAliasNameDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(final DialogInterface dialogInterface, final int id) {
 
-                        listener.onDialogNegativeClick(EditBeaconAliasNameDialogFragment.this);
+                        listener.onDialogNegativeClick(BeaconAliasNameDialogFragment.this);
                     }
                 });
 
         return dialogBuilder.create();
     }
 
-    public interface EditBeaconAliasNameDialogListener {
+    public interface BeaconAliasNameDialogListener {
 
         void onDialogPositiveClick(final DialogFragment dialog, final View view);
 

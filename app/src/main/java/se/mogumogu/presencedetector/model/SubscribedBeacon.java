@@ -9,22 +9,25 @@ public final class SubscribedBeacon implements Parcelable {
 
     private String aliasName;
     private Beacon beacon;
+    private String dateOfSubscription;
     private boolean isInRangeNotified;
     private boolean isOutOfRangeNotified;
     private boolean isInRange;
     private long inRangeTime;
     private long outOfRangeTime;
 
-    public SubscribedBeacon(final String aliasName, final Beacon beacon) {
+    public SubscribedBeacon(final String aliasName, final Beacon beacon, final String dateOfSubscription) {
 
         this.aliasName = aliasName;
         this.beacon = beacon;
+        this.dateOfSubscription = dateOfSubscription;
     }
 
     protected SubscribedBeacon(final Parcel in) {
 
         aliasName = in.readString();
         beacon = in.readParcelable(Beacon.class.getClassLoader());
+        dateOfSubscription = in.readString();
         isInRangeNotified = in.readByte() != 0;
         isOutOfRangeNotified = in.readByte() != 0;
         isInRange = in.readByte() != 0;
@@ -58,6 +61,7 @@ public final class SubscribedBeacon implements Parcelable {
 
         out.writeString(aliasName);
         out.writeParcelable(beacon, flags);
+        out.writeString(dateOfSubscription);
         out.writeByte((byte) (isInRangeNotified ? 1 : 0));
         out.writeByte((byte) (isOutOfRangeNotified ? 1 : 0));
         out.writeByte((byte) (isInRange ? 1 : 0));
@@ -73,6 +77,11 @@ public final class SubscribedBeacon implements Parcelable {
     public Beacon getBeacon() {
 
         return beacon;
+    }
+
+    public String getDateOfSubscription() {
+
+        return dateOfSubscription;
     }
 
     public boolean isInRangeNotified() {
@@ -103,6 +112,7 @@ public final class SubscribedBeacon implements Parcelable {
     public SubscribedBeacon setAliasName(final String aliasName) {
 
         this.aliasName = aliasName;
+
         return this;
     }
 
@@ -143,11 +153,14 @@ public final class SubscribedBeacon implements Parcelable {
 
             return true;
         }
+
         if (other instanceof SubscribedBeacon) {
 
-            SubscribedBeacon otherSubscribedBeacon = (SubscribedBeacon) other;
+            final SubscribedBeacon otherSubscribedBeacon = (SubscribedBeacon) other;
+
             return aliasName.equals(otherSubscribedBeacon.getAliasName()) && beacon.equals(otherSubscribedBeacon.beacon);
         }
+
         return false;
     }
 
@@ -163,9 +176,11 @@ public final class SubscribedBeacon implements Parcelable {
 
     @Override
     public String toString() {
+
         return "SubscribedBeacon{" +
                 "aliasName='" + aliasName + '\'' +
                 ", beacon=" + beacon +
+                ", dateOfSubscription='" + dateOfSubscription + '\'' +
                 ", isInRangeNotified=" + isInRangeNotified +
                 ", isOutOfRangeNotified=" + isOutOfRangeNotified +
                 ", isInRange=" + isInRange +

@@ -6,7 +6,7 @@ public final class RetrofitManager {
 
     private PresenceDetectionService service;
 
-    public RetrofitManager(final String serverUrl){
+    public RetrofitManager(final String serverUrl) {
 
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(serverUrl + "/sys/api/")

@@ -8,7 +8,7 @@ import android.view.MenuItem;
 
 import se.mogumogu.presencedetector.R;
 
-public class ToolbarProvider extends AppCompatActivity{
+public abstract class ToolbarProvider extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {

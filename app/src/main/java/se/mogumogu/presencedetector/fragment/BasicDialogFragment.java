@@ -46,7 +46,7 @@ public final class BasicDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         dialogLayoutId = getArguments().getInt(DIALOG_LAYOUT_ID);

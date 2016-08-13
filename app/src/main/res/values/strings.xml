@@ -24,10 +24,11 @@
     <!-- SubscribedBeaconsActivity -->
     <string name="label_subscribed_beacons_activity">My Beacons</string>
     <string name="label_alias_name">Name</string>
+    <string name="label_since">Since</string>
     <string name="label_status">Status</string>
 
     <!-- SettingsActivity -->
-    <string name="title_setting_activity">App Configuration</string>
+    <string name="label_setting_activity">App Configuration</string>
     <string name="re_monitoring_interval">Re-monitor if beacon is in range</string>
     <string name="dialog_title_re_monitoring_interval">Re-monitoring interval</string>
     <string name="default_interval_value">86400000</string>
@@ -53,6 +54,9 @@
     <string name="last_time_out_of_range">Out of range</string>
     <string name="rssi">RSSI</string>
     <string name="no_data">No data</string>
+
+    <!-- HelpActivity -->
+    <string name="help_example">This is Help Activity.</string>
 
     <!-- Adapter -->
     <string name="beacon">Beacon %1$d</string>
