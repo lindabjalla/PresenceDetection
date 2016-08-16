@@ -336,11 +336,11 @@ public final class RangeHandler implements RangeNotifier {
 
             final BeaconInRange beaconInRange =
                     new BeaconInRange(userId,
-                    beaconToNotifyInRange.getId1().toString(),
-                    beaconToNotifyInRange.getId2().toString(),
-                    beaconToNotifyInRange.getId3().toString(),
-                    String.valueOf(beaconToNotifyInRange.getRssi()),
-                    inRangeTimeStamp);
+                            beaconToNotifyInRange.getId1().toString(),
+                            beaconToNotifyInRange.getId2().toString(),
+                            beaconToNotifyInRange.getId3().toString(),
+                            String.valueOf(beaconToNotifyInRange.getRssi()),
+                            inRangeTimeStamp);
 
             final String beaconInRangeJson = gson.toJson(beaconInRange);
 
@@ -507,20 +507,29 @@ public final class RangeHandler implements RangeNotifier {
         return beacon.getRssi() >= rssiThreshold && beacon.getRssi() <= -20;
     }
 
-    private void sortByInRangeStatus(){
+    private void sortByInRangeStatus() {
 
         Collections.sort(subscribedBeaconList, new Comparator<SubscribedBeacon>() {
             @Override
             public int compare(SubscribedBeacon beacon1, SubscribedBeacon beacon2) {
 
-                Log.d("beacon1", beacon1.toString());
-                Log.d("beacon2", beacon2.toString());
+                final int comparedRangeStatus = Boolean.compare(beacon2.isInRange(), beacon1.isInRange());
 
-                Log.d("compare", String.valueOf(Boolean.compare(beacon1.isInRange(), beacon2.isInRange())));
-                return Boolean.compare(beacon1.isInRange(), beacon2.isInRange());
+                if (comparedRangeStatus != 0) {
+
+                    return comparedRangeStatus;
+
+                } else {
+
+                    Log.d("beacon1Name", beacon1.getAliasName());
+                    Log.d("beacon2Name", beacon2.getAliasName());
+                    Log.d("aliasNameCompare", String.valueOf(beacon1.getAliasName().compareTo(beacon2.getAliasName())));
+
+                    return beacon1.getAliasName().toUpperCase().compareTo(beacon2.getAliasName().toUpperCase());
+                }
             }
         });
 
-        Collections.reverse(subscribedBeaconList);
+        Log.d("sorted beacons", subscribedBeaconList.toString());
     }
 }
