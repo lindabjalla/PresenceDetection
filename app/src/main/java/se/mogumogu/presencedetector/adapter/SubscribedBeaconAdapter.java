@@ -5,7 +5,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +12,7 @@ import android.widget.TextView;
 
 import org.altbeacon.beacon.Beacon;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.fragment.BeaconAliasNameDialogFragment;
@@ -30,25 +25,10 @@ public final class SubscribedBeaconAdapter extends RecyclerView.Adapter<Subscrib
     private FragmentManager manager;
 
     public SubscribedBeaconAdapter(
-            final Context context, final Set<SubscribedBeacon> subscribedBeaconsSet, final FragmentManager manager) {
+            final Context context, final List<SubscribedBeacon> subscribedBeacons, final FragmentManager manager) {
 
         this.context = context;
-        subscribedBeacons = new ArrayList<>();
-        subscribedBeacons.addAll(subscribedBeaconsSet);
-
-        Log.d("unsorted", subscribedBeacons.toString());
-
-        Collections.sort(subscribedBeacons, new Comparator<SubscribedBeacon>() {
-            @Override
-            public int compare(SubscribedBeacon beacon1, SubscribedBeacon beacon2) {
-
-                return Boolean.compare(beacon1.isInRange(), beacon2.isInRange());
-            }
-        });
-        Collections.reverse(subscribedBeacons);
-
-        Log.d("sorted by boolean", subscribedBeacons.toString());
-
+        this.subscribedBeacons = subscribedBeacons;
         this.manager = manager;
     }
 
@@ -75,7 +55,7 @@ public final class SubscribedBeaconAdapter extends RecyclerView.Adapter<Subscrib
 
         if (position % 2 == 0) {
 
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorEggshell));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.colorLilyWhite));
 
         } else {
 

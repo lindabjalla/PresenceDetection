@@ -16,6 +16,7 @@
     <string name="label_uuid">UUID</string>
     <string name="label_major">Major</string>
     <string name="label_minor">Minor</string>
+    <string name="label_rssi">RSSI</string>
 
     <!-- ScanActivity -->
     <string name="label_scan_activity">Beacons Nearby</string>
@@ -58,6 +59,4 @@
     <!-- HelpActivity -->
     <string name="help_example">This is Help Activity.</string>
 
-    <!-- Adapter -->
-    <string name="beacon">Beacon %1$d</string>
 </resources>

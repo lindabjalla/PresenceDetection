@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:hint="@string/first_name"
         android:inputType="text"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:fontFamily="sans-serif-light"/>
 
     <EditText
         android:id="@+id/last_name"
@@ -18,6 +19,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/last_name"
         android:inputType="text"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:fontFamily="sans-serif-light"/>
 
 </LinearLayout>

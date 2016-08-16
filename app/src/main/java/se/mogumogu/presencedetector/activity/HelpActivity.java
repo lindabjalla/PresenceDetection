@@ -2,6 +2,7 @@ package se.mogumogu.presencedetector.activity;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
 import se.mogumogu.presencedetector.R;
@@ -18,5 +19,13 @@ public final class HelpActivity extends ToolbarProvider {
         myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
         setSupportActionBar(myToolbar);
+
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+
+            actionBar.setHomeAsUpIndicator(R.drawable.icon_arrow_back);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 }

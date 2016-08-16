@@ -27,6 +27,8 @@ import org.altbeacon.beacon.Region;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,6 +60,7 @@ public final class RangeHandler implements RangeNotifier {
     private String beaconAliasName;
     private String subscribedBeaconsJson;
     private Set<SubscribedBeacon> subscribedBeacons;
+    private List<SubscribedBeacon> subscribedBeaconList;
     private List<Beacon> beaconsToNotifyInRange;
     private String userId;
     private RetrofitManager retrofitManager;
@@ -87,6 +90,9 @@ public final class RangeHandler implements RangeNotifier {
             final Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
             subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
         }
+
+        subscribedBeaconList = new ArrayList<>();
+        subscribedBeaconList.addAll(subscribedBeacons);
     }
 
     public RangeHandler(final Activity activity, final FragmentManager manager) {
@@ -95,7 +101,7 @@ public final class RangeHandler implements RangeNotifier {
         this.activity = activity;
         recyclerView = (RecyclerView) activity.findViewById(R.id.recycler_view_my_beacons);
         layoutManager = new LinearLayoutManager(activity);
-        subscribedBeaconAdapter = new SubscribedBeaconAdapter(activity, subscribedBeacons, manager);
+        subscribedBeaconAdapter = new SubscribedBeaconAdapter(activity, subscribedBeaconList, manager);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(subscribedBeaconAdapter);
     }
@@ -143,6 +149,7 @@ public final class RangeHandler implements RangeNotifier {
                     @Override
                     public void run() {
 
+                        sortByInRangeStatus();
                         subscribedBeaconAdapter.notifyDataSetChanged();
                     }
                 });
@@ -498,5 +505,22 @@ public final class RangeHandler implements RangeNotifier {
     private boolean isInRange(final Beacon beacon) {
 
         return beacon.getRssi() >= rssiThreshold && beacon.getRssi() <= -20;
+    }
+
+    private void sortByInRangeStatus(){
+
+        Collections.sort(subscribedBeaconList, new Comparator<SubscribedBeacon>() {
+            @Override
+            public int compare(SubscribedBeacon beacon1, SubscribedBeacon beacon2) {
+
+                Log.d("beacon1", beacon1.toString());
+                Log.d("beacon2", beacon2.toString());
+
+                Log.d("compare", String.valueOf(Boolean.compare(beacon1.isInRange(), beacon2.isInRange())));
+                return Boolean.compare(beacon1.isInRange(), beacon2.isInRange());
+            }
+        });
+
+        Collections.reverse(subscribedBeaconList);
     }
 }

@@ -13,25 +13,6 @@
         android:padding="1dp">
 
         <TextView
-            android:id="@+id/beacon_number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:background="@color/colorMystic"
-            android:gravity="center"
-            android:padding="16dp"
-            android:textColor="@color/colorDimGray"
-            android:textSize="20sp" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:padding="1dp">
-
-        <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -40,7 +21,8 @@
             android:padding="16dp"
             android:text="@string/label_uuid"
             android:textColor="@color/colorDimGray"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"/>
 
         <TextView
             android:id="@+id/proximity_uuid"
@@ -52,7 +34,8 @@
             android:padding="16dp"
             android:textColor="@color/colorDimGray"
             android:textSize="20sp"
-            tools:text="text_proximity uuid" />
+            tools:text="text_proximity uuid"
+            android:fontFamily="sans-serif-light"/>
     </TableRow>
 
     <TableRow
@@ -70,7 +53,8 @@
             android:padding="16dp"
             android:text="@string/label_major"
             android:textColor="@color/colorDimGray"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"/>
 
         <TextView
             android:id="@+id/text_major"
@@ -82,7 +66,8 @@
             android:padding="16dp"
             android:textColor="@color/colorDimGray"
             android:textSize="20sp"
-            tools:text="major" />
+            tools:text="major"
+            android:fontFamily="sans-serif-light"/>
 
     </TableRow>
 
@@ -101,7 +86,8 @@
             android:padding="16dp"
             android:text="@string/label_minor"
             android:textColor="@color/colorDimGray"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"/>
 
         <TextView
             android:id="@+id/text_minor"
@@ -113,8 +99,41 @@
             android:padding="16dp"
             android:textColor="@color/colorDimGray"
             android:textSize="20sp"
-            tools:text="minor" />
+            tools:text="minor"
+            android:fontFamily="sans-serif-light"/>
 
+    </TableRow>
+
+    <TableRow
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:padding="1dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorMystic"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/label_rssi"
+            android:textColor="@color/colorDimGray"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-light"/>
+
+        <TextView
+            android:id="@+id/active_beacon_rssi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/colorEggshell"
+            android:gravity="center"
+            android:padding="16dp"
+            android:textColor="@color/colorDimGray"
+            android:textSize="20sp"
+            tools:text="-45"
+            android:fontFamily="sans-serif-light"/>
     </TableRow>
 
 </TableLayout>

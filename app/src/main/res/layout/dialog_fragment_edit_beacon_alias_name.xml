@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:labelFor="@id/alias_name_edit"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:fontFamily="sans-serif-light"/>
 
 </LinearLayout>

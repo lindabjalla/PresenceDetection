@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:hint="@string/alias_name"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:fontFamily="sans-serif-light"/>
 
 </LinearLayout>

@@ -6,7 +6,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import com.google.gson.reflect.TypeToken;
 import org.altbeacon.beacon.Beacon;
 
 import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,21 +40,7 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
 
         this.context = context;
         this.beacons = beacons;
-
-        Collections.sort(beacons, new Comparator<Beacon>() {
-            @Override
-            public int compare(Beacon beacon1, Beacon beacon2) {
-
-                return Integer.compare(beacon1.getRssi(), beacon2.getRssi());
-            }
-        });
-        Collections.reverse(beacons);
-
         this.manager = manager;
-
-        for (final Beacon b : beacons) {
-            Log.d("rssi", "---------" + b.getId1().toString() + ": " + String.valueOf(b.getRssi()));
-        }
     }
 
     @Override
@@ -71,10 +54,12 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
     @Override
     public void onBindViewHolder(final DeviceViewHolder holder, final int position) {
 
-        holder.beaconNumberView.setText(context.getString(R.string.beacon, (position + 1)));
-        holder.proximityUuidView.setText(beacons.get(position).getId1().toString());
-        holder.majorView.setText(beacons.get(position).getId2().toString());
-        holder.minorView.setText(beacons.get(position).getId3().toString());
+        Beacon beacon = beacons.get(position);
+
+        holder.proximityUuidView.setText(beacon.getId1().toString());
+        holder.majorView.setText(beacon.getId2().toString());
+        holder.minorView.setText(beacon.getId3().toString());
+        holder.rssiView.setText(String.valueOf(beacon.getRssi()));
 
         if (position % 2 == 0) {
 
@@ -94,10 +79,11 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
 
     public static final class DeviceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public final TextView beaconNumberView;
         public final TextView proximityUuidView;
         public final TextView majorView;
         public final TextView minorView;
+        public final TextView rssiView;
+
         private Context context;
         private List<Beacon> beacons;
         private FragmentManager manager;
@@ -105,14 +91,13 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
         private Gson gson;
         private Set<SubscribedBeacon> subscribedBeacons;
 
-
         public DeviceViewHolder(final View view, final Context context, final List<Beacon> beacons, final FragmentManager manager) {
 
             super(view);
-            this.beaconNumberView = (TextView) view.findViewById(R.id.beacon_number);
             this.proximityUuidView = (TextView) view.findViewById(R.id.proximity_uuid);
             this.majorView = (TextView) view.findViewById(R.id.text_major);
             this.minorView = (TextView) view.findViewById(R.id.text_minor);
+            this.rssiView = (TextView) view.findViewById(R.id.active_beacon_rssi);
 
             view.setOnClickListener(this);
             this.context = context;

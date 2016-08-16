@@ -25,6 +25,7 @@
         android:padding="18dp"
         android:text="@string/scan_beacons"
         android:textColor="@color/colorDimGray"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:fontFamily="sans-serif-light"/>
 
 </RelativeLayout>

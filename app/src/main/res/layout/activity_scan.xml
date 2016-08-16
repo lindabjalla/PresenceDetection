@@ -12,7 +12,7 @@
         android:id="@+id/scan_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
@@ -21,7 +21,7 @@
         android:id="@+id/subscription_message_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/beacon_details_toolbar"
+        android:layout_below="@id/scan_toolbar"
         android:background="@color/colorLilyWhite"
         android:gravity="center"
         android:padding="16dp">
@@ -35,7 +35,8 @@
             android:padding="16dp"
             android:text="@string/subscription_message"
             android:textColor="@color/colorDimGray"
-            android:textSize="20sp" />
+            android:textSize="22sp"
+            android:fontFamily="sans-serif-smallcaps"/>
 
     </LinearLayout>
 

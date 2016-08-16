@@ -33,6 +33,8 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -221,15 +223,17 @@ public final class ScanActivity extends ToolbarProvider
                     }
                     Log.d("closeBeacons", closeBeacons.toString());
                 }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        adapter.notifyDataSetChanged();
-                    }
-                });
             }
+
+            sortBeaconsByRssi();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    adapter.notifyDataSetChanged();
+                }
+            });
         }
 
         try {
@@ -322,5 +326,18 @@ public final class ScanActivity extends ToolbarProvider
         }
 
         return false;
+    }
+
+    private void sortBeaconsByRssi(){
+
+        Collections.sort(closeBeacons, new Comparator<Beacon>() {
+            @Override
+            public int compare(Beacon beacon1, Beacon beacon2) {
+
+                return Integer.compare(beacon1.getRssi(), beacon2.getRssi());
+            }
+        });
+
+        Collections.reverse(closeBeacons);
     }
 }
