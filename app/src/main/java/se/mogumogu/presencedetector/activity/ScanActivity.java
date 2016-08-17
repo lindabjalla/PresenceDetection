@@ -328,7 +328,7 @@ public final class ScanActivity extends ToolbarProvider
         return false;
     }
 
-    private void sortBeaconsByRssi(){
+    private void sortBeaconsByRssi() {
 
         Collections.sort(closeBeacons, new Comparator<Beacon>() {
             @Override

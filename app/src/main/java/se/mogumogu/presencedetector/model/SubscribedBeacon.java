@@ -49,7 +49,6 @@ public final class SubscribedBeacon implements Parcelable {
         }
     };
 
-
     @Override
     public int describeContents() {
 

@@ -65,6 +65,7 @@ public final class BeaconDetailsActivity extends ToolbarProvider {
         final String inRangeDateTime = dateFormat.format(new Date(inRangeTimeInMilliSeconds));
 
         String outOfRangeDateTime;
+
         if (outOfRangeTimeInMilliSeconds == 0) {
 
             outOfRangeDateTime = getResources().getString(R.string.no_data);

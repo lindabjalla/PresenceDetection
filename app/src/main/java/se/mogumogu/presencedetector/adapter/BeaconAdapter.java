@@ -54,7 +54,7 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
     @Override
     public void onBindViewHolder(final DeviceViewHolder holder, final int position) {
 
-        Beacon beacon = beacons.get(position);
+        final Beacon beacon = beacons.get(position);
 
         holder.proximityUuidView.setText(beacon.getId1().toString());
         holder.majorView.setText(beacon.getId2().toString());
