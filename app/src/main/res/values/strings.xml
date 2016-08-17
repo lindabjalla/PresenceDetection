@@ -53,7 +53,6 @@
     <string name="label_beacon_details_activity">Beacon details</string>
     <string name="last_time_in_range">In range</string>
     <string name="last_time_out_of_range">Out of range</string>
-    <string name="rssi">RSSI</string>
     <string name="no_data">No data</string>
 
     <!-- HelpActivity -->

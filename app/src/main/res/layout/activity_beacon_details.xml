@@ -209,7 +209,7 @@
                 android:background="@color/colorMystic"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="@string/rssi"
+                android:text="@string/label_rssi"
                 android:textColor="@color/colorDimGray"
                 android:textSize="20sp"
                 android:fontFamily="sans-serif-light"/>
