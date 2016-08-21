@@ -143,7 +143,7 @@ public final class RangeHandler implements RangeNotifier {
                 }
             }
 
-            if (SubscribedBeaconsActivity.isActive) {
+            if (SubscribedBeaconsActivity.active) {
 
                 activity.runOnUiThread(new Runnable() {
                     @Override
@@ -315,7 +315,7 @@ public final class RangeHandler implements RangeNotifier {
         stackBuilder.addParentStack(BeaconDetailsActivity.class);
         stackBuilder.addNextIntent(intent);
 
-        final PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_ONE_SHOT);
 
         notificationBuilder.setContentIntent(pendingIntent);
 
@@ -372,7 +372,7 @@ public final class RangeHandler implements RangeNotifier {
                         subscribedBeaconsJson = gson.toJson(subscribedBeacons);
                         appDataPreferences.edit().putString(ScanActivity.SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
 
-                        sendNotification("Beacon in range", "Beacon " + beaconAliasName + " is in range.",
+                        sendNotification("Beacon in range", "Beacon " + beaconAliasName + " came in range.",
                                 R.drawable.icon_bluetooth_in_range, subscribedBeacon);
 
                     } else {
@@ -436,7 +436,7 @@ public final class RangeHandler implements RangeNotifier {
                         subscribedBeaconsJson = gson.toJson(subscribedBeacons);
                         appDataPreferences.edit().putString(ScanActivity.SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
 
-                        sendNotification("Beacon out of range", "Beacon " + beaconAliasName + " is out of range.",
+                        sendNotification("Beacon out of range", "Beacon " + beaconAliasName + " went out of range.",
                                 R.drawable.icon_bluetooth_out_of_range, subscribedBeacon);
 
                     } else {

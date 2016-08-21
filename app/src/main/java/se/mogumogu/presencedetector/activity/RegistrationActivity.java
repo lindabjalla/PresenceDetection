@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -37,7 +36,7 @@ public final class RegistrationActivity extends ToolbarProvider implements Basic
     private SharedPreferences settingsPreferences;
     private DialogFragment dialogFragment;
     private Gson gson;
-    private Context context = this;
+    private Context context;
     private Intent intent;
 
     @Override
@@ -46,14 +45,13 @@ public final class RegistrationActivity extends ToolbarProvider implements Basic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.registration_toolbar);
-        myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
-        myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
-        setSupportActionBar(myToolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.registration_toolbar);
+        setToolbar(toolbar, true);
 
         appDataPreferences = getSharedPreferences(PRESENCE_DETECTION_PREFERENCES, MODE_PRIVATE);
         settingsPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         gson = new Gson();
+        context = this;
 
         final String userId = appDataPreferences.getString(USER_ID, null);
 
@@ -102,6 +100,8 @@ public final class RegistrationActivity extends ToolbarProvider implements Basic
             showRegistrationDialog();
 
         } else {
+
+            //TODO: separate retrofit implementation
 
             final User user = new User(firstName, lastName);
             final String userJson = gson.toJson(user);

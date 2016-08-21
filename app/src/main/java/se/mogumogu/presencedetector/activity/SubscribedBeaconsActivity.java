@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +31,7 @@ import se.mogumogu.presencedetector.model.SubscribedBeacon;
 public final class SubscribedBeaconsActivity extends ToolbarProvider implements BeaconConsumer, BeaconAliasNameDialogFragment.BeaconAliasNameDialogListener {
 
     private static final String TAG = SubscribedBeaconsActivity.class.getSimpleName();
-    public static boolean isActive;
+    public static boolean active;
 
     private Context context;
     private BeaconManager beaconManager;
@@ -50,18 +48,8 @@ public final class SubscribedBeaconsActivity extends ToolbarProvider implements 
         Log.d("onCreate", "onCreate");
         setContentView(R.layout.activity_subscribed_beacons);
 
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.subscribed_beacons_toolbar);
-        myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
-        myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
-        setSupportActionBar(myToolbar);
-
-        final ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-
-            actionBar.setHomeAsUpIndicator(R.drawable.icon_arrow_back);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.subscribed_beacons_toolbar);
+        setToolbar(toolbar, false);
 
         context = this;
         allBeaconsRegion = new Region("allBeacons", null, null, null);
@@ -101,7 +89,7 @@ public final class SubscribedBeaconsActivity extends ToolbarProvider implements 
     protected void onStart() {
 
         super.onStart();
-        isActive = true;
+        active = true;
     }
 
     @Override
@@ -118,7 +106,7 @@ public final class SubscribedBeaconsActivity extends ToolbarProvider implements 
 
         Log.d("onStop", "onStop");
         super.onStop();
-        isActive = false;
+        active = false;
     }
 
     @Override

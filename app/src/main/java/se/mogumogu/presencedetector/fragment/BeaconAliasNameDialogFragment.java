@@ -36,6 +36,7 @@ public final class BeaconAliasNameDialogFragment extends DialogFragment {
 
     @Override
     public void onAttach(final Context context) {
+
         super.onAttach(context);
 
         try {

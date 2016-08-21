@@ -10,9 +10,9 @@ public final class SubscribedBeacon implements Parcelable {
     private String aliasName;
     private Beacon beacon;
     private String dateOfSubscription;
-    private boolean isInRangeNotified;
-    private boolean isOutOfRangeNotified;
-    private boolean isInRange;
+    private boolean inRangeNotified;
+    private boolean outOfRangeNotified;
+    private boolean inRange;
     private long inRangeTime;
     private long outOfRangeTime;
 
@@ -28,9 +28,9 @@ public final class SubscribedBeacon implements Parcelable {
         aliasName = in.readString();
         beacon = in.readParcelable(Beacon.class.getClassLoader());
         dateOfSubscription = in.readString();
-        isInRangeNotified = in.readByte() != 0;
-        isOutOfRangeNotified = in.readByte() != 0;
-        isInRange = in.readByte() != 0;
+        inRangeNotified = in.readByte() != 0;
+        outOfRangeNotified = in.readByte() != 0;
+        inRange = in.readByte() != 0;
         inRangeTime = in.readLong();
         outOfRangeTime = in.readLong();
     }
@@ -61,9 +61,9 @@ public final class SubscribedBeacon implements Parcelable {
         out.writeString(aliasName);
         out.writeParcelable(beacon, flags);
         out.writeString(dateOfSubscription);
-        out.writeByte((byte) (isInRangeNotified ? 1 : 0));
-        out.writeByte((byte) (isOutOfRangeNotified ? 1 : 0));
-        out.writeByte((byte) (isInRange ? 1 : 0));
+        out.writeByte((byte) (inRangeNotified ? 1 : 0));
+        out.writeByte((byte) (outOfRangeNotified ? 1 : 0));
+        out.writeByte((byte) (inRange ? 1 : 0));
         out.writeLong(inRangeTime);
         out.writeLong(outOfRangeTime);
     }
@@ -85,17 +85,17 @@ public final class SubscribedBeacon implements Parcelable {
 
     public boolean isInRangeNotified() {
 
-        return isInRangeNotified;
+        return inRangeNotified;
     }
 
     public boolean isOutOfRangeNotified() {
 
-        return isOutOfRangeNotified;
+        return outOfRangeNotified;
     }
 
     public boolean isInRange() {
 
-        return isInRange;
+        return inRange;
     }
 
     public long getInRangeTime() {
@@ -122,17 +122,17 @@ public final class SubscribedBeacon implements Parcelable {
 
     public void setInRangeNotified(final boolean inRangeNotified) {
 
-        isInRangeNotified = inRangeNotified;
+        this.inRangeNotified = inRangeNotified;
     }
 
     public void setOutOfRangeNotified(final boolean outOfRangeNotified) {
 
-        isOutOfRangeNotified = outOfRangeNotified;
+        this.outOfRangeNotified = outOfRangeNotified;
     }
 
     public void setInRange(final boolean inRange) {
 
-        isInRange = inRange;
+        this.inRange = inRange;
     }
 
     public void setInRangeTime(final long inRangeTime) {
@@ -180,9 +180,9 @@ public final class SubscribedBeacon implements Parcelable {
                 "aliasName='" + aliasName + '\'' +
                 ", beacon=" + beacon +
                 ", dateOfSubscription='" + dateOfSubscription + '\'' +
-                ", isInRangeNotified=" + isInRangeNotified +
-                ", isOutOfRangeNotified=" + isOutOfRangeNotified +
-                ", isInRange=" + isInRange +
+                ", inRangeNotified=" + inRangeNotified +
+                ", outOfRangeNotified=" + outOfRangeNotified +
+                ", inRange=" + inRange +
                 ", inRangeTime=" + inRangeTime +
                 ", outOfRangeTime=" + outOfRangeTime +
                 '}';

@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -75,25 +73,14 @@ public final class ScanActivity extends ToolbarProvider
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
 
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.scan_toolbar);
-        myToolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
-        myToolbar.setSubtitleTextColor(ContextCompat.getColor(this, R.color.colorDimGray));
-        setSupportActionBar(myToolbar);
-
-        final ActionBar actionBar = getSupportActionBar();
-
-        if (actionBar != null) {
-
-            actionBar.setHomeAsUpIndicator(R.drawable.icon_arrow_back);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.scan_toolbar);
+        setToolbar(toolbar, false);
 
         closeBeacons = new ArrayList<>();
-
-        allBeaconsRegion = new Region("allBeacons", null, null, null);
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_scan);
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -101,6 +88,7 @@ public final class ScanActivity extends ToolbarProvider
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
+        allBeaconsRegion = new Region("allBeacons", null, null, null);
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.setRangeNotifier(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
