@@ -14,11 +14,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -27,27 +25,21 @@ import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
-import java.lang.reflect.Type;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import se.mogumogu.presencedetector.PresenceDetectorApplication;
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.RangeHandler;
 import se.mogumogu.presencedetector.adapter.BeaconAdapter;
 import se.mogumogu.presencedetector.fragment.BasicDialogFragment;
 import se.mogumogu.presencedetector.model.BeaconSubscription;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
-import se.mogumogu.presencedetector.model.Timestamp;
 import se.mogumogu.presencedetector.rest.RetrofitManager;
 
 @TargetApi(Build.VERSION_CODES.N)
@@ -56,18 +48,14 @@ public final class ScanActivity extends ToolbarProvider
 
     private static final String TAG = ScanActivity.class.getSimpleName();
 
-    public static final String SUBSCRIBED_BEACONS = "se.mogumogu.presencedetection.SUBSCRIBED_BEACONS";
-    public static final String TIMESTAMP = "se.mogumogu.presencedetection.TIMESTAMP";
-
     private BeaconManager beaconManager;
-    private Context context = this;
+    private Context context;
     private BeaconAdapter adapter;
     private List<Beacon> closeBeacons;
     private Region allBeaconsRegion;
     private Gson gson;
     private SharedPreferences appDataPreferences;
     private SharedPreferences settingsPreferences;
-    private String subscribedBeaconsJson;
     private Set<SubscribedBeacon> subscribedBeacons;
     private Intent intent;
 
@@ -80,35 +68,18 @@ public final class ScanActivity extends ToolbarProvider
         final Toolbar toolbar = (Toolbar) findViewById(R.id.scan_toolbar);
         setToolbar(toolbar, false);
 
+        context = this;
         closeBeacons = new ArrayList<>();
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_scan);
-        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        adapter = new BeaconAdapter(context, closeBeacons, getSupportFragmentManager());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-
-        allBeaconsRegion = new Region("allBeacons", null, null, null);
-        beaconManager = BeaconManager.getInstanceForApplication(this);
-        beaconManager.setRangeNotifier(this);
-        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
-        beaconManager.bind(this);
+        initializeRecyclerView();
+        initializeBeaconManager();
 
         gson = new Gson();
-        appDataPreferences = getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
+        appDataPreferences = getSharedPreferences(PresenceDetectorApplication.PRESENCE_DETECTOR_PREFERENCES, Context.MODE_PRIVATE);
         settingsPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        subscribedBeaconsJson = appDataPreferences.getString(SUBSCRIBED_BEACONS, null);
-
-        if (subscribedBeaconsJson == null) {
-
-            subscribedBeacons = new HashSet<>();
-
-        } else {
-
-            final Type typeSubscribedBeacon = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
-            subscribedBeacons = gson.fromJson(subscribedBeaconsJson, typeSubscribedBeacon);
-        }
+        String subscribedBeaconsJson = appDataPreferences.getString(PresenceDetectorApplication.SUBSCRIBED_BEACONS, null);
+        subscribedBeacons = PresenceDetectorApplication.initializeSubscribedBeacons(subscribedBeaconsJson);
 
         intent = new Intent(context, RegistrationActivity.class);
     }
@@ -126,7 +97,7 @@ public final class ScanActivity extends ToolbarProvider
     @Override
     public void onDialogPositiveClick(final DialogFragment dialog, final View view) {
 
-        final String beaconJson = appDataPreferences.getString(BeaconAdapter.BEACON_KEY, null);
+        final String beaconJson = appDataPreferences.getString(PresenceDetectorApplication.BEACON_KEY, null);
         final Beacon beacon = gson.fromJson(beaconJson, Beacon.class);
 
         if (beaconIsSubscribed(beacon)) {
@@ -148,7 +119,7 @@ public final class ScanActivity extends ToolbarProvider
     @Override
     protected void onPause() {
 
-        Log.d("onPause", "onPause");
+        Log.d(TAG, "onPause");
         super.onPause();
         final RangeHandler rangeHandler = new RangeHandler(context);
         beaconManager.unbind(this);
@@ -194,25 +165,7 @@ public final class ScanActivity extends ToolbarProvider
 
         if (beacons.size() > 0) {
 
-            for (final Beacon beacon : beacons) {
-
-                Log.d("activeBeacon", beacon.toString() + " is about " + beacon.getDistance() + " meters away." + "serviceUUID " + beacon.getServiceUuid());
-                Log.d("rssi", String.valueOf(beacon.getRssi()));
-
-                if (beacon.getId1() != null && beacon.getBluetoothName().equals("closebeacon.com")) {
-
-                    if (isAlreadyDetected(beacon, closeBeacons)) {
-
-                        replaceBeaconToTheOneWithNewStatus(beacon, closeBeacons);
-
-                    } else {
-
-                        closeBeacons.add(beacon);
-                    }
-                    Log.d("closeBeacons", closeBeacons.toString());
-                }
-            }
-
+            makeCloseBeaconList(beacons);
             sortBeaconsByRssi();
 
             runOnUiThread(new Runnable() {
@@ -239,57 +192,20 @@ public final class ScanActivity extends ToolbarProvider
         Log.d("subscribeBeacon", "came in");
 
         final String serverUrl = settingsPreferences.getString(
-                RegistrationActivity.PREFERENCE_SERVER_URL_KEY, RegistrationActivity.DEFAULT_SERVER_URL);
-        final RetrofitManager retrofitManager = new RetrofitManager(serverUrl);
+                PresenceDetectorApplication.PREFERENCE_SERVER_URL_KEY, PresenceDetectorApplication.DEFAULT_SERVER_URL);
+        final RetrofitManager retrofitManager = new RetrofitManager(serverUrl, context);
 
-        final String userId = appDataPreferences.getString(RegistrationActivity.USER_ID, null);
+        final String userId = appDataPreferences.getString(PresenceDetectorApplication.USER_ID, null);
         final BeaconSubscription beaconSubscription = new BeaconSubscription(userId, beacon.getId1().toString());
         final String beaconSubscriptionJson = gson.toJson(beaconSubscription);
 
         final Call<String> result =
                 retrofitManager.getPresenceDetectionService().subscribeBeacon("input=" + beaconSubscriptionJson);
-        result.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(final Call<String> call, final Response<String> response) {
 
-                Log.d("response", response.body());
-
-                final String responseBody = response.body();
-
-                if (responseBody.contains("\"response_value\":\"200\"")) {
-
-                    final Timestamp timestampObject = gson.fromJson(responseBody, Timestamp.class);
-                    final String timestamp = timestampObject.getTimestamp();
-                    Log.d("timestamp from server", timestamp);
-
-                    final EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name);
-                    final String aliasName = aliasNameEditText.getText().toString();
-
-                    final DateFormat dateFormat = DateFormat.getDateTimeInstance();
-                    final String dateOfSubscription = dateFormat.format(new Date(Long.parseLong(timestamp) * 1000L));
-                    Log.d("dateOfSubscription", dateOfSubscription);
-
-                    subscribedBeacons.add(new SubscribedBeacon(aliasName, beacon, dateOfSubscription));
-                    subscribedBeaconsJson = gson.toJson(subscribedBeacons);
-                    appDataPreferences.edit().putString(TIMESTAMP, timestamp).apply();
-                    appDataPreferences.edit().putString(SUBSCRIBED_BEACONS, subscribedBeaconsJson).apply();
-                    dialog.dismiss();
-
-                    Toast.makeText(context, aliasName + " is successfully subscribed.", Toast.LENGTH_LONG).show();
-                    startActivity(intent);
-
-                } else {
-
-                    Log.d("response", responseBody);
-                }
-            }
-
-            @Override
-            public void onFailure(final Call<String> call, final Throwable t) {
-
-                t.printStackTrace();
-            }
-        });
+        retrofitManager.setBeacon(beacon);
+        retrofitManager.setView(view);
+        retrofitManager.setDialogFragment(dialog);
+        retrofitManager.handleResponse(result, TAG);
     }
 
     private void replaceBeaconToTheOneWithNewStatus(final Beacon beacon, final List<Beacon> beacons) {
@@ -307,13 +223,36 @@ public final class ScanActivity extends ToolbarProvider
 
         for (final Beacon aBeacon : beacons) {
 
-            if (aBeacon.getIdentifiers().containsAll(beacon.getIdentifiers())) {
+            if (RangeHandler.isSameBeacon(beacon, aBeacon)) {
 
                 return true;
             }
         }
 
         return false;
+    }
+
+    private void makeCloseBeaconList(final Collection<Beacon> beacons) {
+
+        for (final Beacon beacon : beacons) {
+
+            Log.d("activeBeacon", beacon.toString() + " is about " + beacon.getDistance() + " meters away." + "serviceUUID " + beacon.getServiceUuid());
+            Log.d("rssi", String.valueOf(beacon.getRssi()));
+
+            if (RangeHandler.isCloseBeacon(beacon)) {
+
+                if (isAlreadyDetected(beacon, closeBeacons)) {
+
+                    replaceBeaconToTheOneWithNewStatus(beacon, closeBeacons);
+
+                } else {
+
+                    closeBeacons.add(beacon);
+                }
+
+                Log.d("closeBeacons", closeBeacons.toString());
+            }
+        }
     }
 
     private void sortBeaconsByRssi() {
@@ -327,5 +266,23 @@ public final class ScanActivity extends ToolbarProvider
         });
 
         Collections.reverse(closeBeacons);
+    }
+
+    private void initializeRecyclerView() {
+
+        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view_scan);
+        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        adapter = new BeaconAdapter(context, closeBeacons, getSupportFragmentManager());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void initializeBeaconManager() {
+
+        allBeaconsRegion = new Region("allBeacons", null, null, null);
+        beaconManager = BeaconManager.getInstanceForApplication(this);
+        beaconManager.setRangeNotifier(this);
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
+        beaconManager.bind(this);
     }
 }

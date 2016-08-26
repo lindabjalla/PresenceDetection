@@ -10,8 +10,8 @@ import org.altbeacon.beacon.Beacon;
 import java.text.DateFormat;
 import java.util.Date;
 
+import se.mogumogu.presencedetector.PresenceDetectorApplication;
 import se.mogumogu.presencedetector.R;
-import se.mogumogu.presencedetector.fragment.BeaconAliasNameDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public final class BeaconDetailsActivity extends ToolbarProvider {
@@ -68,7 +68,7 @@ public final class BeaconDetailsActivity extends ToolbarProvider {
 
         final Intent intent = getIntent();
         final Bundle bundle = intent.getExtras();
-        final SubscribedBeacon subscribedBeacon = bundle.getParcelable(BeaconAliasNameDialogFragment.SUBSCRIBED_BEACON);
+        final SubscribedBeacon subscribedBeacon = bundle.getParcelable(PresenceDetectorApplication.SUBSCRIBED_BEACON);
 
         if (subscribedBeacon != null) {
 

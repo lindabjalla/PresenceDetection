@@ -117,7 +117,6 @@ public final class SubscribedBeaconAdapter extends RecyclerView.Adapter<Subscrib
             subscribedBeacon = subscribedBeacons.get(position);
 
             showEditBeaconAliasNameDialog(subscribedBeacon);
-
         }
 
         private void showEditBeaconAliasNameDialog(final SubscribedBeacon subscribedBeacon) {

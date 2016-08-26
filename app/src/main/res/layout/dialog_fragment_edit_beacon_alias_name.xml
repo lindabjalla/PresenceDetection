@@ -5,11 +5,11 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/alias_name_edit"
+        android:id="@+id/alias_name_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:labelFor="@id/alias_name_edit"
+        android:labelFor="@id/alias_name_edit_text"
         android:padding="16dp"
         android:fontFamily="sans-serif-light"/>
 

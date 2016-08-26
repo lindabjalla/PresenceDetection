@@ -60,8 +60,14 @@ public final class BasicDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
 
         final View view = View.inflate(getContext(), dialogLayoutId, null);
-
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        initializeDialogBuilder(dialogBuilder, view);
+
+        return dialogBuilder.create();
+    }
+
+    private void initializeDialogBuilder(final AlertDialog.Builder dialogBuilder, final View view) {
+
         dialogBuilder.setTitle(dialogTitleId);
 
         dialogBuilder.setView(view)
@@ -81,8 +87,6 @@ public final class BasicDialogFragment extends DialogFragment {
                         listener.onDialogNegativeClick(BasicDialogFragment.this);
                     }
                 });
-
-        return dialogBuilder.create();
     }
 
     public interface BasicDialogListener {

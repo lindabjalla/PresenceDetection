@@ -18,6 +18,7 @@ public abstract class ToolbarProvider extends AppCompatActivity{
 
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+
         return true;
     }
 

@@ -13,24 +13,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.altbeacon.beacon.Beacon;
 
-import java.lang.reflect.Type;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import se.mogumogu.presencedetector.PresenceDetectorApplication;
 import se.mogumogu.presencedetector.R;
-import se.mogumogu.presencedetector.activity.RegistrationActivity;
-import se.mogumogu.presencedetector.activity.ScanActivity;
 import se.mogumogu.presencedetector.fragment.BasicDialogFragment;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.DeviceViewHolder> {
-
-    public static final String BEACON_KEY = "se.mogumogu.presencedetection.BEACON_KEY";
 
     private Context context;
     private List<Beacon> beacons;
@@ -113,19 +107,11 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
             beacon = beacons.get(position);
 
             final SharedPreferences preferences =
-                    context.getSharedPreferences(RegistrationActivity.PRESENCE_DETECTION_PREFERENCES, Context.MODE_PRIVATE);
+                    context.getSharedPreferences(PresenceDetectorApplication.PRESENCE_DETECTOR_PREFERENCES, Context.MODE_PRIVATE);
 
-            final String subscribedBeaconSetJson = preferences.getString(ScanActivity.SUBSCRIBED_BEACONS, null);
+            final String subscribedBeaconSetJson = preferences.getString(PresenceDetectorApplication.SUBSCRIBED_BEACONS, null);
 
-            if (subscribedBeaconSetJson == null) {
-
-                subscribedBeacons = new HashSet<>();
-
-            } else {
-
-                final Type type = new TypeToken<Set<SubscribedBeacon>>() {}.getType();
-                subscribedBeacons = gson.fromJson(subscribedBeaconSetJson, type);
-            }
+            subscribedBeacons = PresenceDetectorApplication.initializeSubscribedBeacons(subscribedBeaconSetJson);
 
             if (isSubscribed(beacon, subscribedBeacons)) {
 
@@ -134,7 +120,7 @@ public final class BeaconAdapter extends RecyclerView.Adapter<BeaconAdapter.Devi
             } else {
 
                 final String beaconJson = gson.toJson(beacon);
-                preferences.edit().putString(BEACON_KEY, beaconJson).apply();
+                preferences.edit().putString(PresenceDetectorApplication.BEACON_KEY, beaconJson).apply();
 
                 showSubscriptionDialog();
             }

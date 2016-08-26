@@ -18,8 +18,6 @@ import java.util.List;
 
 public final class NumberPickerPreference extends DialogPreference {
 
-    public static final String PREFERENCE_RSSI_THRESHOLD_KEY = "preference_rssi_threshold_key";
-
     private NumberPicker numberPicker;
     private String defaultValue;
     private List<String> rssiThresholdValues;
@@ -53,7 +51,7 @@ public final class NumberPickerPreference extends DialogPreference {
 
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         defaultValue = getContext().getResources().getString(R.string.rssi_threshold_default);
-        final String currentValue = preferences.getString(PREFERENCE_RSSI_THRESHOLD_KEY, defaultValue);
+        final String currentValue = preferences.getString(PresenceDetectorApplication.PREFERENCE_RSSI_THRESHOLD_KEY, defaultValue);
 
         rssiThresholdValues = new ArrayList<>();
 

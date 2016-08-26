@@ -5,7 +5,7 @@ import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
-public interface PresenceDetectionService {
+public interface PresenceDetectorService {
 
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @POST("register_user")

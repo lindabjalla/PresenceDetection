@@ -12,13 +12,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import se.mogumogu.presencedetector.PresenceDetectorApplication;
 import se.mogumogu.presencedetector.R;
 import se.mogumogu.presencedetector.model.SubscribedBeacon;
 
 public final class BeaconAliasNameDialogFragment extends DialogFragment {
 
     private static final String TAG = BeaconAliasNameDialogFragment.class.getSimpleName();
-    public static final String SUBSCRIBED_BEACON = "se.mogumogu.presencedetector.SUBSCRIBED_BEACON";
 
     private BeaconAliasNameDialogListener listener;
     private SubscribedBeacon subscribedBeacon;
@@ -28,7 +28,7 @@ public final class BeaconAliasNameDialogFragment extends DialogFragment {
         final DialogFragment dialogFragment = new BeaconAliasNameDialogFragment();
 
         final Bundle arguments = new Bundle();
-        arguments.putParcelable(SUBSCRIBED_BEACON, subscribedBeacon);
+        arguments.putParcelable(PresenceDetectorApplication.SUBSCRIBED_BEACON, subscribedBeacon);
         dialogFragment.setArguments(arguments);
 
         return dialogFragment;
@@ -50,7 +50,7 @@ public final class BeaconAliasNameDialogFragment extends DialogFragment {
     public void onCreate(@Nullable final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        subscribedBeacon = getArguments().getParcelable(SUBSCRIBED_BEACON);
+        subscribedBeacon = getArguments().getParcelable(PresenceDetectorApplication.SUBSCRIBED_BEACON);
     }
 
     @NonNull
@@ -58,7 +58,7 @@ public final class BeaconAliasNameDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(final Bundle bundle) {
 
         final View view = View.inflate(getContext(), R.layout.dialog_fragment_edit_beacon_alias_name, null);
-        final EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name_edit);
+        final EditText aliasNameEditText = (EditText) view.findViewById(R.id.alias_name_edit_text);
 
         if (subscribedBeacon != null) {
 
@@ -70,6 +70,13 @@ public final class BeaconAliasNameDialogFragment extends DialogFragment {
         }
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        initializeDialogBuilder(dialogBuilder, view);
+
+        return dialogBuilder.create();
+    }
+
+    private void initializeDialogBuilder(final AlertDialog.Builder dialogBuilder, final View view) {
+
         dialogBuilder.setTitle(R.string.dialog_fragment_edit_beacon_alias_name_title);
 
         dialogBuilder.setView(view)
@@ -88,8 +95,6 @@ public final class BeaconAliasNameDialogFragment extends DialogFragment {
                         listener.onDialogNegativeClick(BeaconAliasNameDialogFragment.this);
                     }
                 });
-
-        return dialogBuilder.create();
     }
 
     public interface BeaconAliasNameDialogListener {
